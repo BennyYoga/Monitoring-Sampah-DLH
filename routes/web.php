@@ -1,6 +1,10 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PegawaiController;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -13,14 +17,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/pegawai', function () {
-    return view('Pegawai/index');
+Route::group(['middleware' => 'role:1|2'], function(){
+    Route::get('/pegawai', [PegawaiController::class, 'index'])->name('pegawai');    
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');    
 });
 
-Route::get('/login', function () {
-    return view('Login/login');
-});
+Route::get('login', [AuthController::class, 'index'])->name('login');
+Route::get('logout', [AuthController::class, 'logout']);
+Route::post('post-logout', [AuthController::class, 'logout'])->name('logout');
+Route::post('post-login', [AuthController::class, 'postLogin'])->name('login.post');
