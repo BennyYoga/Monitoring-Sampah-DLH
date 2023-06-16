@@ -22,7 +22,7 @@
                 </div>
                 @endif --}}
                 <div class="titlemb-30">
-                    <h2>Data Pegawai</h2>
+                    <h2>Dashboard</h2>
                 </div>
             </div>
             <!-- end col -->

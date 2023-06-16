@@ -2,7 +2,11 @@
 
 use App\Http\Controllers\c_kabkota;
 use App\Http\Controllers\c_tiket;
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PegawaiController;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -15,12 +19,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/pegawai', function () {
-    return view('Pegawai/index');
+Route::group(['middleware' => 'role:1|2'], function(){
+    Route::get('/pegawai', [PegawaiController::class, 'index'])->name('pegawai');    
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');    
 });
 
 Route::get('/login', function () {
@@ -33,3 +39,7 @@ Route::get('/login', function () {
 Route::get('kota', [c_kabkota::class, 'index']);
 Route::get('create', [c_kabkota::class, 'create']);
 Route::get('tiket', [c_tiket::class, 'index']);
+Route::get('login', [AuthController::class, 'index'])->name('login');
+Route::get('logout', [AuthController::class, 'logout']);
+Route::post('post-logout', [AuthController::class, 'logout'])->name('logout');
+Route::post('post-login', [AuthController::class, 'postLogin'])->name('login.post');

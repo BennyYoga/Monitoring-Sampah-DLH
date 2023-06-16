@@ -142,7 +142,7 @@
                 <button class="dropdown-toggle bg-transparent border-0" type="button" id="profile" data-bs-toggle="dropdown" aria-expanded="false">
                     <div class="profile-info">
                         <div class="info">
-                            <h6>Username</h6>
+                            <h6>{{session('pegawai')->nama_pegawai}}</h6>
                             <div class="image">
                                 <img src="{{asset('images/profile/profile-image.png')}}" alt="" />
                                 <span class="status"></span>
@@ -153,12 +153,12 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profile">
                     <li>
-                        <a class="dropdown-item" href="" onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                        <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
+                            document.getElementById('logout-form').submit();">
                             <i class="lni lni-exit"></i> Sign Out
                         </a>
-                        <form id="" action="" method="POST" class="d-none">
-                            <!-- @csrf -->
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
                         </form>
                     </li>
                 </ul>
