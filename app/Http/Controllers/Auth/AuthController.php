@@ -18,10 +18,10 @@ class AuthController extends Controller
     public function index()
     {
         if(!session('pegawai')){
-                
+            return view('Login/login');
+        }else{
+            return view('Dashboard/index');
         }
-
-        return view('Login/login');
     }
 
     /**
