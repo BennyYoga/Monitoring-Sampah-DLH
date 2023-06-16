@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\c_kabkota;
+use App\Http\Controllers\c_tiket;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,3 +26,10 @@ Route::get('/pegawai', function () {
 Route::get('/login', function () {
     return view('Login/login');
 });
+
+// Route::get('/kabkota', function ('') {
+//     return view('kabkota/index');
+// });
+Route::get('kota', [c_kabkota::class, 'index']);
+Route::get('create', [c_kabkota::class, 'create']);
+Route::get('tiket', [c_tiket::class, 'index']);
