@@ -33,67 +33,59 @@
                             <li class="breadcrumb-item">
                                 <a href="/tiket">list tiket</a>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="Add">
-                                Add
+                            <li class="breadcrumb-item active" aria-current="page">
+                                Page
                             </li>
                         </ol>
                     </nav>
                 </div>
             </div>
             <!-- end col -->
-            <form action="{{route('tiket.post')}}" method="POST">
+            <form action="{{route('tiket.update', ['id'=>$tiket->id])}}" method="POST"> 
                 @csrf
+                @method('POST')
+                <input type="hidden" name="_method" value="PUT">
                 <div class="row">
                   <div class="col-12">
                     <div class="input-style-1">
                       <label>Pengemudi</label>
-                      <input type="text" placeholder="Pengemudi" id="pengemudi" name="pengemudi" required autofocus />
+                      <input type="text" placeholder="Pengemudi" id="pengemudi" name="pengemudi" required autofocus value="{{$tiket->pengemudi}}" />
                     </div>
                   </div>
                   <div class="col-12">
                     <div class="input-style-1">
                       <label>Jenis Kendaraan</label>
-                      <input type="text" placeholder="Jenis Kendaraan" id="jenis_kendaraan" name="jenis_kendaraan" required autofocus />
+                      <input type="text" placeholder="Jenis Kendaraan" id="jenis_kendaraan" name="jenis_kendaraan" required autofocus value="{{$tiket->jenis_kendaraan}}" />
                     </div>
                   </div>
                   <div class="col-12">
                     <div class="input-style-1">
-                      <label>Nomor Kendaraan</label>
-                      <input type="text" placeholder="Plat Nomor kendaraan" id="no_kendaraan" name="no_kendaraan" required autofocus />
+                      <label>Jenis Kendaraan</label>
+                      <input type="text" placeholder="Plat Kendaraan" id="no_kendaraan" name="no_kendaraan" required autofocus value="{{$tiket->no_kendaraan}}" />
                     </div>
                   </div>
-                  <div class="col-12">
+                  <div class= "col-12">
                     <div class="input-style-1">
                       <label>Lokasi Sampah</label>
-                      <input type="text" placeholder="Lokasi Asal Sampah" id="lokasi_sampah" name="lokasi_sampah" required autofocus />
+                      <input type="text" placeholder="Lokasi Asal Sampah" id="lokasi_sampah" name="lokasi_sampah" required autofocus value="{{$tiket->lokasi_sampah}}" />
                     </div>
                   </div>
                   <!-- end col -->
                   <div class="col-12">
                     <div class="input-style-1">
                       <label>volume</label>
-                      <input type="number" placeholder="volume" id="volume" name="volume" required autofocus />
+                      <input type="number" placeholder="volume" id="volume" name="volume" required autofocus value="{{$tiket->volume}}"/>
                     </div>
                   </div>
-                    <div class="select-style-1">
-                        <label>Kabupaten/kota</label>
-                        <div class="select-position">
-                        <select name="id_kab_kota" id="id_kab_kota">
-                            <option value="">Silahkan Pilih Kabupaten Kota</option>
-                            <option value="1">Kota Bandung</option>
-                            <option value="2">Kabupaten Bandung</option>
-                        </select>
-                        </div>
-                    </div>
                     <button class="
                               main-btn
                               primary-btn
                               btn-hover
                               w-100
                               text-center
-                            " type="submit">
+                             "type="submit">
                         Submit
-                      </button>
+                    </button>
         </div>
         <!-- end row -->
     </div>

@@ -38,7 +38,11 @@ Route::get('/login', function () {
 // });
 Route::get('kota', [c_kabkota::class, 'index']);
 Route::get('create', [c_kabkota::class, 'create']);
-Route::get('tiket', [c_tiket::class, 'index']);
+Route::get('tiket', [c_tiket::class, 'index'])->name('tiket.index');
+Route::get('tiket/create', [c_tiket::class, 'create']);
+Route::post('tiket/post', [c_tiket::class, 'store'])->name('tiket.post');
+Route::get('/tiket/edit/{id}', [c_tiket::class, 'edit'])->name('tiket.edit');
+Route::put('tiket/update/{id}', [c_tiket::class, 'update'])->name('tiket.update');
 Route::get('login', [AuthController::class, 'index'])->name('login');
 Route::get('logout', [AuthController::class, 'logout']);
 Route::post('post-logout', [AuthController::class, 'logout'])->name('logout');

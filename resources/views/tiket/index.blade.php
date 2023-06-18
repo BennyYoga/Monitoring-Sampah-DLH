@@ -22,7 +22,7 @@
                 </div>
                 @endif --}}
                 <div class="titlemb-30">
-                    <h2>Data Kabupaten / Kota</h2>
+                    <h2>Tiket</h2>
                 </div>
                 
             </div>
@@ -34,8 +34,11 @@
                             <li class="breadcrumb-item">
                                 <a href="#0">Kabupaten Kota</a>
                             </li>
+                            <li class="breadcrumb-item">
+                                <a href="/tiket/create">Add</a>
+                            </li>
                             <li class="breadcrumb-item active" aria-current="page">
-                                Page
+                                <a href="/tiket">Page</a>
                             </li>
                         </ol>
                     </nav>
@@ -63,25 +66,18 @@
                             @foreach($tiket as $key=> $tiket)
                             <tr>
                                 <td class="min-width">{{$key+1}}</td>
-                                @foreach($kabkota as $kabkota)
-                                    @if($kabkota->id == $tiket->id)
-                                        <td class="min-width">{{$tiket->jam_masuk}}</td>
-                                        <td class="min-width">{{$tiket->jam_keluar}}</td>
-                                        <td class="min-width">{{$tiket->no_kendaraan}}</td>
-                                        <td class="min-width">{{$tiket->jenis_kendaraan}}</td>
-                                        <td class="min-width">{{$tiket->pengemudi}}</td>
-                                        <td class="min-width">{{$tiket->lokasi_sampah}}</td>
-                                        <td class="min-width">{{$tiket->volume}}</td>
-                                    @endif
-                                @endforeach
-                                <td>
-                                    <a href="" class="btn btn-primary btn-xs">  
-                                        Edit
-                                    </a>
-                                    <a href="" onclick="notificationBeforeDelete(event, this)" class="btn btn-danger btn-xs">
-                                        Delete
-                                    </a>
-                                </td>
+                                    <td class="min-width">{{$tiket->jam_masuk}}</td>
+                                    <td class="min-width">{{$tiket->jam_keluar}}</td>
+                                    <td class="min-width">{{$tiket->no_kendaraan}}</td>
+                                    <td class="min-width">{{$tiket->jenis_kendaraan}}</td>
+                                    <td class="min-width">{{$tiket->pengemudi}}</td>
+                                    <td class="min-width">{{$tiket->lokasi_sampah}}</td>
+                                    <td class="min-width">{{$tiket->volume}}</td>
+                                    <td>
+                                        <a href="{{route('tiket.edit', $tiket->id)}}" class="btn btn-primary btn-xs">  
+                                            Edit
+                                        </a>
+                                    </td>
                                 <!-- <td class="min-width">{{}}</td> -->
                             </tr>
                             @endforeach
