@@ -14,9 +14,9 @@ class PegawaiController extends Controller
     //
     public function index(Request $request)
     {
-        $nama_kantor = Kantor::all();                    
+        $nama_kantor = Kantor::query();                    
         if ($request->ajax()) {
-            $pegawai = Pegawai::all();
+            $pegawai = Pegawai::query();
             return DataTables::of($pegawai)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {

@@ -7,6 +7,7 @@ use App\Models\m_tiket;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use mysqli;
+use DateTime;
 
 class c_tiket extends Controller
 {
@@ -53,14 +54,10 @@ class c_tiket extends Controller
             ]
             );
             $data= $request->all();
-                $data['id_kab_kota'] = (int)$data['id_kab_kota'];
-                $data['jam_masuk'] = date("d-m-Y H:i:s", now()->timestamp);
-                // $data['jam_masuk'] = strtotime($data['jam_masuk']);
-                // $dateTime = m_tiket::createFromFormat("d-m-Y H:i:s", $data['jam_masuk']);
-                // $timestamp = $dateTime->getTimestamp();
-                // $data['jam_masuk']= $timestamp;
-                // dd($data);
-                // dd($data['id_kab_kota']);;
+            $data['id_kab_kota'] = (int)$data['id_kab_kota'];
+            
+            $waktu = new DateTime();
+            $data['jam_masuk'] = $waktu;
             m_tiket::create($data);
             return redirect()-> route('tiket.index')->with('succes_message', 'Berhasil Menambahkan Tiket');
 

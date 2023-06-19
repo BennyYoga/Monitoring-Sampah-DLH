@@ -48,18 +48,22 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <table class="table table-bordered" id="pegawai">
-                        <thead>
-                            <tr class="text-center">
-                                <th>Id Pegawai</th>
-                                <th>Kantor</th>
-                                <th>Role</th>
-                                <th>NIP</th>
-                                <th>Nama Pegawai</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                    </table>
+                    <div class="card-body">
+                        <div class="table-wrapper table-responsive">
+                            <table class="table" id="pegawai">
+                                <thead>
+                                    <tr>
+                                        <th>Id Pegawai</th>
+                                        <th>Kantor</th>
+                                        <th>Role</th>
+                                        <th>NIP</th>
+                                        <th>Nama Pegawai</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- end col -->
@@ -71,25 +75,44 @@
 
 @push('js')
 @include('sweetalert::alert')
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-  <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
 <script type="text/javascript">
-  $(function () {
-    var table = $('#pegawai').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: "",
-        columns: [
-            {data: 'id_pegawai', name: 'id_pegawai'},
-            {data: 'nama_kantor', name: 'nama_kantor'},
-            {data: 'nama_role', name: 'nama_role'},
-            {data: 'NIP', name: 'NIP'},
-            {data: 'nama_pegawai', name: 'nama_pegawai'},
-            {data: 'action', name: 'action', orderable: false, searchable: false},
-        ]
+    $(function() {
+        var table = $('#pegawai').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "",
+            columns: [{
+                    data: 'id_pegawai',
+                    name: 'id_pegawai'
+                },
+                {
+                    data: 'nama_kantor',
+                    name: 'nama_kantor'
+                },
+                {
+                    data: 'nama_role',
+                    name: 'nama_role'
+                },
+                {
+                    data: 'NIP',
+                    name: 'NIP'
+                },
+                {
+                    data: 'nama_pegawai',
+                    name: 'nama_pegawai'
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false
+                },
+            ]
+        });
+
     });
-    
-  });
 </script>
 @endpush
