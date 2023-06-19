@@ -74,7 +74,7 @@ class PegawaiController extends Controller
         $kantor = Kantor::all();
         $pegawai = Pegawai::find($id_pegawai);
     if (!$pegawai) return redirect()->route('pegawai')
-        ->with('error_message', 'Anggota dengan NIP'.$id_pegawai.' tidak ada');
+        ->with('error_message', 'Anggota dengan ID'.$id_pegawai.' tidak ada');
     return view('pegawai.edit', compact('pegawai', 'kantor'));
     }
 
@@ -99,7 +99,7 @@ class PegawaiController extends Controller
         $data['password'] = Hash::make($request->password);
         Pegawai::find($id_pegawai)->update($data);
 
-        return redirect()->route('pegawai')->with('success', 'Data berhasil diupdate');
+        return redirect()->route('pegawai')->with('success', 'Data berhasil diubah');
     }
 
     public function destroy($id_pegawai)

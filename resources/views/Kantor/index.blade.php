@@ -1,6 +1,6 @@
 @extends('template.template')
 
-@section('title','Trash Monitoring System | Pegawai')
+@section('title','Trash Monitoring System | Kantor')
 
 {{-- kalau ada css tambahan selain dari template.blade --}}
 @push('css')
@@ -23,7 +23,7 @@
                     </div>
                     @endif --}}
                     <div class="title mb-30">
-                        <h2>Data Pegawai</h2>
+                        <h2>Data Kantor</h2>
                     </div>
                 </div>
                 <!-- end col -->
@@ -32,7 +32,7 @@
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item">
-                                    <a href="#0">Pegawai</a>
+                                    <a href="#0">Kantor</a>
                                 </li>
                                 <li class="breadcrumb-item active" aria-current="page">
                                     Page
@@ -41,7 +41,7 @@
                         </nav>
                     </div>
                     <div class="d-flex justify-content-end mb-3">
-                        <a href="{{ route('pegawai.create') }}" class="btn btn-primary">Add</a>
+                        <a href="{{ route('kantor.create') }}" class="btn btn-primary">Add</a>
                     </div>
                 </div>
                 <!-- end col -->
@@ -54,14 +54,12 @@
                     <div class="col-lg-12">
                         <div class="card-style mb-30">
                             <div class="table-wrapper table-responsive">
-                                <table class="table" id="pegawai">
+                                <table class="table" id="kantor">
                                     <thead>
                                         <tr class="text-center">
-                                            <th>Id Pegawai</th>
-                                            <th>Kantor</th>
-                                            <th>Role</th>
-                                            <th>NIP</th>
-                                            <th>Nama Pegawai</th>
+                                            {{-- <th>ID Kantor</th> --}}
+                                            <th>Nama</th>
+                                            <th>Alamat</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -98,16 +96,14 @@ $('#example2').DataTable({
             }
         }
     $(function () {
-    var table = $('#pegawai').DataTable({
+    var table = $('#kantor').DataTable({
         processing: true,
         serverSide: true,
         ajax: "",
         columns: [
-            {data: 'id_pegawai', name: 'id_pegawai'},
+            // {data: 'id_kantor', name: 'id_kantor'},
             {data: 'nama_kantor', name: 'nama_kantor'},
-            {data: 'nama_role', name: 'nama_role'},
-            {data: 'NIP', name: 'NIP'},
-            {data: 'nama_pegawai', name: 'nama_pegawai'},
+            {data: 'alamat_kantor', name: 'alamat_kantor'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
     });
