@@ -28,7 +28,11 @@ class CheckRole
                 // ->withToastSuccess('You have Successfully loggedin');
             }
         }
-        return redirect()->route('login')->withToastError('Anda Harus Login Terlebih dahulu');
+        if($roles){
+            // return redirect()->route('dashboard')->withToastError('Page Tidak Tersedia');
+            return abort(404);
+        }
+        return redirect()->route('login')->withToastError('Anda harus login terlebih dahulu');
     }
          
 }

@@ -23,7 +23,10 @@ Route::get('/', function () {
 });
 
 Route::group(['middleware' => 'role:1|2'], function(){
-    Route::get('/pegawai', [PegawaiController::class, 'index'])->name('pegawai');    
+    Route::group(['middleware' => 'role:1'], function(){
+        Route::get('/pegawai', [PegawaiController::class, 'index'])->name('pegawai');   
+    });
+
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');    
 });
 
