@@ -11,6 +11,7 @@ class Pegawai  extends Authenticatable
     use HasFactory;
     protected $table = 'pegawai';
     protected $guarded = ['id'];
+    protected $primaryKey = 'id_pegawai';
 
     protected static $logName = 'pegawai';
     public function hasRole($role)
