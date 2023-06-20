@@ -18,6 +18,16 @@
                     <div class="title mb-30">
                         <h2>Tiket</h2>
                     </div>
+                    <div class="right">
+                        <div class="select-style-1">
+                            <div class="select-position select-sm">
+                                <select class="light-bg" id="dataOption" name="option">
+                                    <option value="Perhari" selected>Harian</option>
+                                    <option value="Perbulan">Bulanan</option>
+                                </select>
+                            </div>
+                        </div>
+                                        <!-- end select -->
                 </div>
                 <div class="col-md-6">
                     <div class="breadcrumb-wrapper mb-30">
@@ -55,6 +65,20 @@
                                     <th>Volume</th>
                                 </tr>
                             </thead>
+                            <tbody>
+                                @foreach($kab_kota as $row)
+                                <tr>
+                                    <td>{{$row->jam_masuk}}</td>
+                                    <td>{{$row->jam_keluar}}</td>
+                                    <td>{{$row->no_kendaraan}}</td>
+                                    <td>{{$row->jenis_kendaraan}}</td>
+                                    <td>{{$row->pengemudi}}</td>
+                                    <td>{{$row->nama_kab_kota}}</td>
+                                    <td>{{$row->lokasi_sampah}}</td>
+                                    <td>{{$row->volume}}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
                         </table>
                     </div>
                 </div>

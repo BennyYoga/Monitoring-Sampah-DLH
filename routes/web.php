@@ -56,6 +56,7 @@ Route::get('kota', [c_kabkota::class, 'index']);
 Route::get('/tiket/edit/{id}', [c_kabkota::class, 'edit'])->name('kabkota.edit');
 Route::get('create', [c_kabkota::class, 'create']);
 Route::get('tiket', [c_tiket::class, 'index'])->name('tiket.index');
+Route::get('tiket/rekap', [c_tiket::class, 'rekap'])->name('tiket.rekap');
 Route::get('tiket/create', [c_tiket::class, 'create']);
 Route::post('tiket/post', [c_tiket::class, 'store'])->name('tiket.post');
 Route::get('/tiket/edit/{id}', [c_tiket::class, 'edit'])->name('tiket.edit');
