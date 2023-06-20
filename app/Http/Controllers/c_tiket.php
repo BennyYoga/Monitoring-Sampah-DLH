@@ -6,6 +6,7 @@ use App\Models\m_kabkota;
 use App\Models\m_tiket;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use \Yajra\Datatables\Datatables;
 use mysqli;
 
 class c_tiket extends Controller
@@ -15,12 +16,38 @@ class c_tiket extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $tiket = m_tiket::All();
-        $kabkota=m_kabkota::All();
-        // $join = m_tiket::where('id_kab_kota', $kabkota->id_kab_kota)->first();
-        return view('tiket.index', compact('tiket'));
+        if ($request->ajax()) {
+            $tiket = m_tiket::query();
+            return DataTables::of($tiket)
+                ->addColumn('nama_kab_kota', function ($row) {
+                    $kab_kota = m_kabkota::where('id_kab_kota', $row->id_kab_kota)->first();                    
+                    return $kab_kota->nama_kab_kota;
+                })
+                    ->addColumn('action', function ($row) {
+                        // Tambahkan aksi yang diperlukan di sini
+                        // Contoh: edit, hapus, dll.
+                        // return '<a href="#" class="btn btn-primary">Edit</a>';
+                        $tiket = m_tiket::all();
+                        $btn = '';
+                
+                            if ($row->jam_keluar === null) {
+                                $btn .= '<a href="' . route('tiket.edit', $row->id) . '" class="btn btn-primary">Selesai</a>';
+                            } else {
+                                $btn .= '';
+                            }
+                        
+                        return $btn;
+
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+    
+        return view('tiket.index');
+    
+        
     }
 
     /**
@@ -31,7 +58,7 @@ class c_tiket extends Controller
     public function create()
     {
         $kabkota=m_kabkota::All();
-        return view('tiket.form');
+        return view('tiket.form', compact('kabkota'));
     }
 
     /**
@@ -55,6 +82,7 @@ class c_tiket extends Controller
             $data= $request->all();
                 $data['id_kab_kota'] = (int)$data['id_kab_kota'];
                 $data['jam_masuk'] = date("d-m-Y H:i:s", now()->timestamp);
+                // dd($data)
                 // $data['jam_masuk'] = strtotime($data['jam_masuk']);
                 // $dateTime = m_tiket::createFromFormat("d-m-Y H:i:s", $data['jam_masuk']);
                 // $timestamp = $dateTime->getTimestamp();
