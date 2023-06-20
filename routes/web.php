@@ -43,6 +43,7 @@ Route::group(['middleware' => 'role:1|2'], function(){
     });
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');    
+    Route::get('/dashboard/data/{option}', [DashboardController::class, 'getData'])->name('dashboard.data');
 });
 
 Route::get('/login', function () {

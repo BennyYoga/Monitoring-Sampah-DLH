@@ -11,11 +11,11 @@
 
 @section('content')
 <section class="section">
-@php
+    @php
     $date = date('d');
     $day = date('l');
     $monthYear = date('F Y');
-@endphp
+    @endphp
     <div class="container-fluid">
         <!-- ========== title-wrapper start ========== -->
         <div class="title-wrapper pt-30">
@@ -180,6 +180,44 @@
 </section>
 @endsection
 
+@section('content')
+<!-- ... konten lainnya ... -->
+
+<!-- end select -->
+</div>
+</div>
+<!-- End Title -->
+<div class="table-responsive">
+    <table class="table" id="dashboard">
+        <thead>
+            <tr class="text-center">
+                <th>
+                    <h6 class="text-sm text-medium">Kabupaten / Kota</h6>
+                </th>
+                <th class="min-width">
+                    <h6 class="text-sm text-medium">Volume Hari Ini</h6>
+                </th>
+                <th class="min-width">
+                    <h6 class="text-sm text-medium">Jumlah Data Hari Ini</h6>
+                </th>
+            </tr>
+        </thead>
+    </table>
+    <!-- End Table -->
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- end container -->
+</section>
+<!-- end col -->
+</div>
+<!-- end row -->
+</div>
+</section>
+@endsection
+
 @push('js')
 @include('sweetalert::alert')
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
@@ -198,7 +236,6 @@
                 {
                     data: 'volume',
                     name: 'volume',
-                    orderable: false,
                     searchable: false
                 },
                 {
@@ -211,9 +248,9 @@
             ]
         });
 
-    });
-    $('#dataOption').on('change', function () {
-        table.ajax.reload(); // Memuat ulang tabel setelah opsi dipilih
+        $('#dataOption').on('change', function() {
+            table.ajax.url('/dashboard/data/' + $(this).val()).load(); // Mengubah URL AJAX dan memuat ulang tabel
+        });
     });
 </script>
 @endpush

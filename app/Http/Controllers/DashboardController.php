@@ -35,10 +35,10 @@ class DashboardController extends Controller
         //Rekapitulasi data
         $today = date('Y-m-d');
         $rekap = m_tiket::where('jam_masuk', 'like', $today . '%')
-        ->groupBy('id_kab_kota', 'jam_masuk')
-        ->select('id_kab_kota', 'jam_masuk', DB::raw('SUM(volume) as volume'))
-        ->get();
-        
+            ->groupBy('id_kab_kota', 'jam_masuk')
+            ->select('id_kab_kota', 'jam_masuk', DB::raw('SUM(volume) as volume'))
+            ->get();
+
         $data = [];
         foreach ($rekap as $dataTiket) {
             $id_kab_kota = $dataTiket->id_kab_kota;
@@ -86,5 +86,66 @@ class DashboardController extends Controller
         }
 
         return view('Dashboard.index', compact('iteration', 'berat'));
+    }
+
+    public function getData(Request $request, $option)
+    {
+        $rekap = [];
+        if ($option == 'Perhari'){
+            $today = date('Y-m-d');
+        }
+        else if ($option == 'Perbulan'){
+            $today = date('Y-m');
+        }
+        $rekap = m_tiket::where('jam_masuk', 'like', $today . '%')
+            ->groupBy('id_kab_kota', 'jam_masuk')
+            ->select('id_kab_kota', 'jam_masuk', DB::raw('SUM(volume) as volume'))
+            ->get();
+
+        $data = [];
+        foreach ($rekap as $dataTiket) {
+            $id_kab_kota = $dataTiket->id_kab_kota;
+            $tanggal = $dataTiket->jam_masuk;
+            $volume = $dataTiket->volume;
+
+            if (!isset($data[$id_kab_kota])) {
+                $data[$id_kab_kota] = [
+                    'id_kab_kota' => $id_kab_kota,
+                    'data_per_hari' => []
+                ];
+            }
+
+            $data[$id_kab_kota]['data_per_hari'][] = [
+                'tanggal' => $tanggal,
+                'volume' => $volume,
+                'jumlah_data' => 1
+            ];
+        }
+
+        $data = array_values($data);
+        if ($request->ajax()) {
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('kabkot', function ($row) {
+                    $nama =  m_kabkota::where('id_kab_kota', $row['id_kab_kota'])->first();
+                    return $nama->nama_kab_kota;
+                })
+                ->addColumn('volume', function ($row) {
+                    $volume = 0;
+                    foreach ($row['data_per_hari'] as $data) {
+                        $volume += $data['volume'];
+                    }
+                    return $volume;
+                })
+                ->addColumn('jumlah', function ($row) {
+                    $jumlahData = 0;
+                    foreach ($row['data_per_hari'] as $data) {
+                        $jumlahData += 1;
+                    }
+                    return $jumlahData;
+                })
+                ->make(true);
+        }
+        return response()->json(['data' => $data]);
     }
 }
