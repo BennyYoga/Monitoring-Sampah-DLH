@@ -36,7 +36,9 @@
                         </svg>
                     </span>
                     <span class="text">Tiket</span>
-                    <li class="nav-item {{ Request::routeIs('tiket.rekap') ? 'active' : '' }}">
+                </a>
+            </li>
+            <li class="nav-item {{ Request::routeIs('tiket.rekap') ? 'active' : '' }}">
                 <a href="{{route('tiket.rekap')}}">
                     <span class="icon">
                         <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -45,6 +47,7 @@
                     </span>
                     <span class="text">Rekap Tiket</span>
                 </a>
+            </li>
             <li class="nav-item {{ Request::routeIs('kantor') ? 'active' : '' }}">
                 <a href="{{route('kantor')}}">
                     <span class="icon">
