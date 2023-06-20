@@ -62,41 +62,86 @@ class c_tiket extends Controller
      * @return \Illuminate\Http\Response
      */
     public function rekap(Request $request)
-    {
-        if ($request->ajax()) {
-            $tiket = m_tiket::whereNotNull('jam_keluar')->get();
-            return DataTables::of($tiket)
-                ->addColumn('nama_kab_kota', function ($row) {
-                    $kab_kota = m_kabkota::where('id_kab_kota', $row->id_kab_kota)->first();                    
-                    return $kab_kota->nama_kab_kota;
-                })
-                
-                    ->addColumn('action', function ($row) {
+{
+    if ($request->ajax()) {
+        $filterKabkota = $request->input('filterKabkota');
 
-                        $tiket = m_tiket::all();
-                        $btn = '';
-                
-                            if ($row->jam_keluar === null) {
-                                // $btn .= '<a href="' . route('tiket.edit', $row->id) . '" class="btn btn-primary">Selesai</a>';
-                                $btn .= '<form action="' . route('tiket.update', ['id'=>$row->id]) . '" method="POST">';
-                                $btn .= '<input type="hidden" name="_method" value="PUT">';
-                                $btn .= csrf_field();
-                                $btn .= '<button type="submit" class="btn btn-success" style="font-size: 15px">Selesai</button>';
-                                $btn .= '</form>';
+        $tiket = m_tiket::whereNotNull('jam_keluar');
 
-                            } else {
-                                $btn .= '';
-                            }
-                        
-                        return $btn;
-
-                })
-                ->rawColumns(['action'])
-                ->make(true);
+        if (!empty($filterKabkota)) {
+            $tiket->whereHas('id_kab_kota', function ($query) use ($filterKabkota) {
+                $query->where('nama_kab_kota', $filterKabkota);
+            });
         }
-    
-        return view('tiket.rekap');
+
+        $tiket = $tiket->get();
+
+        return DataTables::of($tiket)
+            ->addColumn('nama_kab_kota', function ($row) {
+                $kab_kota = m_kabkota::where('id_kab_kota', $row->id_kab_kota)->first();                    
+                return $kab_kota->nama_kab_kota;
+            })
+            ->addColumn('action', function ($row) {
+                $btn = '';
+
+                if ($row->jam_keluar === null) {
+                    $btn .= '<form action="' . route('tiket.update', ['id'=>$row->id]) . '" method="POST">';
+                    $btn .= '<input type="hidden" name="_method" value="PUT">';
+                    $btn .= csrf_field();
+                    $btn .= '<button type="submit" class="btn btn-success" style="font-size: 15px">Selesai</button>';
+                    $btn .= '</form>';
+                } else {
+                    $btn .= '';
+                }
+                
+                return $btn;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
     }
+
+    $kab_kota = m_kabkota::pluck('nama_kab_kota', 'nama_kab_kota')->toArray();
+
+    return view('tiket.rekap', compact('kab_kota'));
+}
+
+    // public function rekap(Request $request)
+    // {
+    //     if ($request->ajax()) {
+    //         $tiket = m_tiket::whereNotNull('jam_keluar')->get();
+    //         $kab_kota = m_kabkota::
+    //         return DataTables::of($tiket)
+    //             ->addColumn('nama_kab_kota', function ($row) {
+    //                 $kab_kota = m_kabkota::where('id_kab_kota', $row->id_kab_kota)->first();                    
+    //                 return $kab_kota->nama_kab_kota;
+    //             })
+                
+    //                 ->addColumn('action', function ($row) {
+
+    //                     $tiket = m_tiket::all();
+    //                     $btn = '';
+                
+    //                         if ($row->jam_keluar === null) {
+    //                             // $btn .= '<a href="' . route('tiket.edit', $row->id) . '" class="btn btn-primary">Selesai</a>';
+    //                             $btn .= '<form action="' . route('tiket.update', ['id'=>$row->id]) . '" method="POST">';
+    //                             $btn .= '<input type="hidden" name="_method" value="PUT">';
+    //                             $btn .= csrf_field();
+    //                             $btn .= '<button type="submit" class="btn btn-success" style="font-size: 15px">Selesai</button>';
+    //                             $btn .= '</form>';
+
+    //                         } else {
+    //                             $btn .= '';
+    //                         }
+                        
+    //                     return $btn;
+
+    //             })
+    //             ->rawColumns(['action'])
+    //             ->make(true);
+    //     }
+    
+    //     return view('tiket.rekap');
+    // }
     public function create()
     {
         $kabkota=m_kabkota::All();

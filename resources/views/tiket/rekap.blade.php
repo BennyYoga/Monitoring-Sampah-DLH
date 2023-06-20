@@ -18,16 +18,6 @@
                     <div class="title mb-30">
                         <h2>Tiket</h2>
                     </div>
-                    <div class="right">
-                        <div class="select-style-1">
-                            <div class="select-position select-sm">
-                                <select class="light-bg" id="dataOption" name="option">
-                                    <option value="Perhari" selected>Harian</option>
-                                    <option value="Perbulan">Bulanan</option>
-                                </select>
-                            </div>
-                        </div>
-                                        <!-- end select -->
                 </div>
                 <div class="col-md-6">
                     <div class="breadcrumb-wrapper mb-30">
@@ -52,6 +42,15 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
+                        <div class="mb-3">
+                            <label for="filter-kabkota" class="form-label">Filter Kabupaten/Kota</label>
+                            <select class="form-select" id="filter-kabkota">
+                                <option value="">Semua</option>
+                                @foreach($kab_kota as $option)
+                                    <option value="{{$option}}">{{$option}}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         <table class="table" id="pegawai">
                             <thead>
                                 <tr class="text-center">
@@ -66,18 +65,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($kab_kota as $row)
-                                <tr>
-                                    <td>{{$row->jam_masuk}}</td>
-                                    <td>{{$row->jam_keluar}}</td>
-                                    <td>{{$row->no_kendaraan}}</td>
-                                    <td>{{$row->jenis_kendaraan}}</td>
-                                    <td>{{$row->pengemudi}}</td>
-                                    <td>{{$row->nama_kab_kota}}</td>
-                                    <td>{{$row->lokasi_sampah}}</td>
-                                    <td>{{$row->volume}}</td>
-                                </tr>
-                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -93,25 +80,37 @@
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 <script type="text/javascript">
-$(document).ready(function () {
-    var table = $('#pegawai').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: "",
-        columns: [
-            { data: 'jam_masuk', name: 'jam_masuk', class:"text-center" },
-            {data : 'jam_keluar', name: 'jam_keluar', orderable: true, class:"text-center"},
-            { data: 'no_kendaraan', name: 'no_kendaraan', class:"text-center" },
-            { data: 'jenis_kendaraan', name: 'jenis_kendaraan', class:"text-center" },
-            { data: 'pengemudi', name: 'pengemudi', class:"text-center" },
-            { data: 'nama_kab_kota', name: 'nama_kab_kota', class:"text-center" },
-            { data: 'lokasi_sampah', name: 'lokasi_sampah', class:"text-center" },
-            { data: 'volume', name: 'volume', class:"text-center" },
-            { data: 'action', name: 'action', orderable: false,  searchable: false }
-        
-        ],
+    $(document).ready(function () {
+        // Initialize DataTable
+        var table = $('#pegawai').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax:  "",
+            // {
+            //     url: "{{ route('tiket.rekap') }}",
+            //     data: function (d) {
+            //         d.filterKabkota = $('#filter-kabkota').val();
+            //     }
+            // },
+            columns: [
+                { data: 'jam_masuk', name: 'jam_masuk', class:"text-center" },
+                { data: 'jam_keluar', name: 'jam_keluar', orderable: true, class:"text-center" },
+                { data: 'no_kendaraan', name: 'no_kendaraan', class:"text-center" },
+                { data: 'jenis_kendaraan', name: 'jenis_kendaraan', class:"text-center" },
+                { data: 'pengemudi', name: 'pengemudi', class:"text-center" },
+                { data: 'nama_kab_kota', name: 'nama_kab_kota', class:"text-center" },
+                { data: 'lokasi_sampah', name: 'lokasi_sampah', class:"text-center" },
+                { data: 'volume', name: 'volume', class:"text-center" },
+            ],
+        });
+
+        // Filter data based on selected Kabupaten/Kota
+        $('#filter-kabkota').on('change', function () {
+            // table.ajax.reload('/tiket/rekap/' + $(this).val()).load();
+            table.ajax.reload();
+        });
     });
-});
 </script>
 @endpush
