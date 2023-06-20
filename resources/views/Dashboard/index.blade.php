@@ -198,7 +198,7 @@
                 {
                     data: 'volume',
                     name: 'volume',
-                    orderable: false,
+                    orderable: true,
                     searchable: false
                 },
                 {
@@ -213,7 +213,11 @@
 
     });
     $('#dataOption').on('change', function () {
-        table.ajax.reload(); // Memuat ulang tabel setelah opsi dipilih
-    });
+    var selectedOption = $(this).val();
+    if (selectedOption === 'Perbulan') {
+        alert('You have selected "bulan"');
+    }
+    table.ajax.reload(); // Reload the table after the option is selected
+});
 </script>
 @endpush
