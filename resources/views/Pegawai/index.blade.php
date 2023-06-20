@@ -57,11 +57,11 @@
                                 <table class="table" id="pegawai">
                                     <thead>
                                         <tr class="text-center">
-                                            <th>Id Pegawai</th>
-                                            <th>Kantor</th>
-                                            <th>Role</th>
-                                            <th>NIP</th>
+                                            <th>No</th>
                                             <th>Nama Pegawai</th>
+                                            <th>NIP</th>
+                                            <th>Role</th>
+                                            <th>Kantor</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -103,11 +103,22 @@ $('#example2').DataTable({
         serverSide: true,
         ajax: "",
         columns: [
-            {data: 'id_pegawai', name: 'id_pegawai'},
-            {data: 'nama_kantor', name: 'nama_kantor'},
-            {data: 'nama_role', name: 'nama_role'},
-            {data: 'NIP', name: 'NIP'},
+            {   
+            data: null,
+            render: function (data, type, row, meta) {
+                // Menghitung nomor urut berdasarkan halaman dan jumlah baris yang ditampilkan
+                var startIndex = meta.settings._iDisplayStart;
+                var index = meta.row + startIndex + 1;
+
+                return index;
+            },
+            orderable: false,
+            searchable: false
+            },
             {data: 'nama_pegawai', name: 'nama_pegawai'},
+            {data: 'NIP', name: 'NIP'},
+            {data: 'nama_role', name: 'nama_role'},
+            {data: 'nama_kantor', name: 'nama_kantor'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
     });

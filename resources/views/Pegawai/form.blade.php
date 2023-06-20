@@ -72,7 +72,7 @@
                         <div class="row">
                         <div class="input-style-1 col-lg-6">
                             <label>Password</label>
-                            <input type="text" placeholder="Password" name="password" />
+                            <input type="password" placeholder="Password" name="password" />
                         </div>
                         <!-- end input -->
                         <div class="select-style-1 col-lg-6">
