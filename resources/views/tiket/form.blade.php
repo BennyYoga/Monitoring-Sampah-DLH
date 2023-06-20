@@ -81,7 +81,7 @@
                         <select name="id_kab_kota" id="id_kab_kota">
                             <option value="">Silahkan Pilih Kabupaten Kota</option>
                             <option value="1">Kota Bandung</option>
-                            <option value="2">Kabupaten Bandung</option>
+                            <option value="3">Kabupaten Bandung</option>
                         </select>
                         </div>
                     </div>
