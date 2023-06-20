@@ -16,7 +16,7 @@
             <div class="row align-items-center">
                 <div class="col-md-6">
                     <div class="title mb-30">
-                        <h2>Data Pegawai</h2>
+                        <h2>Tiket</h2>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -42,7 +42,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        <table class="table table-bordered" id="pegawai">
+                        <table class="table" id="pegawai">
                             <thead>
                                 <tr class="text-center">
                                     <th>Jam Masuk</th>
@@ -75,10 +75,10 @@ $(document).ready(function () {
     var table = $('#pegawai').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('tiket.index') }}",
+        ajax: "",
         columns: [
             { data: 'jam_masuk', name: 'jam_masuk', class:"text-center" },
-            {data : 'jam_keluar', name: 'jam_keluar', class:"text-center"},
+            {data : 'jam_keluar', name: 'jam_keluar', orderable: true, class:"text-center"},
             { data: 'no_kendaraan', name: 'no_kendaraan', class:"text-center" },
             { data: 'jenis_kendaraan', name: 'jenis_kendaraan', class:"text-center" },
             { data: 'pengemudi', name: 'pengemudi', class:"text-center" },
@@ -86,6 +86,12 @@ $(document).ready(function () {
             { data: 'lokasi_sampah', name: 'lokasi_sampah', class:"text-center" },
             { data: 'volume', name: 'volume', class:"text-center" },
             { data: 'action', name: 'action', orderable: false,  searchable: false }
+        
+        ],
+        order:[
+            [
+                1, 'asc'
+            ]
         ]
     });
 });

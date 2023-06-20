@@ -16,7 +16,7 @@
             <div class="row align-items-center">
                 <div class="col-md-6">
                     <div class="title mb-30">
-                        <h2>Kota</h2>
+                        <h2>Tiket</h2>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -45,10 +45,14 @@
                         <table class="table" id="pegawai">
                             <thead>
                                 <tr class="text-center">
-                                    <th>No</th>
+                                    <th>Jam Masuk</th>
                                     <th>Jam keluar</th>
                                     <th>Nomor Kendaraan</th>
-                                    <th>Action</th>
+                                    <th>Jenis Kendaraan</th>
+                                    <th>Pengemudi</th>
+                                    <th>Kabupaten/Kota</th>
+                                    <th>Lokasi</th>
+                                    <th>Volume</th>
                                 </tr>
                             </thead>
                         </table>
@@ -72,11 +76,17 @@ $(document).ready(function () {
         serverSide: true,
         ajax: "",
         columns: [
-            {"data": 'DT_RowIndex', orderable: false, searchable: false},
+            { data: 'jam_masuk', name: 'jam_masuk', class:"text-center" },
+            {data : 'jam_keluar', name: 'jam_keluar', orderable: true, class:"text-center"},
+            { data: 'no_kendaraan', name: 'no_kendaraan', class:"text-center" },
+            { data: 'jenis_kendaraan', name: 'jenis_kendaraan', class:"text-center" },
+            { data: 'pengemudi', name: 'pengemudi', class:"text-center" },
             { data: 'nama_kab_kota', name: 'nama_kab_kota', class:"text-center" },
-            { data : 'id_kab_kota', name: 'id_kab_kota', class:"text-center"},
+            { data: 'lokasi_sampah', name: 'lokasi_sampah', class:"text-center" },
+            { data: 'volume', name: 'volume', class:"text-center" },
             { data: 'action', name: 'action', orderable: false,  searchable: false }
-        ]
+        
+        ],
     });
 });
 </script>
