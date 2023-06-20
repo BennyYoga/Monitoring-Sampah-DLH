@@ -79,9 +79,11 @@
                         <label>Kabupaten/kota</label>
                         <div class="select-position">
                         <select name="id_kab_kota" id="id_kab_kota">
-                            <option value="">Silahkan Pilih Kabupaten Kota</option>
-                            <option value="1">Kota Bandung</option>
-                            <option value="3">Kabupaten Bandung</option>
+                          @foreach($kabkota as $kabkota)
+                        <option value="<?= $kabkota->id_kab_kota?>">
+                                   <?= $kabkota->nama_kab_kota?>
+                                </option>
+                          @endforeach
                         </select>
                         </div>
                     </div>

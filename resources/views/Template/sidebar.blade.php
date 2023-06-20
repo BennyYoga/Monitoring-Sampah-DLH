@@ -46,6 +46,16 @@
                         </svg>
                     </span>
                     <span class="text">Tiket</span>
+<<<<<<< HEAD
+=======
+                </a>
+            <li class="nav-item {{ Request::routeIs('kantor') ? 'active' : '' }}">
+                <a href="{{route('kantor')}}">
+                    <span class="icon">
+                        <i class="lni lni-home"></i>
+                    </span>
+                    <span class="text">Kantor</span>
+>>>>>>> b70243a353986df73ca26421ff699cd3c6fa7f98
                 </a>
             </li>
             @endif
