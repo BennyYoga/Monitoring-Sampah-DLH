@@ -12,7 +12,8 @@ class m_tiket extends Model
     protected $table ='tiket';
 
     protected $fillable = [
-        'no_kendaraan', 'jenis_kendaraan', 'pengemudi', 'lokasi_sampah', 'volume', 'id_kab_kota', 'jam_masuk', 'jam_keluar'
+        'no_kendaraan', 'jenis_kendaraan', 'pengemudi', 'lokasi_sampah',
+        'volume', 'id_kab_kota', 'jam_masuk', 'jam_keluar'
     ];
         
 }
