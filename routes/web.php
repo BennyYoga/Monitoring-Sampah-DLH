@@ -53,6 +53,7 @@ Route::get('/login', function () {
 //     return view('kabkota/index');
 // });
 Route::get('kota', [c_kabkota::class, 'index']);
+Route::get('/tiket/edit/{id}', [c_kabkota::class, 'edit'])->name('kabkota.edit');
 Route::get('create', [c_kabkota::class, 'create']);
 Route::get('tiket', [c_tiket::class, 'index'])->name('tiket.index');
 Route::get('tiket/create', [c_tiket::class, 'create']);

@@ -6,6 +6,7 @@ use App\Models\m_kabkota;
 use App\Models\m_tiket;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use \Yajra\Datatables\Datatables;
 use mysqli;
 use DateTime;
 
@@ -16,12 +17,43 @@ class c_tiket extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $tiket = m_tiket::All();
-        $kabkota=m_kabkota::All();
-        // $join = m_tiket::where('id_kab_kota', $kabkota->id_kab_kota)->first();
-        return view('tiket.index', compact('tiket'));
+        if ($request->ajax()) {
+            $tiket = m_tiket::all();
+            return DataTables::of($tiket)
+                ->addColumn('nama_kab_kota', function ($row) {
+                    $kab_kota = m_kabkota::where('id_kab_kota', $row->id_kab_kota)->first();                    
+                    return $kab_kota->nama_kab_kota;
+                })
+                
+                    ->addColumn('action', function ($row) {
+
+                        $tiket = m_tiket::all();
+                        $btn = '';
+                
+                            if ($row->jam_keluar === null) {
+                                // $btn .= '<a href="' . route('tiket.edit', $row->id) . '" class="btn btn-primary">Selesai</a>';
+                                $btn .= '<form action="' . route('tiket.update', ['id'=>$row->id]) . '" method="POST">';
+                                $btn .= '<input type="hidden" name="_method" value="PUT">';
+                                $btn .= csrf_field();
+                                $btn .= '<button type="submit" class="btn btn-success" style="font-size: 15px">Selesai</button>';
+                                $btn .= '</form>';
+
+                            } else {
+                                $btn .= '';
+                            }
+                        
+                        return $btn;
+
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+    
+        return view('tiket.index');
+    
+        
     }
 
     /**
@@ -32,7 +64,7 @@ class c_tiket extends Controller
     public function create()
     {
         $kabkota=m_kabkota::All();
-        return view('tiket.form');
+        return view('tiket.form', compact('kabkota'));
     }
 
     /**
@@ -59,7 +91,7 @@ class c_tiket extends Controller
             $waktu = new DateTime();
             $data['jam_masuk'] = $waktu;
             m_tiket::create($data);
-            return redirect()-> route('tiket.index')->with('succes_message', 'Berhasil Menambahkan Tiket');
+            return redirect()-> route('tiket.index')->withToastSuccess('Berhasil Menambahkan Tiket');
 
         
     }
@@ -96,26 +128,21 @@ class c_tiket extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update($id)
     {
-
-        $request->validate(
-            [
-                'no_kendaraan' =>'required',
-                'jenis_kendaraan' =>'required',
-                'pengemudi' =>'required',
-                'lokasi_sampah' =>'required',
-                'volume' =>'required',
-            ]
-            );
+        $tiket = m_tiket::where('id',$id)->first();
             $data= [
-                'no_kendaraan' => $request->input('no_kendaraan'),
-                'jenis_kendaraan' =>$request->input('jenis_kendaraan'),
-                'pengemudi'=>$request->input('pengemudi'),
-                'lokasi_sampah' => $request->input('lokasi_sampah'),
-                'volume' => $request->input('volume'),
+                'no_kendaraan' => $tiket['no_kendaraan'],
+                'jenis_kendaraan' =>$tiket['jenis_kendaraan'],
+                'pengemudi'=>$tiket['pengemudi'],
+                'lokasi_sampah' => $tiket['lokasi_sampah'],
+                'jam_masuk'=>$tiket['jam_masuk'],
+                'volume' => $tiket['volume'],
             ];
-        m_tiket::where('id', $id )->update($data);
+            $waktu = new DateTime();
+            $data['jam_keluar'] = $waktu;
+            // dd($data);
+            m_tiket::where('id', $id )->update($data);
 
         return redirect()->route('tiket.index', ['id'=>$id])->with('message', 'Berhasil Memperbarui tiket');
 

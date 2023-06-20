@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\m_kabkota;
 use Illuminate\Http\Request;
+use \Yajra\Datatables\Datatables;
 
 class c_kabkota extends Controller
 {
@@ -12,10 +13,24 @@ class c_kabkota extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $kabkota = m_kabkota::All();
-        return view('kabkota.index', compact('kabkota'));
+        // $kabkota = m_kabkota::All();
+        // return view('kabkota.index', compact('kabkota'));
+        $nama_kantor = m_kabkota::all();                    
+        if ($request->ajax()) {
+            $kabkota = m_kabkota::all();
+            return DataTables::of($kabkota)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    // $btn = '<a href=' . route('kabkota.edit', $row->id_kab_kota) . ' style="font-size:20px" class="text-warning mr-10"><i class="lni lni-pencil-alt"></i></a>';
+                    // $btn .= '<a href=' . route('kabkota.destroy', $row->id_kab_kota) . ' style="font-size:20px" class="text-danger mr-10" onclick="notificationBeforeDelete(event, this)"><i class="lni lni-trash-can"></i></a>';
+                    // return $btn;
+                })
+                ->make(true);
+        }
+
+        return view('kabkota.index');
 
     }
 
