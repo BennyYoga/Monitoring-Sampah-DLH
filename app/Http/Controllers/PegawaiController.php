@@ -34,6 +34,7 @@ class PegawaiController extends Controller
                     $role = Role::where('id_role', $row->id_role)->first();
                     return $role->nama_role;
                 })
+                ->rawColumns(['action'])
                 ->make(true);
         }
 

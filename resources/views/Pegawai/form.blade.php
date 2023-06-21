@@ -49,49 +49,59 @@
             <!-- end row -->
         </div>
     
-    <form action="{{route('pegawai.store')}}" method="post">
+    <form action="{{route('pegawai.store')}}" method="post" id="pegawai">
         @csrf
         <div class="form-elements-wrapper">
             <div class="row">
-                <div class="col-lg-12">
+                <div class="col-lg-6">
+                    <!-- input style start -->
+                    <div class="card-style mb-30">
+                        <div class="input-style-1 col-lg-12">
+                            <label>Nama Lengkap</label>
+                            <input type="text" placeholder="Nama Lengkap" name="nama_pegawai" required/>
+                        </div>
+                        <!-- end input -->
+                        <div class="input-style-1 col-lg-12">
+                            <label>NIP</label>
+                            <input type="number" placeholder="NIP" name="NIP" required/>
+                       </div>
+                        <!-- end input -->
+                            <div class="select-style-1 col-lg-12">
+                                <label>Kantor</label>
+                                <div class="select-position">
+                                  <select name="id_kantor" required>
+                                    <option value="">Pilih Kantor</option>
+                                    @foreach ($kantor as $kantor)
+                                    <option value="{{$kantor->id_kantor}}">{{$kantor->nama_kantor}}</option>
+                                    @endforeach
+                                  </select>
+                                </div>
+                            </div>
+                            <!-- end input -->
+                    </div>
+                    <!-- end card -->
+                </div>
+                <!-- end col -->
+                <div class="col-lg-6">
                     <!-- input style start -->
                     <div class="card-style mb-30">
                         <div class="row">
-                        <div class="input-style-1 col-lg-6">
-                            <label>Nama Lengkap</label>
-                            <input type="text" placeholder="Nama Lengkap" name="nama_pegawai"/>
-                        </div>
-                        <!-- end input -->
-                        <div class="input-style-1 col-lg-6">
-                            <label>NIP</label>
-                            <input type="number" placeholder="NIP" name="NIP"/>
-                        </div>
-                        <!-- end input -->
-                        </div>
-                        <!-- end row -->
-                        <div class="row">
-                        <div class="input-style-1 col-lg-6">
+                        <div class="input-style-1 col-lg-12">
                             <label>Password</label>
-                            <input type="password" placeholder="Password" name="password" />
+                            <input type="password" placeholder="Password" id="password1" title="" required/>
                         </div>
                         <!-- end input -->
-                        <div class="select-style-1 col-lg-6">
-                            <label>Kantor</label>
-                            <div class="select-position">
-                              <select name="id_kantor">
-                                <option value="">Pilih Kantor</option>
-                                @foreach ($kantor as $kantor)
-                                <option value="{{$kantor->id_kantor}}">{{$kantor->nama_kantor}}</option>
-                                @endforeach
-                              </select>
-                            </div>
+                       <div class="input-style-1 col-lg-12">
+                            <label>Konfirmasi Password</label>
+                            <input type="password" placeholder="Konfirmasi Password" name="password" id="password2" required/>
+                            <p id="message"></p>
                         </div>
                         <!-- end input -->
                         </div>
                         <!-- end row -->
-                        <div class="card-footer">
-                            <button type="submit" class="btn btn-success">Simpan</button>
-                            <a href="/pegawai" class="btn btn-light">
+                        <div class="card-footer mb">
+                            <button type="submit" class="btn btn-success" onclick="checkPassword()">Simpan</button>
+                            <a href="/pegawai" class="btn btn-deactive">
                                 Batal
                             </a>
                         </div>
@@ -108,4 +118,21 @@
 
 @push('js')
 @include('sweetalert::alert')
+<script>
+    function checkPassword(event) {
+        let password1 = document.getElementById('password1').value;
+        let password2 = document.getElementById('password2').value;
+        let message = document.getElementById('message');
+
+        if(password1.length != 0){
+            if (password1 != password2) {
+                message.textContent = 'Password Tidak Sesuai';
+                message.style.color = 'red';
+                event.preventDefault();
+            }
+        }
+    }
+    const form = document.getElementById('pegawai');
+    form.addEventListener('submit', checkPassword);
+</script>
 @endpush
