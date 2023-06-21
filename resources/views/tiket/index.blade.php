@@ -47,13 +47,12 @@
                                 <tr class="text-center">
                                     <th>Jam Masuk</th>
                                     <th>Jam keluar</th>
-                                    <th>Nomor Kendaraan</th>
-                                    <th>Jenis Kendaraan</th>
+                                    <th>Nomor <br> Kendaraan</th>
+                                    <th>Jenis <br> Kendaraan</th>
                                     <th>Pengemudi</th>
-                                    <th>Kabupaten/Kota</th>
                                     <th>Lokasi</th>
                                     <th>Volume</th>
-                                    <th>Action</th>
+                                    <th width="120">Action</th>
                                 </tr>
                             </thead>
                         </table>
@@ -82,7 +81,6 @@ $(document).ready(function () {
             { data: 'no_kendaraan', name: 'no_kendaraan', class:"text-center" },
             { data: 'jenis_kendaraan', name: 'jenis_kendaraan', class:"text-center" },
             { data: 'pengemudi', name: 'pengemudi', class:"text-center" },
-            { data: 'nama_kab_kota', name: 'nama_kab_kota', class:"text-center" },
             { data: 'lokasi_sampah', name: 'lokasi_sampah', class:"text-center" },
             { data: 'volume', name: 'volume', class:"text-center" },
             { data: 'action', name: 'action', orderable: false,  searchable: false }

@@ -17,17 +17,26 @@ class c_tiket extends Controller
      */
     public function index(Request $request)
     {
+        $date = date('Y-m-d');
+        // $tiket = m_tiket::all();
+        $tiket = m_tiket::whereDate('jam_masuk', $date)->get();
         if ($request->ajax()) {
-            $tiket = m_tiket::all();
             return DataTables::of($tiket)
                 ->addColumn('nama_kab_kota', function ($row) {
                     $kab_kota = m_kabkota::where('id_kab_kota', $row->id_kab_kota)->first();
                     return $kab_kota->nama_kab_kota;
                 })
-
+                ->addColumn('jam_masuk', function ($row) {
+                    $row->jam_masuk = date('H:i:s', strtotime($row->jam_masuk));
+                    return $row->jam_masuk;
+                })
+                ->addColumn('jam_keluar', function ($row) {
+                    if ($row->jam_keluar) {
+                        $row->jam_keluar = date('H:i:s', strtotime($row->jam_keluar));
+                    }
+                    return $row->jam_keluar;
+                })
                 ->addColumn('action', function ($row) {
-
-                    $tiket = m_tiket::all();
                     $btn = '';
 
                     if ($row->jam_keluar === null) {
@@ -164,6 +173,22 @@ class c_tiket extends Controller
             $tiket = $tiket->get();
 
             return DataTables::of($tiket)
+                ->addColumn('bulan', function ($row) {
+                    $tanggal = date('d', strtotime($row->jam_keluar));
+                    $namaBulan = date('F', strtotime($row->jam_keluar));
+                    $bulan = $tanggal . ' ' . $namaBulan;
+                    return $bulan;
+                })
+                ->addColumn('jam_masuk', function ($row) {
+                    $row->jam_masuk = date('H:i:s', strtotime($row->jam_masuk));
+                    return $row->jam_masuk;
+                })
+                ->addColumn('jam_keluar', function ($row) {
+                    if ($row->jam_keluar) {
+                        $row->jam_keluar = date('H:i:s', strtotime($row->jam_keluar));
+                    }
+                    return $row->jam_keluar;
+                })
                 ->addColumn('nama_kab_kota', function ($row) {
                     $kab_kota = m_kabkota::where('id_kab_kota', $row->id_kab_kota)->first();
                     return $kab_kota->nama_kab_kota;
@@ -177,16 +202,53 @@ class c_tiket extends Controller
         return view('tiket.rekap', compact('kab_kota'));
     }
 
-    public function rekapData(Request $request, $option)
+    public function rekapData(Request $request, $optionKota, $optionHari)
     {
-        if($option != 'default'){
-            $data = m_tiket::whereNotNull('jam_keluar')->where('id_kab_kota', $option)->get();
-        }else{
-            $data = m_tiket::whereNotNull('jam_keluar')->get();
+        $data = null; // Inisialisasi variabel $data dengan null
+
+        // Filter Kota
+        if ($optionKota != 'default') {
+            $data = m_tiket::whereNotNull('jam_keluar')->where('id_kab_kota', $optionKota);
+        } else {
+            $data = m_tiket::whereNotNull('jam_keluar');
         }
-        
+
+        // Filter Berdasarkan Waktu
+        if ($optionHari == 'Hari') {
+            $date = date('Y-m-d');
+            $data = $data->whereDate('jam_keluar', $date);
+        } else if ($optionHari == 'Bulan') {
+            $date = date('Y-m');
+            $data = $data->whereYear('jam_keluar', '=', date('Y'))
+                ->whereMonth('jam_keluar', '=', date('m'));
+        } else if ($optionHari == 'Tahun') {
+            $date = date('Y');
+            $data = $data->whereYear('jam_keluar', $date);
+        }
+
+        $data = $data->get(); // Eksekusi query dan ambil data
+
+        // Melanjutkan pemrosesan data selanjutnya...
+
+
         if ($request->ajax()) {
             return DataTables::of($data)
+                ->addColumn('bulan', function ($row) {
+                    $tanggal = date('d', strtotime($row->jam_keluar));
+                    $namaBulan = date('F', strtotime($row->jam_keluar));
+                    $bulan = $tanggal . ' ' . $namaBulan;
+                    return $bulan;
+                })
+                ->addColumn('jam_masuk', function ($row) {
+                    $row->jam_masuk = date('H:i:s', strtotime($row->jam_masuk));
+                    return $row->jam_masuk;
+                })
+                ->addColumn('jam_keluar', function ($row) {
+                    if ($row->jam_keluar) {
+                        $row->jam_keluar = date('H:i:s', strtotime($row->jam_keluar));
+                    }
+                    return $row->jam_keluar;
+                })
                 ->addColumn('nama_kab_kota', function ($row) {
                     $kab_kota = m_kabkota::where('id_kab_kota', $row->id_kab_kota)->first();
                     return $kab_kota->nama_kab_kota;

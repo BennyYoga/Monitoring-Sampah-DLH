@@ -67,7 +67,6 @@
                                     <h6 class="mb-10">Data Hari Ini</h6>
                                     <h3 class="text-bold mb-10">{{$iteration['hari']}}</h3>
                                     <p class="text-sm text-success">
-                                        <i class="lni"></i> +2.00%
                                         <span class="text-gray">{{$date}} {{$day}}</span>
                                     </p>
                                 </div>
@@ -84,7 +83,6 @@
                                     <h6 class="mb-10">Data Bulan Ini</h6>
                                     <h3 class="text-bold mb-10">{{$iteration['bulan']}}</h3>
                                     <p class="text-sm text-success">
-                                        <i class="lni"></i> +5.45%
                                         <span class="text-gray">{{$monthYear}}</span>
                                     </p>
                                 </div>
@@ -101,8 +99,7 @@
                                     <h6 class="mb-10">Volume Hari Ini</h6>
                                     <h3 class="text-bold mb-10">{{$berat['hari']}}</h3>
                                     <p class="text-sm text-danger">
-                                        <i class="lni lni-arrow-down"></i> -2.00%
-                                        <span class="text-gray">Expense</span>
+                                        <span class="text-gray">Cubic Metre</span>
                                     </p>
                                 </div>
                             </div>
@@ -118,8 +115,7 @@
                                     <h6 class="mb-10">Volume Bulan Ini</h6>
                                     <h3 class="text-bold mb-10">{{$berat['bulan']}}</h3>
                                     <p class="text-sm text-danger">
-                                        <i class="lni"></i> -25.00%
-                                        <span class="text-gray"> Earning</span>
+                                        <span class="text-gray">Cubic Metre</span>
                                     </p>
                                 </div>
                             </div>

@@ -13,9 +13,9 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
         $today = date('Y-m-d');
-        $tiket['Day'] = m_tiket::whereDate('jam_masuk', $today)->get();
+        $tiket['Day'] = m_tiket::whereDate('jam_keluar', $today)->get();
         $today = date('m');
-        $tiket['Month'] = m_tiket::whereMonth('jam_masuk', $today)->get();
+        $tiket['Month'] = m_tiket::whereMonth('jam_keluar', $today)->get();
 
         $berat = [
             'hari' => 0,
@@ -34,15 +34,15 @@ class DashboardController extends Controller
         // Membuat indeks array kembali secara berurutan
         //Rekapitulasi data
         $today = date('Y-m-d');
-        $rekap = m_tiket::where('jam_masuk', 'like', $today . '%')
-            ->groupBy('id_kab_kota', 'jam_masuk')
-            ->select('id_kab_kota', 'jam_masuk', DB::raw('SUM(volume) as volume'))
+        $rekap = m_tiket::where('jam_keluar', 'like', $today . '%')
+            ->groupBy('id_kab_kota', 'jam_keluar')
+            ->select('id_kab_kota', 'jam_keluar', DB::raw('SUM(volume) as volume'))
             ->get();
 
         $data = [];
         foreach ($rekap as $dataTiket) {
             $id_kab_kota = $dataTiket->id_kab_kota;
-            $tanggal = $dataTiket->jam_masuk;
+            $tanggal = $dataTiket->jam_keluar;
             $volume = $dataTiket->volume;
 
             if (!isset($data[$id_kab_kota])) {
@@ -97,15 +97,15 @@ class DashboardController extends Controller
         else if ($option == 'Perbulan'){
             $today = date('Y-m');
         }
-        $rekap = m_tiket::where('jam_masuk', 'like', $today . '%')
-            ->groupBy('id_kab_kota', 'jam_masuk')
-            ->select('id_kab_kota', 'jam_masuk', DB::raw('SUM(volume) as volume'))
+        $rekap = m_tiket::where('jam_keluar', 'like', $today . '%')
+            ->groupBy('id_kab_kota', 'jam_keluar')
+            ->select('id_kab_kota', 'jam_keluar', DB::raw('SUM(volume) as volume'))
             ->get();
 
         $data = [];
         foreach ($rekap as $dataTiket) {
             $id_kab_kota = $dataTiket->id_kab_kota;
-            $tanggal = $dataTiket->jam_masuk;
+            $tanggal = $dataTiket->jam_keluar;
             $volume = $dataTiket->volume;
 
             if (!isset($data[$id_kab_kota])) {

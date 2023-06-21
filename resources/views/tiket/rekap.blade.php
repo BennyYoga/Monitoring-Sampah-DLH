@@ -42,24 +42,49 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        <div class="mb-3">
-                            <label for="filter-kabkota" class="form-label">Filter Kabupaten/Kota</label>
-                            <select class="form-select" id="filter-kabkota">
-                                <option value="default">Semua</option>
-                                @foreach($kab_kota as $option)
-                                    <option value="{{$option->id_kab_kota}}">{{$option->nama_kab_kota}}</option>
-                                @endforeach
-                            </select>
+                        <div class="title d-flex flex-wrap align-items-center justify-content-between">
+                            <div class="left">
+                                <h6 class="text-medium mb-30">Rekap Data</h6>
+                            </div>
+                            <div class="right">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="select-style-1">
+                                            <div class="select-position select-sm">
+                                                <select class="light-bg" id="filter-kota" name="option">
+                                                    <option value="default">Semua Kota</option>
+                                                    @foreach($kab_kota as $option)
+                                                    <option value="{{$option->id_kab_kota}}">{{$option->nama_kab_kota}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="select-style-1">
+                                            <div class="select-position select-sm">
+                                                <select class="light-bg" id="filter-hari" name="option">
+                                                    <option value="SemuaHari">Semua Hari</option>
+                                                    <option value="Hari">Harian</option>
+                                                    <option value="Bulan">Bulanan</option>
+                                                    <option value="Tahun">Tahunan</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end select -->
+                            </div>
                         </div>
                         <table class="table" id="tiket">
                             <thead>
                                 <tr class="text-center">
-                                    <th>Jam Masuk</th>
-                                    <th>Jam keluar</th>
-                                    <th>Nomor Kendaraan</th>
-                                    <th>Jenis Kendaraan</th>
+                                    <th>Tanggal</th>
+                                    <th>Jam<br>Masuk</th>
+                                    <th>Jam<br>keluar</th>
+                                    <th>Nomor<br>Kendaraan</th>
+                                    <th>Jenis<br>Kendaraan</th>
                                     <th>Pengemudi</th>
-                                    <th>Kabupaten/Kota</th>
                                     <th>Lokasi</th>
                                     <th>Volume</th>
                                 </tr>
@@ -87,44 +112,46 @@
             serverSide: true,
             ajax: "",
             columns: [{
+                    data: 'bulan',
+                    name: 'bulan'
+                },
+                {
                     data: 'jam_masuk',
-                    class: "text-center"
+                    name: 'jam_masuk'
                 },
                 {
                     data: 'jam_keluar',
-                    orderable: true,
-                    class: "text-center"
+                    name: 'jam_keluar',
+                    orderable: true
                 },
                 {
                     data: 'no_kendaraan',
-                    class: "text-center"
+                    name: 'no_kendaraan'
                 },
                 {
                     data: 'jenis_kendaraan',
-                    class: "text-center"
+                    name: 'jenis_kendaraan'
                 },
                 {
-                    data: 'pengemudi',
-                    class: "text-center"
-                },
-                {
-                    data: 'nama_kab_kota',
-                    class: "text-center"
+                    name: 'pengemudi',
+                    data: 'pengemudi'
                 },
                 {
                     data: 'lokasi_sampah',
-                    class: "text-center"
+                    name: 'lokasi_sampah'
                 },
                 {
-                    data: 'volume',
-                    class: "text-center"
+                    name: 'volume',
+                    data: 'volume'
                 },
             ],
         });
 
         // Filter data based on selected Kabupaten/Kota
-        $('#filter-kabkota').on('change', function() {
-            table.ajax.url('/tiket/rekap/data/' + $(this).val()).load(); // Mengubah URL AJAX dan memuat ulang tabel
+        $('#filter-kota, #filter-hari').on('change', function() {
+            var inputHari = $('#filter-hari').val();
+            var inputKota = $('#filter-kota').val();
+            table.ajax.url('/tiket/rekap/data/' + inputKota + '/' + inputHari).load(); // Mengubah URL AJAX dan memuat ulang tabel
         });
     });
 </script>
