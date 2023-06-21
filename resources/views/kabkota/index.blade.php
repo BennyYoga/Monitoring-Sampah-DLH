@@ -32,6 +32,9 @@
                             </ol>
                         </nav>
                     </div>
+                    <div class="d-flex justify-content-end mb-3">
+                        <a href="{{ route('kota.create') }}" class="btn btn-primary">Add</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -42,12 +45,12 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        <table class="table" id="pegawai">
+                        <table class="table" id="kabkota">
                             <thead>
                                 <tr class="text-center">
                                     <th>No</th>
-                                    <th>Jam keluar</th>
-                                    <th>Nomor Kendaraan</th>
+                                    <th>id Kabupaten Kota</th>
+                                    <th>Kabupaten Kota</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -62,19 +65,20 @@
 @endsection
 
 @push('js')
+@include('sweetalert::alert')
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function () {
-    var table = $('#pegawai').DataTable({
+    var table = $('#kabkota').DataTable({
         processing: true,
         serverSide: true,
         ajax: "",
         columns: [
             {"data": 'DT_RowIndex', orderable: false, searchable: false},
-            { data: 'nama_kab_kota', name: 'nama_kab_kota', class:"text-center" },
             { data : 'id_kab_kota', name: 'id_kab_kota', class:"text-center"},
+            { data: 'nama_kab_kota', name: 'nama_kab_kota'},
             { data: 'action', name: 'action', orderable: false,  searchable: false }
         ]
     });

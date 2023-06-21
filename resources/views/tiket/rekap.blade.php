@@ -87,6 +87,7 @@
                                     <th>Pengemudi</th>
                                     <th>Lokasi</th>
                                     <th>Volume</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                         </table>
@@ -144,6 +145,8 @@
                     name: 'volume',
                     data: 'volume'
                 },
+                { data: 'action', name: 'action', orderable: false,  searchable: false }
+
             ],
         });
 

@@ -1,6 +1,6 @@
 @extends('template.template')
 
-@section('title','Portal Admin Desa | Dashboard')
+@section('title','Trash Monitoring System | Dashboard')
 
 {{-- kalau ada css tambahan selain dari template.blade --}}
 @push('css')
@@ -22,21 +22,49 @@
                 </div>
                 @endif --}}
                 <div class="titlemb-30">
-                    <h2>Data Kabupaten / Kota</h2>
+                    <h2>Input Data Tiket</h2>
                 </div>
-                <form action="" method="post">
+            </div>
+            <!-- end col -->
+            <div class="col-md-6">
+                <div class="breadcrumb-wrapper mb-30">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="/tiket">list tiket</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="Add">
+                                Add
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+            <!-- end col -->
+            <form action="{{route('kota.post')}}" method="POST">
+                @csrf
+                <div class="row">
+                  <div class="col-12">
                     <div class="input-style-1">
-                        <label>Nama Kota</label>
-                        <input type="text" placeholder="Masukkan Nama Kota/Kabupaten" name="nama_kota_kab">
+                      <label>Pengemudi</label>
+                      <input type="text" placeholder="Kabupaten Kota" id="nama_kab_kota" name="nama_kab_kota" required autofocus />
                     </div>
-                    <div class="card-footer">
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                    <a href="/kota" class="btn btn-default">
-                        Batal
-                    </a>
-                </div>
-                </form>
+                  </div>
+                    <button class="
+                              main-btn
+                              primary-btn
+                              btn-hover
+                              w-100
+                              text-center
+                            " type="submit">
+                        Submit
+                      </button>
+        </div>
+        <!-- end row -->
+    </div>
+</section>
+@endsection
 
-    
-                        
-                @endsection
+@push('js')
+  @include('sweetalert::alert')
+@endpush
