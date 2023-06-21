@@ -87,9 +87,9 @@
         var table = $('#pegawai').DataTable({
             processing: true,
             serverSide: true,
-            ajax:  "",
+            ajax: "",
             // {
-            //     url: "{{ route('tiket.rekap') }}",
+            //     url: "{{route('tiket.rekap')}}",
             //     data: function (d) {
             //         d.filterKabkota = $('#filter-kabkota').val();
             //     }
@@ -108,7 +108,6 @@
 
         // Filter data based on selected Kabupaten/Kota
         $('#filter-kabkota').on('change', function () {
-            // table.ajax.reload('/tiket/rekap/' + $(this).val()).load();
             table.ajax.reload();
         });
     });

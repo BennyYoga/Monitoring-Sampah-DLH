@@ -10,6 +10,7 @@ class m_kabkota extends Model
     use HasFactory;
 
     protected $table ='kabupaten_kota';
+    protected $guarded = ['id'];
 
     protected $fillable = [
         'id_kab_kota',

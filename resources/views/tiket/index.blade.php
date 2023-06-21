@@ -33,6 +33,9 @@
                         </nav>
                     </div>
                 </div>
+                <div class="d-flex justify-content-end mb-3">
+                        <a href="{{ route('tiket.create') }}" class="btn btn-primary">Add</a>
+                    </div>
             </div>
         </div>
         <!-- ========== title-wrapper end ========== -->
