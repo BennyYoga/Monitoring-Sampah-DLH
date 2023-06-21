@@ -45,13 +45,13 @@
                         <div class="mb-3">
                             <label for="filter-kabkota" class="form-label">Filter Kabupaten/Kota</label>
                             <select class="form-select" id="filter-kabkota">
-                                <option value="">Semua</option>
+                                <option value="default">Semua</option>
                                 @foreach($kab_kota as $option)
-                                    <option value="{{$option}}">{{$option}}</option>
+                                    <option value="{{$option->id_kab_kota}}">{{$option->nama_kab_kota}}</option>
                                 @endforeach
                             </select>
                         </div>
-                        <table class="table" id="pegawai">
+                        <table class="table" id="tiket">
                             <thead>
                                 <tr class="text-center">
                                     <th>Jam Masuk</th>
@@ -64,8 +64,6 @@
                                     <th>Volume</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -82,33 +80,51 @@
 <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 <script type="text/javascript">
-    $(document).ready(function () {
+    $(function() {
         // Initialize DataTable
-        var table = $('#pegawai').DataTable({
+        var table = $('#tiket').DataTable({
             processing: true,
             serverSide: true,
             ajax: "",
-            // {
-            //     url: "{{route('tiket.rekap')}}",
-            //     data: function (d) {
-            //         d.filterKabkota = $('#filter-kabkota').val();
-            //     }
-            // },
-            columns: [
-                { data: 'jam_masuk', name: 'jam_masuk', class:"text-center" },
-                { data: 'jam_keluar', name: 'jam_keluar', orderable: true, class:"text-center" },
-                { data: 'no_kendaraan', name: 'no_kendaraan', class:"text-center" },
-                { data: 'jenis_kendaraan', name: 'jenis_kendaraan', class:"text-center" },
-                { data: 'pengemudi', name: 'pengemudi', class:"text-center" },
-                { data: 'nama_kab_kota', name: 'nama_kab_kota', class:"text-center" },
-                { data: 'lokasi_sampah', name: 'lokasi_sampah', class:"text-center" },
-                { data: 'volume', name: 'volume', class:"text-center" },
+            columns: [{
+                    data: 'jam_masuk',
+                    class: "text-center"
+                },
+                {
+                    data: 'jam_keluar',
+                    orderable: true,
+                    class: "text-center"
+                },
+                {
+                    data: 'no_kendaraan',
+                    class: "text-center"
+                },
+                {
+                    data: 'jenis_kendaraan',
+                    class: "text-center"
+                },
+                {
+                    data: 'pengemudi',
+                    class: "text-center"
+                },
+                {
+                    data: 'nama_kab_kota',
+                    class: "text-center"
+                },
+                {
+                    data: 'lokasi_sampah',
+                    class: "text-center"
+                },
+                {
+                    data: 'volume',
+                    class: "text-center"
+                },
             ],
         });
 
         // Filter data based on selected Kabupaten/Kota
-        $('#filter-kabkota').on('change', function () {
-            table.ajax.reload();
+        $('#filter-kabkota').on('change', function() {
+            table.ajax.url('/tiket/rekap/data/' + $(this).val()).load(); // Mengubah URL AJAX dan memuat ulang tabel
         });
     });
 </script>
