@@ -2,10 +2,12 @@
 
 @section('title', 'Trash Monitoring System | Dashboard')
 
+
 @push('css')
 <link href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" />
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />\
+<link href="{{ asset('vendor/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet">
 @endpush
 
 @section('content')
@@ -34,7 +36,7 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-end mb-3">
-                        <a href="{{ route('tiket.create') }}" class="btn btn-primary">Add</a>
+                        <a href="{{route('tiket.create')}}" class="btn btn-primary">Add</a>
                     </div>
             </div>
         </div>
@@ -55,7 +57,7 @@
                                     <th>Pengemudi</th>
                                     <th>Kabupaten/Kota</th>
                                     <th>Lokasi</th>
-                                    <th>Volume</th>
+                                    <th>Berat(Kg)</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>

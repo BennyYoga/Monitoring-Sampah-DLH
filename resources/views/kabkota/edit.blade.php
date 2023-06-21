@@ -32,7 +32,7 @@
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item">
-                                    <a href="Pegawai.index">Pegawai</a>
+                                    <a href="kabkota.index">Kabupaten Kota</a>
                                 </li>
                                 <li class="breadcrumb-item active" aria-current="page">
                                     Update
@@ -49,7 +49,7 @@
             <!-- end row -->
         </div>
     
-    <form action="{{route('pegawai.update', ['id'=>$pegawai->id_pegawai])}}" method="post">
+    <form action="{{route('kabkota.update', ['id'=>$kabkota->id_kab_kota])}}" method="post">
         @csrf
         @method('POST')
         <input type="hidden" name="_method" value="PUT">
@@ -60,11 +60,11 @@
                     <div class="card-style mb-30">
                         <div class="row">
                         <div class="input-style-1 col-lg-6">
-                            <label>Nama Kabupate / Kota</label>
-                            <input type="text" placeholder="Nama Lengkap" id="nama_kab_kota" name="nama_kab_kota" required autofocus value="{{$kabkota->nama_kab_kota}}"/>
+                            <label>Nama Kabupaten / Kota</label>
+                            <input type="text" placeholder="Kabupaten Kota" id="nama_kab_kota" name="nama_kab_kota" required autofocus value="{{$kabkota->nama_kab_kota}}"/>
                         </div>
                         <!-- end input -->
-                        </div>
+                        <!-- end input -->
                         <!-- end row -->
                         <div class="card-footer">
                             <button type="submit" class="btn btn-success">Simpan</button>

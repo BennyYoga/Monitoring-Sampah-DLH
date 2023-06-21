@@ -42,10 +42,12 @@ Route::group(['middleware' => 'role:1|2'], function(){
         Route::get('/kantor/destroy/{id}', [KantorController::class, 'destroy'])->name('kantor.destroy');
 
         Route::get('kota', [c_kabkota::class, 'index'])->name('kabkota.index');
-        Route::get('/kota/edit/{id_kab_kota}', [c_kabkota::class, 'edit'])->name('kabkota.edit');
-        Route::put('/kota/edit/{id_kab_kota}', [c_kabkota::class, 'update'])->name('kabkota.update');
+        Route::get('/kota/edit/{id}', [c_kabkota::class, 'edit'])->name('kabkota.edit');
+        Route::put('/kota/update/{id}', [c_kabkota::class, 'update'])->name('kabkota.update');
         Route::get('/kota/create', [c_kabkota::class, 'create'])->name('kota.create');
         Route::post('/kota/post', [c_kabkota::class, 'store'])->name('kota.post');
+        Route::get('/kota/destroy/{id}', [c_kabkota::class, 'destroy'])->name('kabkota.destroy');
+
     });
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');    
@@ -61,15 +63,15 @@ Route::get('/login', function () {
 // });
 // Route::get('kota', [c_kabkota::class, 'index']);
 
-Route::get('/tiket/edit/{id}', [c_kabkota::class, 'edit'])->name('kabkota.edit');
-Route::get('create', [c_kabkota::class, 'create']);
+// Route::get('/tiket/edit/{id}', [c_kabkota::class, 'edit'])->name('kabkota.edit');
+Route::get('tiket/create', [c_tiket::class, 'create'])->name('tiket.create');
 Route::get('tiket', [c_tiket::class, 'index'])->name('tiket.index');
 Route::get('tiket/rekap/', [c_tiket::class, 'rekap'])->name('tiket.rekap');
 Route::get('tiket/rekap/data/{option}', [c_tiket::class, 'rekapData'])->name('tiket.rekap.data');
-Route::get('tiket/create', [c_tiket::class, 'create']);
 Route::post('tiket/post', [c_tiket::class, 'store'])->name('tiket.post');
 Route::get('/tiket/edit/{id}', [c_tiket::class, 'edit'])->name('tiket.edit');
 Route::put('tiket/update/{id}', [c_tiket::class, 'update'])->name('tiket.update');
+Route::get('tiket/detail/{id}', [c_tiket::class, 'show'])->name('tiket.detail');
 
 
 Route::get('login', [AuthController::class, 'index'])->name('login');

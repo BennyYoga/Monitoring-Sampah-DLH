@@ -71,7 +71,7 @@
                   <!-- end col -->
                   <div class="col-12">
                     <div class="input-style-1">
-                      <label>volume</label>
+                      <label>Berat(Kilogram)</label>
                       <input type="number" placeholder="volume" id="volume" name="volume" required autofocus />
                     </div>
                   </div>

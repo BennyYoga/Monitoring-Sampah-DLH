@@ -49,11 +49,6 @@
                     <span class="text">Kabupaten Kota</span>
                 </a>
             </li>
-                <a href="{{route('tiket.index')}}">
-                    <li class="nav-item {{ Request::routeIs('tiket.rekap') ? 'active' : '' }}">
-                    <span class="text">Tiket</span>
-                </a>
-            </li>
             <li class="nav-item {{ Request::routeIs('tiket.rekap') ? 'active' : '' }}">
                 <a href="{{route('tiket.rekap')}}">
                     <span class="icon">

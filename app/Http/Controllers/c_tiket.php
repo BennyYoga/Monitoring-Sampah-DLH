@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\m_kabkota;
 use App\Models\m_tiket;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 use \Yajra\Datatables\Datatables;
 use DateTime;
 
@@ -29,13 +30,13 @@ class c_tiket extends Controller
 
                     $tiket = m_tiket::all();
                     $btn = '';
+           
 
                     if ($row->jam_keluar === null) {
-                        // $btn .= '<a href="' . route('tiket.edit', $row->id) . '" class="btn btn-primary">Selesai</a>';
                         $btn .= '<form action="' . route('tiket.update', ['id' => $row->id]) . '" method="POST">';
                         $btn .= '<input type="hidden" name="_method" value="PUT">';
                         $btn .= csrf_field();
-                        $btn .= '<button type="submit" class="btn btn-success" style="font-size: 15px">Selesai</button>';
+                        $btn .= '<button type="submit" class="btn btn-success" data-confirm-swal="true" data-confirm-title="Delete User!" data-confirm-text="Are you sure you want to delete?" style="font-size: 15px">Selesai</button>';
                         $btn .= '</form>';
                     } else {
                         $btn .= '';
@@ -96,7 +97,8 @@ class c_tiket extends Controller
      */
     public function show($id)
     {
-        //
+        $tiket=m_tiket::findOrfail($id);    
+        return view('tiket.detail', compact('tiket'));
     }
 
     /**
@@ -136,7 +138,7 @@ class c_tiket extends Controller
         // dd($data);
         m_tiket::where('id', $id)->update($data);
 
-        return redirect()->route('tiket.index', ['id' => $id])->with('message', 'Berhasil Memperbarui tiket');
+        return redirect()->route('tiket.index')->withToastSuccess('Berhasil Memperbarui tiket');
     }
 
     /**
@@ -168,6 +170,12 @@ class c_tiket extends Controller
                     $kab_kota = m_kabkota::where('id_kab_kota', $row->id_kab_kota)->first();
                     return $kab_kota->nama_kab_kota;
                 })
+                ->addColumn('action', function ($row) {
+                    $tiket = m_tiket::all();
+                    $btn = '';
+                    $btn = '<a href=' . route('tiket.detail', $row->id) . ' style="font-size:20px" class="text-warning mr-10"><i class="lni lni-pencil-alt"></i></a>';
+                    return $btn;
+                })
                 ->rawColumns(['action'])
                 ->make(true);
         }
@@ -190,6 +198,9 @@ class c_tiket extends Controller
                 ->addColumn('nama_kab_kota', function ($row) {
                     $kab_kota = m_kabkota::where('id_kab_kota', $row->id_kab_kota)->first();
                     return $kab_kota->nama_kab_kota;
+                })
+                ->addColumn('action', function ($row) {
+                    $tiket = m_tiket::all();
                 })
                 ->make(true);
         }

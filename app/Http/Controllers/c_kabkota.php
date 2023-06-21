@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\m_kabkota;
+use App\Models\m_tiket;
 use Illuminate\Http\Request;
 use \Yajra\Datatables\Datatables;
 
@@ -24,7 +25,7 @@ class c_kabkota extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
                     $btn = '<a href=' . route('kabkota.edit', $row->id_kab_kota) . ' style="font-size:20px" class="text-warning mr-10"><i class="lni lni-pencil-alt"></i></a>';
-                    // $btn .= '<a href=' . route('kabkota.destroy', $row->id_kab_kota) . ' style="font-size:20px" class="text-danger mr-10" onclick="notificationBeforeDelete(event, this)"><i class="lni lni-trash-can"></i></a>';
+                    $btn .= '<a href=' . route('kabkota.destroy', $row->id_kab_kota) . ' style="font-size:20px" class="text-danger mr-10" onclick="notificationBeforeDelete(event, this)"><i class="lni lni-trash-can"></i></a>';
                     return $btn;
                 })
                     
@@ -62,9 +63,10 @@ class c_kabkota extends Controller
             ]
             );
             $data= $request->all();
-            $check= m_kabkota::where('nama_kab_kota', $data['nama_kab_kota'] );
+            // dd($data);
+            $check= m_kabkota::where('nama_kab_kota', $data['nama_kab_kota'])->first();
 
-            if($check){
+            if(!$check){
                 m_kabkota::create($data);
                 return redirect()-> route('kabkota.index')->withToastSuccess('Berhasil Menambahkan Kota / Kabupaten');
             }else{
@@ -95,9 +97,7 @@ class c_kabkota extends Controller
         $kabkota = m_kabkota::find($id_kab_kota);
         if (!$kabkota) return redirect()->route('kabkota.index')
             ->with('error_message', 'kabkota dengan id'.$id_kab_kota.' tidak ditemukan');
-        return view('kabkota.edit', [
-            'kabkota' => $kabkota
-        ]);
+        return view('kabkota.edit', compact('kabkota'));
     }
 
     /**
@@ -112,8 +112,16 @@ class c_kabkota extends Controller
         $request->validate([
             'nama_kab_kota' => 'required',
         ]);
-        $data =$request->all();
-        m_kabkota::find($id_kab_kota)->update($data);
+        $data=$request->all();
+        $check= m_kabkota::where('nama_kab_kota', $data['nama_kab_kota'])->first();
+
+        if(!$check){
+            m_kabkota::find($id_kab_kota)->update($data);
+            return redirect()-> route('kabkota.index')->withToastSuccess('Berhasil Mememperbaharui Data');
+        }else{
+            return redirect()->route('kabkota.index')->withToastError('Gagal memperbaharui Data');
+        }
+
     }
 
     /**
@@ -122,8 +130,11 @@ class c_kabkota extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id_kab_kota)
     {
-        //
+        
+        $pegawai = m_kabkota::find($id_kab_kota);
+        $pegawai->delete();
+            return redirect()->route('kabkota.index')->withToastSuccess('Berhasil menghapus Data');
     }
 }
