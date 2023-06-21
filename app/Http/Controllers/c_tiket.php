@@ -20,7 +20,7 @@ class c_tiket extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $tiket = m_tiket::all();
+            $tiket = m_tiket::whereNull('jam_keluar');
             return DataTables::of($tiket)
                 ->addColumn('nama_kab_kota', function ($row) {
                     $kab_kota = m_kabkota::where('id_kab_kota', $row->id_kab_kota)->first();                    
@@ -82,19 +82,6 @@ class c_tiket extends Controller
                 return $kab_kota->nama_kab_kota;
             })
             ->addColumn('action', function ($row) {
-                $btn = '';
-
-                if ($row->jam_keluar === null) {
-                    $btn .= '<form action="' . route('tiket.update', ['id'=>$row->id]) . '" method="POST">';
-                    $btn .= '<input type="hidden" name="_method" value="PUT">';
-                    $btn .= csrf_field();
-                    $btn .= '<button type="submit" class="btn btn-success" style="font-size: 15px">Selesai</button>';
-                    $btn .= '</form>';
-                } else {
-                    $btn .= '';
-                }
-                
-                return $btn;
             })
             ->rawColumns(['action'])
             ->make(true);
