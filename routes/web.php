@@ -33,6 +33,7 @@ Route::group(['middleware' => 'role:1|2'], function(){
         Route::get('/pegawai/edit/{id}', [PegawaiController::class, 'edit'])->name('pegawai.edit');
         Route::put('/pegawai/update/{id}', [PegawaiController::class, 'update'])->name('pegawai.update');
         Route::get('/pegawai/destroy/{id}', [PegawaiController::class, 'destroy'])->name('pegawai.destroy');
+        Route::get('/pegawai/print', [PegawaiController::class, 'document'])->name('pegawai.document');
 
         Route::get('/kantor', [KantorController::class, 'index'])->name('kantor');
         Route::get('/kantor/create', [KantorController::class, 'create'])->name('kantor.create');
@@ -40,6 +41,7 @@ Route::group(['middleware' => 'role:1|2'], function(){
         Route::get('/kantor/edit/{id}', [KantorController::class, 'edit'])->name('kantor.edit');
         Route::put('/kantor/update/{id}', [KantorController::class, 'update'])->name('kantor.update');
         Route::get('/kantor/destroy/{id}', [KantorController::class, 'destroy'])->name('kantor.destroy');
+        Route::get('/kantor/print', [KantorController::class, 'document'])->name('kantor.document');
     });
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');    

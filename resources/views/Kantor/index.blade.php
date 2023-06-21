@@ -42,6 +42,7 @@
                     </div>
                     <div class="d-flex justify-content-end mb-3">
                         <a href="{{ route('kantor.create') }}" class="btn btn-primary">Add</a>
+                        <a href="{{ route('kantor.document') }}" class="btn btn-success ml-2">Print</a>
                     </div>
                 </div>
                 <!-- end col -->

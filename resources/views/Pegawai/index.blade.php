@@ -41,7 +41,8 @@
                         </nav>
                     </div>
                     <div class="d-flex justify-content-end mb-3">
-                        <a href="{{ route('pegawai.create') }}" class="btn btn-primary">Add</a>
+                        <a href="{{ route('pegawai.create') }}" class="btn btn-primary mr-2">Add</a>
+                        <a href="{{ route('pegawai.document') }}" class="btn btn-success ml-2">Print</a>
                     </div>
                 </div>
                 <!-- end col -->
