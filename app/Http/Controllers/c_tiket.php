@@ -19,7 +19,7 @@ class c_tiket extends Controller
     {
         $date = date('Y-m-d');
         // $tiket = m_tiket::all();
-        $tiket = m_tiket::whereDate('jam_masuk', $date)->get();
+        $tiket = m_tiket::whereNull('jam_keluar')->get();
         if ($request->ajax()) {
             return DataTables::of($tiket)
                 ->addColumn('nama_kab_kota', function ($row) {
