@@ -4,7 +4,8 @@
 
 {{-- kalau ada css tambahan selain dari template.blade --}}
 @push('css')
-<link href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.bootstrap5.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" />
 <link rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
@@ -41,7 +42,8 @@
                         </nav>
                     </div>
                     <div class="d-flex justify-content-end mb-3">
-                        <a href="{{ route('pegawai.create') }}" class="btn btn-primary">Add</a>
+                        <a href="{{ route('pegawai.create') }}" class="btn btn-primary mr-2">Add</a>
+                        <a href="{{ route('pegawai.document') }}" class="btn btn-success ml-2">Print</a>
                     </div>
                 </div>
                 <!-- end col -->
@@ -57,11 +59,11 @@
                                 <table class="table" id="pegawai">
                                     <thead>
                                         <tr class="text-center">
-                                            <th>Id Pegawai</th>
-                                            <th>Kantor</th>
-                                            <th>Role</th>
-                                            <th>NIP</th>
+                                            <th>No</th>
                                             <th>Nama Pegawai</th>
+                                            <th>NIP</th>
+                                            <th>Role</th>
+                                            <th>Kantor</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -80,6 +82,14 @@
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.bootstrap5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.colVis.min.js"></script>
 
 <form action="" id="delete-form" method="post">
     @method('get')
@@ -97,17 +107,37 @@ $('#example2').DataTable({
                 $("#delete-form").submit();
             }
         }
-    $(function () {
+    $(document).ready(function () {
     var table = $('#pegawai').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+           {
+               extend: 'pdf',
+               exportOptions: {
+                   columns: [0, 1, 2, 3] // Kolom yang ingin disertakan dalam ekspor
+               }
+           }
+       ],
         processing: true,
         serverSide: true,
-        ajax: "",
+        ajax: "{{ route('pegawai') }}",
         columns: [
-            {data: 'id_pegawai', name: 'id_pegawai'},
-            {data: 'nama_kantor', name: 'nama_kantor'},
-            {data: 'nama_role', name: 'nama_role'},
-            {data: 'NIP', name: 'NIP'},
+            {   
+            data: null,
+            render: function (data, type, row, meta) {
+                // Menghitung nomor urut berdasarkan halaman dan jumlah baris yang ditampilkan
+                var startIndex = meta.settings._iDisplayStart;
+                var index = meta.row + startIndex + 1;
+
+                return index;
+            },
+            orderable: false,
+            searchable: false
+            },
             {data: 'nama_pegawai', name: 'nama_pegawai'},
+            {data: 'NIP', name: 'NIP'},
+            {data: 'nama_role', name: 'nama_role'},
+            {data: 'nama_kantor', name: 'nama_kantor'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
     });

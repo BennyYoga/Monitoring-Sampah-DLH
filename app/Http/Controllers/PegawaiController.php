@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Hash;
+use Mpdf\Mpdf as PDF;
 
 class PegawaiController extends Controller
 {
@@ -33,6 +34,7 @@ class PegawaiController extends Controller
                     $role = Role::where('id_role', $row->id_role)->first();
                     return $role->nama_role;
                 })
+                ->rawColumns(['action'])
                 ->make(true);
         }
 
@@ -105,7 +107,20 @@ class PegawaiController extends Controller
     public function destroy($id_pegawai)
     {
         $pegawai = Pegawai::find($id_pegawai);
-        $pegawai->delete();
+        if ($pegawai) {
+            $pegawai->delete();
             return redirect()->route('pegawai')->with('success', 'Berhasil menghapus pegawai');
+        }
+        return redirect()->route('pegawai')->with('error', 'Pegawai tidak ditemukan');
+    }
+
+    public function document (){
+        $pegawai = Pegawai::all();
+        $mpdf = new PDF(['orientation' => 'L']);
+        // $html ="";
+        $html = view('Pegawai.print',compact('pegawai'));
+        // $html=$html->render();
+        $mpdf ->writeHTML($html);
+        $mpdf -> Output("Daftar Pegawai.pdf","I");
     }
 }

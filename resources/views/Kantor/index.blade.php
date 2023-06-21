@@ -42,6 +42,7 @@
                     </div>
                     <div class="d-flex justify-content-end mb-3">
                         <a href="{{ route('kantor.create') }}" class="btn btn-primary">Add</a>
+                        <a href="{{ route('kantor.document') }}" class="btn btn-success ml-2">Print</a>
                     </div>
                 </div>
                 <!-- end col -->
@@ -58,6 +59,7 @@
                                     <thead>
                                         <tr class="text-center">
                                             {{-- <th>ID Kantor</th> --}}
+                                            <th>No</th>
                                             <th>Nama</th>
                                             <th>Alamat</th>
                                             <th>Action</th>
@@ -102,6 +104,18 @@ $('#example2').DataTable({
         ajax: "",
         columns: [
             // {data: 'id_kantor', name: 'id_kantor'},
+            {   
+            data: null,
+            render: function (data, type, row, meta) {
+                // Menghitung nomor urut berdasarkan halaman dan jumlah baris yang ditampilkan
+                var startIndex = meta.settings._iDisplayStart;
+                var index = meta.row + startIndex + 1;
+
+                return index;
+            },
+            orderable: false,
+            searchable: false
+            },
             {data: 'nama_kantor', name: 'nama_kantor'},
             {data: 'alamat_kantor', name: 'alamat_kantor'},
             {data: 'action', name: 'action', orderable: false, searchable: false},

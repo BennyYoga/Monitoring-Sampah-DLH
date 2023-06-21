@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Kantor;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
+use Mpdf\Mpdf as PDF;
 
 class KantorController extends Controller
 {
@@ -92,5 +93,15 @@ class KantorController extends Controller
         $kantor = Kantor::find($id_kantor);
         $kantor->delete();
             return redirect()->route('kantor')->with('success', 'Berhasil menghapus kantor');
+    }
+    
+    public function document (){
+        $kantor = Kantor::all();
+        $mpdf = new PDF(['orientation' => 'L']);
+        // $html ="";
+        $html = view('Kantor.print',compact('kantor'));
+        // $html=$html->render();
+        $mpdf ->writeHTML($html);
+        $mpdf -> Output("Daftar kantor.pdf","I");
     }
 }
