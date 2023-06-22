@@ -18,7 +18,6 @@ class c_kabkota extends Controller
     {
         // $kabkota = m_kabkota::All();
         // return view('kabkota.index', compact('kabkota'));
-        $nama_kantor = m_kabkota::all();                    
         if ($request->ajax()) {
             $kabkota = m_kabkota::all();
             return DataTables::of($kabkota)

@@ -70,7 +70,6 @@ Route::get('tiket/create', [c_tiket::class, 'create'])->name('tiket.create');
 Route::get('tiket', [c_tiket::class, 'index'])->name('tiket.index');
 Route::get('tiket/rekap/', [c_tiket::class, 'rekap'])->name('tiket.rekap');
 Route::get('tiket/rekap/data/{optionkota}/{optionHari}', [c_tiket::class, 'rekapData'])->name('tiket.rekap.data');
-Route::get('tiket/create', [c_tiket::class, 'create']);
 Route::post('tiket/post', [c_tiket::class, 'store'])->name('tiket.post');
 Route::get('/tiket/edit/{id}', [c_tiket::class, 'edit'])->name('tiket.edit');
 Route::put('tiket/update/{id}', [c_tiket::class, 'update'])->name('tiket.update');
@@ -78,6 +77,8 @@ Route::get('tiket/detail/{id}', [c_tiket::class, 'show'])->name('tiket.detail');
 
 
 Route::get('login', [AuthController::class, 'index'])->name('login');
+Route::get('changePassword', [AuthController::class, 'changePassword'])->name('changePassword.index');
+Route::put('updatePassword/{id}', [AuthController::class, 'updatePassword'])->name('updatePassword');
 Route::get('logout', [AuthController::class, 'logout']);
 Route::post('post-logout', [AuthController::class, 'logout'])->name('logout');
 Route::post('post-login', [AuthController::class, 'postLogin'])->name('login.post');
