@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Pegawai;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Hash;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class AuthController extends Controller
@@ -89,5 +91,22 @@ class AuthController extends Controller
         Auth::logout();
 
         return redirect()->route('login')->withToastSuccess('Anda berhasil Logout');
+    }
+
+    public function changePassword(){
+        return view('Login/changePass');
+    }
+
+    public function updatePassword(Request $request, $id){
+
+        if(Hash::check($request->PassLama, session('pegawai')->password)){
+            $data = Hash::make($request->PassBaru);
+            Pegawai::where("NIP", $id)->first()->update(['password' => $data]);
+            return redirect()->route('pegawai')->withToastSuccess('Berhasil Mengubah Password');
+        }
+        else{
+            return redirect()->route('changePassword.index')->withError('Password Lama tidak Sesuai');
+        }
+
     }
 }

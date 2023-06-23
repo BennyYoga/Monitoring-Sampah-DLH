@@ -77,6 +77,8 @@ Route::get('tiket/detail/{id}', [c_tiket::class, 'show'])->name('tiket.detail');
 
 
 Route::get('login', [AuthController::class, 'index'])->name('login');
+Route::get('changePassword', [AuthController::class, 'changePassword'])->name('changePassword.index');
+Route::put('updatePassword/{id}', [AuthController::class, 'updatePassword'])->name('updatePassword');
 Route::get('logout', [AuthController::class, 'logout']);
 Route::post('post-logout', [AuthController::class, 'logout'])->name('logout');
 Route::post('post-login', [AuthController::class, 'postLogin'])->name('login.post');

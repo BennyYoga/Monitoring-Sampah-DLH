@@ -161,6 +161,11 @@
                             @csrf
                         </form>
                     </li>
+                    <li>
+                        <a class="dropdown-item" href="{{ route('changePassword.index') }}">
+                            <i class="lni lni-key"></i> Change Password
+                        </a>
+                    </li>
                 </ul>
             </div>
             <!-- profile end -->

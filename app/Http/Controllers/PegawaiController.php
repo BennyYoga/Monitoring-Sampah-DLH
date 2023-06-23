@@ -77,7 +77,7 @@ class PegawaiController extends Controller
         $pegawai = Pegawai::find($id_pegawai);
     if (!$pegawai) return redirect()->route('pegawai')
         ->with('error_message', 'Anggota dengan ID'.$id_pegawai.' tidak ada');
-    return view('pegawai.edit', compact('pegawai', 'kantor'));
+    return view('Pegawai.edit', compact('pegawai', 'kantor'));
     }
 
     /**
