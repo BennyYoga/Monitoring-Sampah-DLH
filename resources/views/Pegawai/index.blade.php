@@ -96,7 +96,7 @@
     @csrf
 </form>
 <script type="text/javascript">
-$('#example2').DataTable({
+    $('#example2').DataTable({
             "responsive": true,
         });
 
@@ -107,6 +107,29 @@ $('#example2').DataTable({
                 $("#delete-form").submit();
             }
         }
+
+        $('.show_confirm').click(function(event) {
+          var form =  $(this).closest("form");
+          var name = $(this).data("name");
+          event.preventDefault();
+          Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire(
+                'Deleted!',
+                'Your file has been deleted.',
+                'success'
+                )
+            }
+            })
+      });
     $(document).ready(function () {
     var table = $('#pegawai').DataTable({
         dom: 'Bfrtip',
