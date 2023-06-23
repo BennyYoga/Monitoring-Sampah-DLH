@@ -1,4 +1,4 @@
-@extends('template.template')
+@extends('Template.template')
 
 @section('title', 'Trash Monitoring System | Dashboard')
 
@@ -36,8 +36,8 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-end mb-3">
-                        <a href="{{route('tiket.create')}}" class="btn btn-primary">Add</a>
-                    </div>
+                    <a href="{{route('tiket.create')}}" class="btn btn-primary">Add</a>
+                </div>
             </div>
         </div>
         <!-- ========== title-wrapper end ========== -->
@@ -75,28 +75,61 @@
 <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
 <script type="text/javascript">
-$(document).ready(function () {
-    var table = $('#pegawai').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: "",
-        columns: [
-            { data: 'jam_masuk', name: 'jam_masuk', class:"text-center" },
-            {data : 'jam_keluar', name: 'jam_keluar', orderable: true, class:"text-center"},
-            { data: 'no_kendaraan', name: 'no_kendaraan', class:"text-center" },
-            { data: 'jenis_kendaraan', name: 'jenis_kendaraan', class:"text-center" },
-            { data: 'pengemudi', name: 'pengemudi', class:"text-center" },
-            { data: 'lokasi_sampah', name: 'lokasi_sampah', class:"text-center" },
-            { data: 'volume', name: 'volume', class:"text-center" },
-            { data: 'action', name: 'action', orderable: false,  searchable: false }
-        
-        ],
-        order:[
-            [
-                1, 'asc'
+    $(document).ready(function() {
+        var table = $('#pegawai').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "",
+            columns: [{
+                    data: 'jam_masuk',
+                    name: 'jam_masuk',
+                    class: "text-center"
+                },
+                {
+                    data: 'jam_keluar',
+                    name: 'jam_keluar',
+                    orderable: true,
+                    class: "text-center"
+                },
+                {
+                    data: 'no_kendaraan',
+                    name: 'no_kendaraan',
+                    class: "text-center"
+                },
+                {
+                    data: 'jenis_kendaraan',
+                    name: 'jenis_kendaraan',
+                    class: "text-center"
+                },
+                {
+                    data: 'pengemudi',
+                    name: 'pengemudi',
+                    class: "text-center"
+                },
+                {
+                    data: 'lokasi_sampah',
+                    name: 'lokasi_sampah',
+                    class: "text-center"
+                },
+                {
+                    data: 'volume',
+                    name: 'volume',
+                    class: "text-center"
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false
+                }
+
+            ],
+            order: [
+                [
+                    1, 'asc'
+                ]
             ]
-        ]
+        });
     });
-});
 </script>
 @endpush

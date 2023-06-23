@@ -65,7 +65,7 @@ class KantorController extends Controller
         $kantor = Kantor::find($id_kantor);
     if (!$kantor) return redirect()->route('pegawai')
         ->with('error_message', 'Anggota dengan NIP'.$id_kantor.' tidak ada');
-    return view('kantor.edit', compact('kantor'));
+    return view('Kantor.edit', compact('kantor'));
     }
 
     /**

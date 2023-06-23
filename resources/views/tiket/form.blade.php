@@ -1,4 +1,4 @@
-@extends('template.template')
+@extends('Template.template')
 
 @section('title','Trash Monitoring System | Dashboard')
 

@@ -16,11 +16,11 @@
     @stack('css')
   </head>
   <body>
-    @include('template.sidebar')
+    @include('Template.sidebar')
     <!-- ======== main-wrapper start =========== -->
     <main class="main-wrapper">
       <!-- ========== header start ========== -->
-      @include('template.navbar')
+      @include('Template.navbar')
       <!-- ========== header end ========== -->
 
       <!-- ========== section start ========== -->
