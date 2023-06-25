@@ -48,7 +48,7 @@
                             </div>
                             <div class="right">
                                 <div class="row">
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-4">
                                         <div class="select-style-1">
                                             <div class="select-position select-sm">
                                                 <select class="light-bg" id="filter-kota" name="option">
@@ -60,15 +60,22 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-4">
                                         <div class="select-style-1">
                                             <div class="select-position select-sm">
                                                 <select class="light-bg" id="filter-hari" name="option">
                                                     <option value="SemuaHari">Semua Hari</option>
-                                                    <option value="Hari">Harian</option>
-                                                    <option value="Bulan">Bulanan</option>
-                                                    <option value="Tahun">Tahunan</option>
+                                                    <option value="Hari">Hari Ini</option>
+                                                    <option value="Bulan">Bulan Ini</option>
+                                                    <option value="Tahun">Tahun Ini</option>
                                                 </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="select-style-1">
+                                            <div class="select-position select-sm calendar">
+                                                <input id="filter-calendar" class="input-calendar" type="month" value="" placeholder="Pilih Tanggal">
                                             </div>
                                         </div>
                                     </div>
@@ -98,6 +105,24 @@
         <!-- End Row -->
     </div>
 </section>
+
+<style>
+    .calendar{
+        background-color: white;
+        border: 1px solid rgba(25,25,25,0.1);
+        padding: 2px;
+        padding-bottom: 7px;
+        border-radius: 10px;
+        background-color: rgba(25, 25, 25, 0.04);
+        margin: auto;
+        text-align: center;
+        padding-top: 7px;
+    }
+    .input-calendar{
+        color: rgba(25,25,25,0.65);
+        border: 0px solid transparent;
+    }
+</style>
 @endsection
 
 @push('js')
@@ -151,7 +176,8 @@
         });
 
         // Filter data based on selected Kabupaten/Kota
-        $('#filter-kota, #filter-hari').on('change', function() {
+        $('#filter-kota, #filter-hari, #filter-calendar').on('change', function() {
+            alert($('#filter-calendar').val())
             var inputHari = $('#filter-hari').val();
             var inputKota = $('#filter-kota').val();
             table.ajax.url('/tiket/rekap/data/' + inputKota + '/' + inputHari).load(); // Mengubah URL AJAX dan memuat ulang tabel
