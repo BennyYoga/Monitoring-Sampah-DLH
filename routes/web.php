@@ -70,6 +70,7 @@ Route::get('tiket/create', [c_tiket::class, 'create'])->name('tiket.create');
 Route::get('tiket', [c_tiket::class, 'index'])->name('tiket.index');
 Route::get('tiket/rekap/', [c_tiket::class, 'rekap'])->name('tiket.rekap');
 Route::get('tiket/rekap/data/{optionkota}/{optionHari}', [c_tiket::class, 'rekapData'])->name('tiket.rekap.data');
+Route::get('tiket/rekap/print/{optionkota}/{optionHari}', [c_tiket::class, 'rekapPrint'])->name('tiket.rekap.print');
 // Route::get('tiket/create', [c_tiket::class, 'create']);
 Route::post('tiket/post', [c_tiket::class, 'store'])->name('tiket.post');
 Route::get('/tiket/edit/{id}', [c_tiket::class, 'edit'])->name('tiket.edit');
