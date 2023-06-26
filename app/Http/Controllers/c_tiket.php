@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 use \Yajra\Datatables\Datatables;
 use DateTime;
+use Mpdf\Mpdf as PDF;
+
 
 class c_tiket extends Controller
 {
@@ -223,17 +225,16 @@ class c_tiket extends Controller
         }
 
         // Filter Berdasarkan Waktu
-        if ($optionHari == 'Hari') {
-            $date = date('Y-m-d');
-            $data = $data->whereDate('jam_keluar', $date);
-        } else if ($optionHari == 'Bulan') {
-            $date = date('Y-m');
-            $data = $data->whereYear('jam_keluar', '=', date('Y'))
-                ->whereMonth('jam_keluar', '=', date('m'));
-        } else if ($optionHari == 'Tahun') {
-            $date = date('Y');
-            $data = $data->whereYear('jam_keluar', $date);
+        if (strlen($optionHari) === 10) {
+            $data = $data->whereDate('jam_keluar', $optionHari);
+        } else if (strlen($optionHari) === 7) {
+            list($tahun, $bulan) = explode("-", $optionHari);
+            $data = $data->whereYear('jam_keluar', '=', $tahun)
+                ->whereMonth('jam_keluar', '=', $bulan);
+        } else if (strlen($optionHari) === 4) {
+            $data = $data->whereYear('jam_keluar', $optionHari);
         }
+
 
         $data = $data->get(); // Eksekusi query dan ambil data
 
@@ -269,5 +270,34 @@ class c_tiket extends Controller
         }
 
         return response()->json(['data' => $data]);
+    }
+
+    public function rekapPrint($optionKota, $optionHari)
+    {
+        $data = null; // Inisialisasi variabel $data dengan null
+
+        // Filter Kota
+        if ($optionKota != 'default') {
+            $data = m_tiket::whereNotNull('jam_keluar')->where('id_kab_kota', $optionKota);
+        } else {
+            $data = m_tiket::whereNotNull('jam_keluar');
+        }
+
+        // Filter Berdasarkan Waktu
+        if (strlen($optionHari) === 10) {
+            $data = $data->whereDate('jam_keluar', $optionHari);
+        } else if (strlen($optionHari) === 7) {
+            list($tahun, $bulan) = explode("-", $optionHari);
+            $data = $data->whereYear('jam_keluar', '=', $tahun)
+                ->whereMonth('jam_keluar', '=', $bulan);
+        } else if (strlen($optionHari) === 4) {
+            $data = $data->whereYear('jam_keluar', $optionHari);
+        }
+        $data = $data->get();
+
+        $mpdf = new PDF(['orientation' => 'L']);
+        $html = view('tiket.printRekap',compact('data'));
+        $mpdf ->writeHTML($html);
+        $mpdf -> Output("Rekap.pdf","D");
     }
 }

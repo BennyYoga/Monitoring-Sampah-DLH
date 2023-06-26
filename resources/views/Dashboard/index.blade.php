@@ -1,4 +1,4 @@
-@extends('template.template')
+@extends('Template.template')
 
 @section('title','Trash Monitoring System | Dashboard')
 
@@ -135,8 +135,8 @@
                                         <div class="select-style-1">
                                             <div class="select-position select-sm">
                                                 <select class="light-bg" id="dataOption" name="option">
-                                                    <option value="Perhari" selected>Harian</option>
-                                                    <option value="Perbulan">Bulanan</option>
+                                                    <option value="Perhari" selected>Hari Ini</option>
+                                                    <option value="Perbulan">Bulan Ini</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -191,10 +191,10 @@
                     <h6 class="text-sm text-medium">Kabupaten / Kota</h6>
                 </th>
                 <th class="min-width">
-                    <h6 class="text-sm text-medium">Volume Hari Ini</h6>
+                    <h6 class="text-sm text-medium">Volume</h6>
                 </th>
                 <th class="min-width">
-                    <h6 class="text-sm text-medium">Jumlah Data Hari Ini</h6>
+                    <h6 class="text-sm text-medium">Jumlah Data</h6>
                 </th>
             </tr>
         </thead>

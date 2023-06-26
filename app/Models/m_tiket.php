@@ -15,5 +15,9 @@ class m_tiket extends Model
         'no_kendaraan', 'jenis_kendaraan', 'pengemudi', 'lokasi_sampah',
         'volume', 'id_kab_kota', 'jam_masuk', 'jam_keluar',
     ];
-        
+ 
+    public function fk_kab_kot()
+    {
+        return $this->belongsTo(m_kabkota::class, 'id_kab_kota', 'id_kab_kota');
+    }
 }
