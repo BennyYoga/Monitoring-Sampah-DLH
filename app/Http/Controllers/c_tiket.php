@@ -51,7 +51,7 @@ class c_tiket extends Controller
                         $btn .= '<form action="' . route('tiket.update', ['id' => $row->id]) . '" method="POST">';
                         $btn .= '<input type="hidden" name="_method" value="PUT">';
                         $btn .= csrf_field();
-                        $btn .= '<button type="submit" class="btn btn-success" data-confirm-swal="true" data-confirm-title="Delete User!" data-confirm-text="Are you sure you want to delete?" style="font-size: 15px">Selesai</button>';
+                        $btn .= '<button type="submit" class="btn btn-success" id="printTiket" style="font-size: 15px">Selesai</button>';
                         $btn .= '</form>';
                     } else {
                         $btn .= '';
@@ -154,12 +154,12 @@ class c_tiket extends Controller
         // dd($tiket);
         $user = Auth::user();
         // return view('tiket.detail', compact('tiket','user'))->render();
-        $mpdf = new Mpdf(['mode' => 'utf-8', 'format' => 'A5', 'margin_left'=>'20', 'margin_right'=>'20', 'margin-bottom'=>'10']);
+        $mpdf = new Mpdf(['mode' => 'utf-8', 'format' => 'A4', 'margin_left'=>'20', 'margin_right'=>'20', 'margin-bottom'=>'10']);
         $view = view('tiket.detail', compact('tiket', 'user'))->render();
         $mpdf->WriteHTML($view);
         $filename = $tiket->pengemudi . '.pdf';
         $mpdf->Output($filename, 'D');
-        return redirect()->route('tiket.index')->with('refresh', true);
+        // return redirect()->route('tiket.index')->with('refresh', true);
         // return redirect()->route('tiket.index')->withToastSuccess('Data sudah Berhasil');
     }
 
@@ -214,13 +214,13 @@ class c_tiket extends Controller
                     $kab_kota = m_kabkota::where('id_kab_kota', $row->id_kab_kota)->first();
                     return $kab_kota->nama_kab_kota;
                 })
-                ->addColumn('action', function ($row) {
-                    $tiket = m_tiket::all();
-                    $btn = '';
-                    $btn = '<a href=' . route('tiket.detail', $row->id) . ' style="font-size:20px" class="text-warning mr-10"><i class="lni lni-pencil-alt"></i></a>';
-                    return $btn;
-                })
-                ->rawColumns(['action'])
+                // ->addColumn('action', function ($row) {
+                //     $tiket = m_tiket::all();
+                //     $btn = '';
+                //     // $btn = '<a href=' . route('tiket.detail', $row->id) . ' style="font-size:20px" class="text-warning mr-10"><i class="lni lni-pencil-alt"></i></a>';
+                //     return $btn;
+                // })
+                // ->rawColumns(['action'])
                 ->make(true);
         }
 

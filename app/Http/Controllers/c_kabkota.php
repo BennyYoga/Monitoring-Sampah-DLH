@@ -132,7 +132,7 @@ class c_kabkota extends Controller
      */
     public function destroy($id)
     {
-        $kabkota = m_kabkota::find($id_kab_kota);
+        $kabkota = m_kabkota::find($id);
         $kabkota->delete();
         return redirect()->route('kabkota.index')->with('success', 'Kabupaten / Kota Berhasil Dihapus');
 
