@@ -8,12 +8,12 @@
             border-collapse: collapse;
             text-align: center;
         }
-
+        
         table tr td,
         table tr th {
-            font-size: 9pt;
+            font-size: 8pt;
             border: 1px solid;
-            padding: 5px;
+            padding: 0 2px;
         }
 
         h1 {
@@ -31,7 +31,7 @@
     @if($namakota == null)
     <h4>Data Sampah Wilayah Jawa Barat</h4>
     @else
-    <h4>Data Sampah {{namakota}}</h4>
+    <h4>Data Sampah {{$namakota->nama_kab_kota}}</h4>
     @endif
     <table>
         <thead>
@@ -65,13 +65,13 @@
                 <td>{{$data->no_kendaraan}}</td>
                 <td>{{$data->jenis_kendaraan}}</td>
                 <td>-</td>
-                <td>{{$data->jam_masuk}}</td>
-                <td>{{$data->jam_keluar}}</td>
+                <td>{{ date('H:i:s', strtotime($data->jam_masuk)) }}</td>
+                <td>{{ date('H:i:s', strtotime($data->jam_keluar)) }}</td>
                 <td>{{$data->pengemudi}}</td>
                 <td>{{$data->lokasi_sampah}}</td>
                 <td>{{$data->volume}}</td>
                 <td>0</td>
-                <td>0</td>
+                <td>0</td> 
                 <td>{{$data->volume * 476}}</td>
             </tr>
             @endforeach

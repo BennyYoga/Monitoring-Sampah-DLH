@@ -12,13 +12,13 @@
 @section('content')
 <section class="section">
   <div class="container-fluid">
-    <!-- ========== title-wrapper start ========== -->
+    <!--========== title-wrapper start ==========-->
     <div class="title-wrapper pt-30">
       <div class="row align-items-center">
         <div class="col-md-6">
           {{-- @if (session('success'))
-                            <div class="alert alert-success" role="alert">
-                                {{ session('success') }}
+            <div class="alert alert-success" role="alert">
+          {{ session('success') }}
         </div>
         @endif --}}
         <div class="titlemb-30">

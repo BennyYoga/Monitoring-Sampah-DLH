@@ -18,6 +18,7 @@
                     <span class="text">Dashboard</span>
                 </a>
             </li>
+            @if(Session('pegawai')->id_role == 2)
             <li class="nav-item {{ Request::routeIs('tiket.index') ? 'active' : '' }}">
                 <a href="{{route('tiket.index')}}">
                     <span class="icon">
@@ -28,6 +29,7 @@
                     <span class="text">Tiket</span>
                 </a>
             </li>
+            @endif
             <li class="nav-item {{ Request::routeIs('tiket.rekap') ? 'active' : '' }}">
                 <a href="{{route('tiket.rekap')}}">
                     <span class="icon">

@@ -308,7 +308,7 @@ class c_tiket extends Controller
         // Filter Kota
         if ($optionKota != 'default') {
             $data = m_tiket::whereNotNull('jam_keluar')->where('id_kab_kota', $optionKota);
-            $namakota = m_kabkota::where('id_kab_kota', $optionKota);
+            $namakota = m_kabkota::where('id_kab_kota', $optionKota)->first();
         } else {
             $data = m_tiket::whereNotNull('jam_keluar');
         }
@@ -344,8 +344,13 @@ class c_tiket extends Controller
             $total['Tara'] += $tara;
             $total['Netto'] += $netto;
         }
-
-        $mpdf = new PDF(['orientation' => 'L']);
+        $mpdf = new PDF(['orientation' => 'P', 'format' => 'A4',]);
+        $mpdf->AddPageByArray([
+            'margin-left' => 7,
+            'margin-right' => 7,
+            'margin-top' => 10,
+            'margin-bottom' => 10,
+        ]);
         $html = view('tiket.printRekap', compact('data', 'namakota', 'total'));
         $mpdf->writeHTML($html);
         $mpdf->Output("Rekap.pdf", "D");
