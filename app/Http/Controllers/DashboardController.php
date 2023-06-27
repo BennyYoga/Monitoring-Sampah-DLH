@@ -13,9 +13,14 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
         $today = date('Y-m-d');
-        $tiket['Day'] = m_tiket::whereDate('jam_keluar', $today)->get();
         $today = date('m');
-        $tiket['Month'] = m_tiket::whereMonth('jam_keluar', $today)->get();
+        if (session('pegawai')->id_role == 1) {
+            $tiket['Day'] = m_tiket::whereDate('jam_keluar', $today)->get();
+            $tiket['Month'] = m_tiket::whereMonth('jam_keluar', $today)->get();
+        } else {
+            $tiket['Day'] = m_tiket::whereDate('jam_keluar', $today)->where('id_pegawai', session('pegawai')->id_pegawai)->get();
+            $tiket['Month'] = m_tiket::whereMonth('jam_keluar', $today)->where('id_pegawai', session('pegawai')->id_pegawai)->get();
+        }
 
         $berat = [
             'hari' => 0,
@@ -34,10 +39,17 @@ class DashboardController extends Controller
         // Membuat indeks array kembali secara berurutan
         //Rekapitulasi data
         $today = date('Y-m-d');
-        $rekap = m_tiket::where('jam_keluar', 'like', $today . '%')
-            ->groupBy('id_kab_kota', 'jam_keluar')
-            ->select('id_kab_kota', 'jam_keluar', DB::raw('SUM(volume) as volume'))
-            ->get();
+        if (session('pegawai')->id_role == 1) {
+            $rekap = m_tiket::where('jam_keluar', 'like', $today . '%')
+                ->groupBy('id_kab_kota', 'jam_keluar')
+                ->select('id_kab_kota', 'jam_keluar', DB::raw('SUM(volume) as volume'))
+                ->get();
+        } else {
+            $rekap = m_tiket::where([['jam_keluar', 'like', $today . '%'], ['id_pegawai', session('pegawai')->id_pegawai]])
+                ->groupBy('id_kab_kota', 'jam_keluar')
+                ->select('id_kab_kota', 'jam_keluar', DB::raw('SUM(volume) as volume'))
+                ->get();
+        }
 
         $data = [];
         foreach ($rekap as $dataTiket) {
@@ -91,10 +103,9 @@ class DashboardController extends Controller
     public function getData(Request $request, $option)
     {
         $rekap = [];
-        if ($option == 'Perhari'){
+        if ($option == 'Perhari') {
             $today = date('Y-m-d');
-        }
-        else if ($option == 'Perbulan'){
+        } else if ($option == 'Perbulan') {
             $today = date('Y-m');
         }
         $rekap = m_tiket::where('jam_keluar', 'like', $today . '%')

@@ -20,4 +20,12 @@ class Pegawai  extends Authenticatable
         return false;
     }
 
+    public function fk_tiket()
+    {
+        return $this->hasMany(m_tiket::class, 'id_pegawai', 'id_pegawai');
+    }
+    public function fk_kantor()
+    {
+        return $this->belongsTo(Kantor::class, 'id_kantor', 'id_kantor');
+    }
 }

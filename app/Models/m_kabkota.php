@@ -19,7 +19,7 @@ class m_kabkota extends Model
 
     public function fk_tiket()
     {
-        return $this->hasMany(m_tiket::class, 'm_kab_kota', 'm_kab_kota');
+        return $this->hasMany(m_tiket::class, 'id_kab_kota', 'id_kab_kota');
     }
 }
 
