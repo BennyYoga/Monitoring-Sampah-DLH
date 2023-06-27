@@ -43,7 +43,7 @@
                     </div>
                     <div class="d-flex justify-content-end mb-3">
                         <a href="{{ route('pegawai.create') }}" class="btn btn-primary mr-2">Add</a>
-                        <a href="{{ route('pegawai.document') }}" class="btn btn-success ml-2">Print</a>
+                        {{-- <a href="{{ route('pegawai.document') }}" class="btn btn-success ml-2">Print</a> --}}
                     </div>
                 </div>
                 <!-- end col -->
@@ -74,6 +74,25 @@
                     </div>
                     <!-- end row -->
                 </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Hapus Pegawai</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                        Anda yakin ingin menghapus pegawai ini?
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
+                        <button type="submit" class="btn btn-danger" id="hapusBtnModal">Ya, hapus</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
 </section>
 @endsection
 
@@ -90,56 +109,68 @@
 <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.colVis.min.js"></script>
-
 <form action="" id="delete-form" method="post">
     @method('get')
     @csrf
 </form>
+<script>
+    $(document).ready(function () {
+        // Menggunakan event click untuk button dengan id hapusBtn
+        $('#pegawai').on('click', '#hapusBtn', function (e) {
+            e.preventDefault();
+
+            // Simpan URL hapus pada atribut data-hapus pada tombol hapus
+            var deleteUrl = $(this).attr('href');
+            $('#hapusBtn').attr('data-hapus', deleteUrl);
+
+            // Menampilkan modal
+            $('#staticBackdrop').modal('show');
+        });
+
+        // Menggunakan event click untuk button hapus pada modal
+        $('#hapusBtnModal').on('click', function () {
+            // Mengambil URL hapus dari atribut data-hapus pada tombol hapus
+            var deleteUrl = $('#hapusBtn').attr('data-hapus');
+
+            // Mengubah action pada form hapus sesuai dengan URL hapus
+            $('#delete-form').attr('action', deleteUrl);
+
+            // Submit form hapus
+            $("#delete-form").submit();
+        });
+    });
+</script>
 <script type="text/javascript">
     $('#example2').DataTable({
             "responsive": true,
         });
 
-        function notificationBeforeDelete(event, el) {
-            event.preventDefault();
-            if (confirm('Apakah anda yakin akan menghapus data ? ')) {
-                $("#delete-form").attr('action', $(el).attr('href'));
-                $("#delete-form").submit();
-            }
-        }
-
-        $('.show_confirm').click(function(event) {
-          var form =  $(this).closest("form");
-          var name = $(this).data("name");
-          event.preventDefault();
-          Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire(
-                'Deleted!',
-                'Your file has been deleted.',
-                'success'
-                )
-            }
-            })
-      });
+        // function notificationBeforeDelete(event, el) {
+        //     event.preventDefault();
+        //     if (confirm('Apakah anda yakin akan menghapus data ? ')) {
+        //         $("#delete-form").attr('action', $(el).attr('href'));
+        //         $("#delete-form").submit();
+        //     }
+        // }
     $(document).ready(function () {
     var table = $('#pegawai').DataTable({
         dom: 'Bfrtip',
         buttons: [
            {
                extend: 'pdf',
+               text: 'Download PDF',
                exportOptions: {
                    columns: [0, 1, 2, 3] // Kolom yang ingin disertakan dalam ekspor
-               }
-           }
+               },
+               customize: function (doc) {
+                doc.defaultStyle = {
+                color: '#000'
+                };
+                doc.pageSize = 'A4'; // Mengatur ukuran halaman
+                doc.pageOrientation = 'potrait'; // Mengatur orientasi halaman
+                doc.content[1].table.widths = ['5%', '45%', '30%', '20%']; // Mengatur lebar kolom secara manual
+                }
+           },
        ],
         processing: true,
         serverSide: true,
@@ -164,6 +195,7 @@
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
     });
+    $('.buttons-pdf').removeClass('btn-secondary').addClass('btn-danger');
     
   });
 </script>

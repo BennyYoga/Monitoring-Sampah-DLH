@@ -23,7 +23,7 @@ class PegawaiController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
                     $btn = '<a href=' . route('pegawai.edit', $row->id_pegawai) . ' style="font-size:20px" class="text-warning mr-10"><i class="lni lni-pencil-alt"></i></a>';
-                    $btn .= '<a href=' . route('pegawai.destroy', $row->id_pegawai) . ' style="font-size:20px" class="text-danger mr-10" onclick="notificationBeforeDelete(event, this)"><i class="lni lni-trash-can"></i></a>';
+                    $btn .= '<a href=' . route('pegawai.destroy', $row->id_pegawai) . ' style="font-size:20px" class="text-danger mr-10" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="hapusBtn"><i class="lni lni-trash-can"></i></a>';
                     return $btn;
                 })
                 ->addColumn('nama_kantor', function ($row) {

@@ -24,7 +24,7 @@ class c_kabkota extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
                     $btn = '<a href=' . route('kabkota.edit', $row->id_kab_kota) . ' style="font-size:20px" class="text-warning mr-10"><i class="lni lni-pencil-alt"></i></a>';
-                    $btn .= '<a href=' . route('kabkota.destroy', $row->id_kab_kota) . ' style="font-size:20px" class="text-danger mr-10" onclick="notificationBeforeDelete(event, this)"><i class="lni lni-trash-can"></i></a>';
+                    $btn .= '<a href=' . route('kabkota.destroy', $row->id_kab_kota) . ' style="font-size:20px" class="text-danger mr-10" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="hapusBtn"><i class="lni lni-trash-can"></i></a>';
                     return $btn;
                 })
                     
@@ -131,9 +131,10 @@ class c_kabkota extends Controller
      */
     public function destroy($id_kab_kota)
     {
-        
-        $pegawai = m_kabkota::find($id_kab_kota);
-        $pegawai->delete();
-            return redirect()->route('kabkota.index')->withToastSuccess('Berhasil menghapus Data');
+        $kabkota = m_kabkota::find($id_kab_kota);
+        $kabkota->delete();
+        return redirect()->route('kabkota.index')->with('success', 'Kabupaten / Kota Berhasil Dihapus');
+
+//            return redirect()->route('kabkota.index')->withToastSuccess('Berhasil menghapus Data');
     }
 }
