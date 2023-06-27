@@ -11,6 +11,8 @@ use \Yajra\Datatables\Datatables;
 use DateTime;
 use Illuminate\Support\Facades\Auth;
 use Mpdf\Mpdf;
+use Mpdf\Mpdf as PDF;
+
 
 class c_tiket extends Controller
 {
@@ -43,7 +45,7 @@ class c_tiket extends Controller
                 })
                 ->addColumn('action', function ($row) {
                     $btn = '';
-           
+
 
                     if ($row->jam_keluar === null) {
                         $btn .= '<form action="' . route('tiket.update', ['id' => $row->id]) . '" method="POST">';
@@ -111,6 +113,7 @@ class c_tiket extends Controller
      */
     public function show($id)
     {
+<<<<<<< HEAD
         $tiket = m_tiket::findOrFail($id);
         $user = Auth::user();
         // return view('tiket.detail', compact('tiket','user'))->render();
@@ -121,6 +124,11 @@ class c_tiket extends Controller
         $mpdf->Output($filename, 'D');
 
         }
+=======
+        $tiket = m_tiket::findOrfail($id);
+        return view('tiket.detail', compact('tiket'));
+    }
+>>>>>>> 765c06485511811f2631609a29bb63d5610c836b
 
     /**
      * Show the form for editing the specified resource.
@@ -175,7 +183,12 @@ class c_tiket extends Controller
     public function rekap(Request $request)
     {
         if ($request->ajax()) {
-            $tiket = m_tiket::whereNotNull('jam_keluar');
+            
+            if (session('pegawai')->id_role == 1) {
+                $tiket = m_tiket::whereNotNull('jam_keluar');
+            } else {
+                $tiket = m_tiket::whereNotNull('jam_keluar')->where('id_pegawai', session('pegawai')->id_pegawai);
+            }
 
             if (!empty($filterKabkota)) {
                 $tiket->whereHas('id_kab_kota', function ($query) use ($filterKabkota) {
@@ -226,25 +239,30 @@ class c_tiket extends Controller
     {
         $data = null; // Inisialisasi variabel $data dengan null
 
+        if (session('pegawai')->id_role == 1) {
+            $data = m_tiket::whereNotNull('jam_keluar');
+        } else {
+            $data = m_tiket::whereNotNull('jam_keluar')->where('id_pegawai', session('pegawai')->id_pegawai);
+        }
+
         // Filter Kota
         if ($optionKota != 'default') {
-            $data = m_tiket::whereNotNull('jam_keluar')->where('id_kab_kota', $optionKota);
+            $data = $data->where('id_kab_kota', $optionKota);
         } else {
-            $data = m_tiket::whereNotNull('jam_keluar');
+            $data = $data->whereNotNull('jam_keluar');
         }
 
         // Filter Berdasarkan Waktu
-        if ($optionHari == 'Hari') {
-            $date = date('Y-m-d');
-            $data = $data->whereDate('jam_keluar', $date);
-        } else if ($optionHari == 'Bulan') {
-            $date = date('Y-m');
-            $data = $data->whereYear('jam_keluar', '=', date('Y'))
-                ->whereMonth('jam_keluar', '=', date('m'));
-        } else if ($optionHari == 'Tahun') {
-            $date = date('Y');
-            $data = $data->whereYear('jam_keluar', $date);
+        if (strlen($optionHari) === 10) {
+            $data = $data->whereDate('jam_keluar', $optionHari);
+        } else if (strlen($optionHari) === 7) {
+            list($tahun, $bulan) = explode("-", $optionHari);
+            $data = $data->whereYear('jam_keluar', '=', $tahun)
+                ->whereMonth('jam_keluar', '=', $bulan);
+        } else if (strlen($optionHari) === 4) {
+            $data = $data->whereYear('jam_keluar', $optionHari);
         }
+
 
         $data = $data->get(); // Eksekusi query dan ambil data
 
@@ -280,5 +298,62 @@ class c_tiket extends Controller
         }
 
         return response()->json(['data' => $data]);
+    }
+
+    public function rekapPrint($optionKota, $optionHari)
+    {
+        $data = null; // Inisialisasi variabel $data dengan null
+        $namakota = null;
+
+        if (session('pegawai')->id_role == 1) {
+            $data = m_tiket::whereNotNull('jam_keluar');
+        } else {
+            $data = m_tiket::whereNotNull('jam_keluar')->where('id_pegawai', session('pegawai')->id_pegawai);
+        }
+
+        // Filter Kota
+        if ($optionKota != 'default') {
+            $data = m_tiket::whereNotNull('jam_keluar')->where('id_kab_kota', $optionKota);
+            $namakota = m_kabkota::where('id_kab_kota', $optionKota);
+        } else {
+            $data = m_tiket::whereNotNull('jam_keluar');
+        }
+
+        // Filter Berdasarkan Waktu
+        if (strlen($optionHari) === 10) {
+            $data = $data->whereDate('jam_keluar', $optionHari);
+        } else if (strlen($optionHari) === 7) {
+            list($tahun, $bulan) = explode("-", $optionHari);
+            $data = $data->whereYear('jam_keluar', '=', $tahun)
+                ->whereMonth('jam_keluar', '=', $bulan);
+        } else if (strlen($optionHari) === 4) {
+            $data = $data->whereYear('jam_keluar', $optionHari);
+        }
+
+        $data = $data->get();
+        
+        $total = [
+            'Volume' => 0,
+            'Tara' => 0,
+            'Netto' => 0,
+            'Bruto' => 0
+
+        ];
+
+        foreach ($data as $dataItem) {
+
+            $volume = $dataItem->volume;
+            $tara = $volume * 476;
+            $netto = $volume - $tara;
+        
+            $total['Volume'] += $dataItem->volume;
+            $total['Tara'] += $tara;
+            $total['Netto'] += $netto;
+        }
+
+        $mpdf = new PDF(['orientation' => 'L']);
+        $html = view('tiket.printRekap', compact('data', 'namakota', 'total'));
+        $mpdf->writeHTML($html);
+        $mpdf->Output("Rekap.pdf", "D");
     }
 }

@@ -16,6 +16,11 @@ class m_kabkota extends Model
     protected $fillable = [
         'nama_kab_kota',
     ];
+
+    public function fk_tiket()
+    {
+        return $this->hasMany(m_tiket::class, 'id_kab_kota', 'id_kab_kota');
+    }
 }
 
 

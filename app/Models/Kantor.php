@@ -19,4 +19,8 @@ class Kantor extends Authenticatable
         if ($this->role == $role) return true;
         return false;
     }
+    public function fk_pegawai()
+    {
+        return $this->hasMany(m_tiket::class, 'id_kantor', 'id_kantor');
+    }
 }

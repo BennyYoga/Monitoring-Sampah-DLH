@@ -44,11 +44,13 @@
                     <div class="card-body">
                         <div class="title d-flex flex-wrap align-items-center justify-content-between">
                             <div class="left">
-                                <h6 class="text-medium mb-30">Rekap Data</h6>
+                                <button id="print" class="btn btn-danger mb-5">
+                                    Download PDF
+                                </button>
                             </div>
                             <div class="right">
                                 <div class="row">
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-6 contain">
                                         <div class="select-style-1">
                                             <div class="select-position select-sm">
                                                 <select class="light-bg" id="filter-kota" name="option">
@@ -60,15 +62,22 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-6 contain">
                                         <div class="select-style-1">
                                             <div class="select-position select-sm">
                                                 <select class="light-bg" id="filter-hari" name="option">
                                                     <option value="SemuaHari">Semua Hari</option>
-                                                    <option value="Hari">Harian</option>
-                                                    <option value="Bulan">Bulanan</option>
-                                                    <option value="Tahun">Tahunan</option>
+                                                    <option value="Hari">Perhari</option>
+                                                    <option value="Bulan">Perbulan</option>
+                                                    <option value="Tahun">Pertaun</option>
                                                 </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="select-style-1">
+                                            <div class="select-position select-sm calendar d-none" id="calendarContainer">
+                                                <input id="filter-calendar" class="input-calendar" type="date" value="">
                                             </div>
                                         </div>
                                     </div>
@@ -98,6 +107,25 @@
         <!-- End Row -->
     </div>
 </section>
+
+<style>
+    .calendar {
+        background-color: white;
+        border: 1px solid rgba(25, 25, 25, 0.1);
+        padding: 2px;
+        padding-bottom: 7px;
+        border-radius: 10px;
+        background-color: rgba(25, 25, 25, 0.04);
+        margin: auto;
+        text-align: center;
+        padding-top: 7px;
+    }
+
+    .input-calendar {
+        color: rgba(25, 25, 25, 0.65);
+        border: 0px solid transparent;
+    }
+</style>
 @endsection
 
 @push('js')
@@ -106,6 +134,45 @@
 <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 <script type="text/javascript">
+    var select = document.getElementById("filter-hari");
+    var calendarContainer = document.getElementById("calendarContainer");
+    var calendarInput = calendarContainer.querySelector("input");
+    var contain = document.getElementsByClassName("contain");
+
+    select.addEventListener("change", function() {
+        var selectedOption = this.options[this.selectedIndex].value;
+
+        if (selectedOption === "Bulan") {
+            calendarInput.type = "month";
+            calendarContainer.classList.remove("d-none");
+            for (var i = 0; i < contain.length; i++) {
+                contain[i].classList.remove("col-sm-6");
+                contain[i].classList.add("col-sm-4");
+            }
+        } else if (selectedOption === "Hari") {
+            calendarInput.type = "date";
+            calendarContainer.classList.remove("d-none");
+            for (var i = 0; i < contain.length; i++) {
+                contain[i].classList.remove("col-sm-6");
+                contain[i].classList.add("col-sm-4");
+            }
+        } else if (selectedOption === "Tahun") {
+            calendarInput.type = "number";
+            calendarContainer.classList.remove("d-none");
+            for (var i = 0; i < contain.length; i++) {
+                contain[i].classList.remove("col-sm-6");
+                contain[i].classList.add("col-sm-4");
+            }
+        } else {
+            calendarContainer.classList.add("d-none");
+            for (var i = 0; i < contain.length; i++) {
+                contain[i].classList.remove("col-sm-4");
+                contain[i].classList.add("col-sm-6");
+            }
+        }
+    });
+
+
     $(function() {
         // Initialize DataTable
         var table = $('#tiket').DataTable({
@@ -145,16 +212,40 @@
                     name: 'volume',
                     data: 'volume'
                 },
-                { data: 'action', name: 'action', orderable: false,  searchable: false }
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false
+                }
 
             ],
         });
 
         // Filter data based on selected Kabupaten/Kota
-        $('#filter-kota, #filter-hari').on('change', function() {
-            var inputHari = $('#filter-hari').val();
+        $('#filter-kota, #filter-calendar, #filter-hari').on('change', function() {
+            var Pilihan = $('#filter-hari').val();
             var inputKota = $('#filter-kota').val();
-            table.ajax.url('/tiket/rekap/data/' + inputKota + '/' + inputHari).load(); // Mengubah URL AJAX dan memuat ulang tabel
+            var inputHari = $('#filter-calendar').val();
+
+            if (Pilihan == 'SemuaHari') {
+                inputHari = 'all'
+                table.ajax.url('/tiket/rekap/data/' + inputKota + '/' + inputHari).load(); // Mengubah URL AJAX dan memuat ulang tabel
+            } else if (inputHari) {
+                table.ajax.url('/tiket/rekap/data/' + inputKota + '/' + inputHari).load(); // Mengubah URL AJAX dan memuat ulang tabel
+            }
+        });
+
+        $("#print").click(function() {
+            var Pilihan = $('#filter-hari').val();
+            var inputKota = $('#filter-kota').val();
+            var inputHari = $('#filter-calendar').val();
+            if (Pilihan == 'SemuaHari') {
+                inputHari = 'all'
+                window.location.href = '/tiket/rekap/print/' + inputKota + '/' + inputHari;
+            } else if (inputHari) {
+                window.location.href = '/tiket/rekap/print/' + inputKota + '/' + inputHari;
+            }
         });
     });
 </script>
