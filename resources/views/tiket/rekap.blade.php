@@ -237,6 +237,7 @@
         });
 
         $("#print").click(function() {
+            let dataTable = table.data().length
             var Pilihan = $('#filter-hari').val();
             var inputKota = $('#filter-kota').val();
             var inputHari = $('#filter-calendar').val();

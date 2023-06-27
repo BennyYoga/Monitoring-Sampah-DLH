@@ -71,7 +71,7 @@
                 <td>{{$data->lokasi_sampah}}</td>
                 <td>{{$data->volume}}</td>
                 <td>0</td>
-                <td>0</td>
+                <td>0</td> 
                 <td>{{$data->volume * 476}}</td>
             </tr>
             @endforeach
