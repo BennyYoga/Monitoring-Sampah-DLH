@@ -86,6 +86,7 @@
                 <label>Kabupaten/kota</label>
                 <div class="select-position">
                   <select class="select2" name="id_kab_kota" id="id_kab_kota" style="width: 100%">
+                  <option value=" " selected disabled> Pilih Kabupaten Kota </option>
                     @foreach($kabkota as $kabkota)
                     <option value="<?= $kabkota->id_kab_kota ?>">
                       <?= $kabkota->nama_kab_kota ?>
