@@ -60,10 +60,6 @@ Route::get('/login', function () {
     return view('Login/login');
 });
 
-// Route::get('/kabkota', function ('') {
-//     return view('kabkota/index');
-// });
-// Route::get('kota', [c_kabkota::class, 'index']);
 
 // Route::get('/tiket/edit/{id}', [c_kabkota::class, 'edit'])->name('kabkota.edit');
 Route::get('tiket/create', [c_tiket::class, 'create'])->name('tiket.create');

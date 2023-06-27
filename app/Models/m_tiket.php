@@ -20,4 +20,8 @@ class m_tiket extends Model
     {
         return $this->belongsTo(m_kabkota::class, 'id_kab_kota', 'id_kab_kota');
     }
+    public function fk_pegawai()
+    {
+        return $this->belongsTo(Pegawai::class, 'id_pegawai', 'id_pegawai');
+    }
 }
