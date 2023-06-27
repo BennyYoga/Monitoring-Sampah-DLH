@@ -20,7 +20,11 @@
                                 </button>
                             </div>
                             <div class="info">
-                                <h6> PORTAL TRAHS MONITORING SYSTEM</h6>
+                                @if (session('pegawai')->id_role == 1)
+                                <h6> Trash Monitoring System</h6>
+                                @else
+                                <h6> {{session('pegawai')->fk_kantor->nama_kantor}}</h6>
+                                @endif
                             </div>
                         </div>
 

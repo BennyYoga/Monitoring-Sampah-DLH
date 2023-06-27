@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <style>
         table {
@@ -20,8 +21,18 @@
         }
     </style>
 </head>
+
 <body>
-    <h1>DATA KEANGGOTAAN PERPUSTAKAAN</h1>
+    <div style="width:100%; text-align:center;">
+        <h4><u>{{session('pegawai')->fk_kantor->nama_kantor}}</u></h4>
+        {{session('pegawai')->fk_kantor->alamat_kantor}}
+    </div>
+    <br>
+    @if($namakota == null)
+    <h4>Data Sampah Wilayah Jawa Barat</h4>
+    @else
+    <h4>Data Sampah {{namakota}}</h4>
+    @endif
     <table>
         <thead>
             <tr>
@@ -57,7 +68,7 @@
                 <td>{{$data->jam_masuk}}</td>
                 <td>{{$data->jam_keluar}}</td>
                 <td>{{$data->pengemudi}}</td>
-                <td>{{$data->fk_kab_kot->nama_kab_kota}}</td>
+                <td>{{$data->lokasi_sampah}}</td>
                 <td>{{$data->volume}}</td>
                 <td>0</td>
                 <td>0</td>
@@ -67,4 +78,5 @@
         </tbody>
     </table>
 </body>
+
 </html>
