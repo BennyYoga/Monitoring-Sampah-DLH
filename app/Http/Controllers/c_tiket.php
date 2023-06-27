@@ -314,9 +314,28 @@ class c_tiket extends Controller
         }
 
         $data = $data->get();
+        
+        $total = [
+            'Volume' => 0,
+            'Tara' => 0,
+            'Netto' => 0,
+            'Bruto' => 0
+
+        ];
+
+        foreach ($data as $dataItem) {
+
+            $volume = $dataItem->volume;
+            $tara = $volume * 476;
+            $netto = $volume - $tara;
+        
+            $total['Volume'] += $dataItem->volume;
+            $total['Tara'] += $tara;
+            $total['Netto'] += $netto;
+        }
 
         $mpdf = new PDF(['orientation' => 'L']);
-        $html = view('tiket.printRekap', compact('data', 'namakota'));
+        $html = view('tiket.printRekap', compact('data', 'namakota', 'total'));
         $mpdf->writeHTML($html);
         $mpdf->Output("Rekap.pdf", "D");
     }

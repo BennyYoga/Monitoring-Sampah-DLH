@@ -75,6 +75,13 @@
                 <td>{{$data->volume * 476}}</td>
             </tr>
             @endforeach
+            <tr>
+                <td colspan='9'>Jumlah</td>
+                <td>{{$total['Volume']}}</td>
+                <td>0</td>
+                <td>0</td>
+                <td>{{$total['Tara']}}</td>
+            </tr>
         </tbody>
     </table>
 </body>
