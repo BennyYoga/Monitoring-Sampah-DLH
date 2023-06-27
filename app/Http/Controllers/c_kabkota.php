@@ -6,6 +6,7 @@ use App\Models\m_kabkota;
 use App\Models\m_tiket;
 use Illuminate\Http\Request;
 use \Yajra\Datatables\Datatables;
+use Mpdf\Mpdf as PDF;
 
 class c_kabkota extends Controller
 {
@@ -24,7 +25,7 @@ class c_kabkota extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
                     $btn = '<a href=' . route('kabkota.edit', $row->id_kab_kota) . ' style="font-size:20px" class="text-warning mr-10"><i class="lni lni-pencil-alt"></i></a>';
-                    $btn .= '<a href=' . route('kabkota.destroy', $row->id_kab_kota) . ' style="font-size:20px" class="text-danger mr-10" onclick="notificationBeforeDelete(event, this)"><i class="lni lni-trash-can"></i></a>';
+                    $btn .= '<a href=' . route('kabkota.destroy', $row->id_kab_kota) . ' style="font-size:20px" class="text-danger mr-10" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="hapusBtn"><i class="lni lni-trash-can"></i></a>';
                     return $btn;
                 })
                     
@@ -131,8 +132,18 @@ class c_kabkota extends Controller
      */
     public function destroy($id)
     {
-        $kabkota =m_kabkota::where('id_kab_kota', $id);
+        $kabkota = m_kabkota::find($id_kab_kota);
         $kabkota->delete();
-            return redirect()->route('kabkota.index')->withToastSuccess('Berhasil menghapus Data');
+        return redirect()->route('kabkota.index')->with('success', 'Kabupaten / Kota Berhasil Dihapus');
+
+//            return redirect()->route('kabkota.index')->withToastSuccess('Berhasil menghapus Data');
+    }
+
+    public function document (){
+        $kabkota = m_kabkota::all();
+        $mpdf = new PDF(['orientation' => 'P']);
+        $html = view('kabkota.print',compact('kabkota'));
+        $mpdf ->writeHTML($html);
+        $mpdf -> Output("Daftar KabupatenKota.pdf","D");
     }
 }

@@ -113,7 +113,6 @@ class c_tiket extends Controller
      */
     public function show($id)
     {
-<<<<<<< HEAD
         $tiket = m_tiket::findOrFail($id);
         $user = Auth::user();
         // return view('tiket.detail', compact('tiket','user'))->render();
@@ -124,11 +123,6 @@ class c_tiket extends Controller
         $mpdf->Output($filename, 'D');
 
         }
-=======
-        $tiket = m_tiket::findOrfail($id);
-        return view('tiket.detail', compact('tiket'));
-    }
->>>>>>> 765c06485511811f2631609a29bb63d5610c836b
 
     /**
      * Show the form for editing the specified resource.
