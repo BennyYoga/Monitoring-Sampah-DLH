@@ -6,6 +6,7 @@ use App\Models\m_kabkota;
 use App\Models\m_tiket;
 use Illuminate\Http\Request;
 use \Yajra\Datatables\Datatables;
+use Mpdf\Mpdf as PDF;
 
 class c_kabkota extends Controller
 {
@@ -136,5 +137,13 @@ class c_kabkota extends Controller
         return redirect()->route('kabkota.index')->with('success', 'Kabupaten / Kota Berhasil Dihapus');
 
 //            return redirect()->route('kabkota.index')->withToastSuccess('Berhasil menghapus Data');
+    }
+
+    public function document (){
+        $kabkota = m_kabkota::all();
+        $mpdf = new PDF(['orientation' => 'P']);
+        $html = view('kabkota.print',compact('kabkota'));
+        $mpdf ->writeHTML($html);
+        $mpdf -> Output("Daftar KabupatenKota.pdf","D");
     }
 }

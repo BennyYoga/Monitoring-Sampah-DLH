@@ -41,6 +41,7 @@ Route::group(['middleware' => 'role:1|2'], function(){
         Route::get('/kantor/edit/{id}', [KantorController::class, 'edit'])->name('kantor.edit');
         Route::put('/kantor/update/{id}', [KantorController::class, 'update'])->name('kantor.update');
         Route::get('/kantor/destroy/{id}', [KantorController::class, 'destroy'])->name('kantor.destroy');
+        Route::get('/kantor/print', [KantorController::class, 'document'])->name('kantor.document');
 
         Route::get('kota', [c_kabkota::class, 'index'])->name('kabkota.index');
         Route::get('/kota/edit/{id}', [c_kabkota::class, 'edit'])->name('kabkota.edit');
@@ -48,8 +49,8 @@ Route::group(['middleware' => 'role:1|2'], function(){
         Route::get('/kota/create', [c_kabkota::class, 'create'])->name('kota.create');
         Route::post('/kota/post', [c_kabkota::class, 'store'])->name('kota.post');
         Route::get('/kota/destroy/{id}', [c_kabkota::class, 'destroy'])->name('kabkota.destroy');
+        Route::get('/kota/print', [c_kabkota::class, 'document'])->name('kabkota.document');
 
-        Route::get('/kantor/print', [KantorController::class, 'document'])->name('kantor.document');
     });
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');    

@@ -42,7 +42,7 @@
                     </div>
                     <div class="d-flex justify-content-end mb-3">
                         <a href="{{ route('kantor.create') }}" class="btn btn-primary">Add</a>
-                        <a href="{{ route('kantor.document') }}" class="btn btn-success ml-2">Print</a>
+                        {{-- <a href="{{ route('kantor.document') }}" class="btn btn-success ml-2">Print</a> --}}
                     </div>
                 </div>
                 <!-- end col -->
@@ -55,6 +55,28 @@
                     <div class="col-lg-12">
                         <div class="card-style mb-30">
                             <div class="table-wrapper table-responsive">
+                                <div class="title d-flex flex-wrap align-items-center justify-content-between">
+                                    <div class="left">
+                                        <a href="{{ route('kantor.document') }}" class="btn btn-danger mb-5">Download PDF</a>
+                                    </div>
+                                    {{-- <div class="right">
+                                        <div class="row">
+                                            <div class="col-sm-6 contain">
+                                                <div class="select-style-1">
+                                                    <div class="select-position select-sm">
+                                                        <select class="light-bg" id="filter-kota" name="option">
+                                                            <option value="default">Semua Kota</option>
+                                                            @foreach($kab_kota as $option)
+                                                            <option value="{{$option->id_kab_kota}}">{{$option->nama_kab_kota}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- end select -->
+                                    </div> --}}
+                                </div>
                                 <table class="table" id="kantor">
                                     <thead>
                                         <tr class="text-center">
@@ -139,36 +161,8 @@
     });
 </script>
 <script type="text/javascript">
-$('#example2').DataTable({
-            "responsive": true,
-        });
-
-        function notificationBeforeDelete(event, el) {
-            event.preventDefault();
-            if (confirm('Apakah anda yakin akan menghapus data ? ')) {
-                $("#delete-form").attr('action', $(el).attr('href'));
-                $("#delete-form").submit();
-            }
-        }
     $(function () {
     var table = $('#kantor').DataTable({
-        dom: 'Bfrtip',
-        buttons: [
-           {
-               extend: 'pdf',
-               exportOptions: {
-                   columns: [0, 1, 2] // Kolom yang ingin disertakan dalam ekspor
-               },
-               customize: function (doc) {
-                doc.defaultStyle = {
-                color: '#000'
-                };
-                doc.pageSize = 'A4'; // Mengatur ukuran halaman
-                doc.pageOrientation = 'potrait'; // Mengatur orientasi halaman
-                doc.content[1].table.widths = ['5%', '40%', '55%']; // Mengatur lebar kolom secara manual
-                },
-           }
-       ],
         processing: true,
         serverSide: true,
         ajax: "",

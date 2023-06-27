@@ -19,7 +19,6 @@ class KantorController extends Controller
                     $btn .= '<a href=' . route('kantor.destroy', $row->id_kantor) . ' style="font-size:20px" class="text-danger mr-10" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="hapusBtn"><i class="lni lni-trash-can"></i></a>';
                     return $btn;
                 })
-                ->rawColumns(['action'])
                 ->make(true);
             }
         return view('Kantor.index');

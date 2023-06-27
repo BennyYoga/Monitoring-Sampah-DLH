@@ -15,10 +15,14 @@ class PegawaiController extends Controller
 {
     //
     public function index(Request $request)
-    {
-        $nama_kantor = Kantor::all();                    
+    {                    
         if ($request->ajax()) {
             $pegawai = Pegawai::all();
+            if (!empty($filterKantor)) {
+                $pegawai->whereHas('id_kantor', function ($query) use ($filterKantor) {
+                    $query->where('nama_kantor', $filterKantor);
+                });
+            }
             return DataTables::of($pegawai)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -34,11 +38,11 @@ class PegawaiController extends Controller
                     $role = Role::where('id_role', $row->id_role)->first();
                     return $role->nama_role;
                 })
-                ->rawColumns(['action'])
                 ->make(true);
         }
+        $kantor = Kantor::all();
 
-        return view('Pegawai.index');
+        return view('Pegawai.index', compact('kantor'));
     }
 
     public function create()
@@ -116,11 +120,9 @@ class PegawaiController extends Controller
 
     public function document (){
         $pegawai = Pegawai::all();
-        $mpdf = new PDF(['orientation' => 'L']);
-        // $html ="";
+        $mpdf = new PDF(['orientation' => 'P']);
         $html = view('Pegawai.print',compact('pegawai'));
-        // $html=$html->render();
         $mpdf ->writeHTML($html);
-        $mpdf -> Output("Daftar Pegawai.pdf","I");
+        $mpdf -> Output("Daftar Pegawai.pdf","D");
     }
 }
