@@ -129,11 +129,10 @@ class c_kabkota extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id_kab_kota)
+    public function destroy($id)
     {
-        
-        $pegawai = m_kabkota::find($id_kab_kota);
-        $pegawai->delete();
+        $kabkota =m_kabkota::where('id_kab_kota', $id);
+        $kabkota->delete();
             return redirect()->route('kabkota.index')->withToastSuccess('Berhasil menghapus Data');
     }
 }

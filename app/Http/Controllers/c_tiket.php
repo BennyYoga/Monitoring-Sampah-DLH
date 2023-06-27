@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\m_kabkota;
 use App\Models\m_tiket;
+use App\Models\Pegawai;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 use \Yajra\Datatables\Datatables;
 use DateTime;
+use Illuminate\Support\Facades\Auth;
+use Mpdf\Mpdf;
 
 class c_tiket extends Controller
 {
@@ -92,7 +95,8 @@ class c_tiket extends Controller
         );
         $data = $request->all();
         $data['id_kab_kota'] = (int)$data['id_kab_kota'];
-
+        $user = Auth::user();
+        $data['id_pegawai'] = $user->id_pegawai;    
         $waktu = new DateTime();
         $data['jam_masuk'] = $waktu;
         m_tiket::create($data);
@@ -107,9 +111,16 @@ class c_tiket extends Controller
      */
     public function show($id)
     {
-        $tiket=m_tiket::findOrfail($id);    
-        return view('tiket.detail', compact('tiket'));
-    }
+        $tiket = m_tiket::findOrFail($id);
+        $user = Auth::user();
+        // return view('tiket.detail', compact('tiket','user'))->render();
+        $mpdf = new Mpdf(['mode' => 'utf-8', 'format' => 'A5', 'margin_left'=>'20', 'margin_right'=>'20', 'margin-bottom'=>'10']);
+        $view = view('tiket.detail', compact('tiket', 'user'))->render();
+        $mpdf->WriteHTML($view);
+        $filename = $tiket->pengemudi . '.pdf';
+        $mpdf->Output($filename, 'D');
+
+        }
 
     /**
      * Show the form for editing the specified resource.
@@ -134,21 +145,20 @@ class c_tiket extends Controller
      */
     public function update($id)
     {
-        $tiket = m_tiket::where('id', $id)->first();
-        $data = [
-            'no_kendaraan' => $tiket['no_kendaraan'],
-            'jenis_kendaraan' => $tiket['jenis_kendaraan'],
-            'pengemudi' => $tiket['pengemudi'],
-            'lokasi_sampah' => $tiket['lokasi_sampah'],
-            'jam_masuk' => $tiket['jam_masuk'],
-            'volume' => $tiket['volume'],
-        ];
+        $tiket = m_tiket::findOrFail($id);
         $waktu = new DateTime();
-        $data['jam_keluar'] = $waktu;
-        // dd($data);
-        m_tiket::where('id', $id)->update($data);
-
-        return redirect()->route('tiket.index')->withToastSuccess('Berhasil Memperbarui tiket');
+        $tiket->jam_keluar = $waktu;
+        $tiket->save();
+        // dd($tiket);
+        $user = Auth::user();
+        // return view('tiket.detail', compact('tiket','user'))->render();
+        $mpdf = new Mpdf(['mode' => 'utf-8', 'format' => 'A5', 'margin_left'=>'20', 'margin_right'=>'20', 'margin-bottom'=>'10']);
+        $view = view('tiket.detail', compact('tiket', 'user'))->render();
+        $mpdf->WriteHTML($view);
+        $filename = $tiket->pengemudi . '.pdf';
+        $mpdf->Output($filename, 'D');
+        return redirect()->route('tiket.index')->with('refresh', true);
+        // return redirect()->route('tiket.index')->withToastSuccess('Data sudah Berhasil');
     }
 
     /**
@@ -179,7 +189,8 @@ class c_tiket extends Controller
                 ->addColumn('bulan', function ($row) {
                     $tanggal = date('d', strtotime($row->jam_keluar));
                     $namaBulan = date('F', strtotime($row->jam_keluar));
-                    $bulan = $tanggal . ' ' . $namaBulan;
+                    $tahun = date('Y',strtotime($row->jam_keluar) );
+                    $bulan = $tanggal . ' ' . $namaBulan . ' ' . $tahun;
                     return $bulan;
                 })
                 ->addColumn('jam_masuk', function ($row) {

@@ -14,7 +14,7 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.0",
         "laravel/tinker": "^2.0",
-        "mpdf/mpdf": "*",
+        "mpdf/mpdf": "^8.1",
         "realrashid/sweet-alert": "^7.0",
         "yajra/laravel-datatables-buttons": "^4.13",
         "yajra/laravel-datatables-oracle": "^9.21"

@@ -54,6 +54,14 @@ Route::group(['middleware' => 'role:1|2'], function(){
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');    
     Route::get('/dashboard/data/{option}', [DashboardController::class, 'getData'])->name('dashboard.data');
+    Route::get('tiket/create', [c_tiket::class, 'create'])->name('tiket.create');
+    Route::get('tiket', [c_tiket::class, 'index'])->name('tiket.index');
+    Route::get('tiket/rekap/', [c_tiket::class, 'rekap'])->name('tiket.rekap');
+    Route::get('tiket/rekap/data/{optionkota}/{optionHari}', [c_tiket::class, 'rekapData'])->name('tiket.rekap.data');
+    Route::post('tiket/post', [c_tiket::class, 'store'])->name('tiket.post');
+    Route::get('/tiket/edit/{id}', [c_tiket::class, 'edit'])->name('tiket.edit');
+    Route::put('tiket/update/{id}', [c_tiket::class, 'update'])->name('tiket.update');
+Route::get('tiket/detail/{id}', [c_tiket::class, 'show'])->name('tiket.detail');
 });
 
 Route::get('/login', function () {
@@ -66,14 +74,7 @@ Route::get('/login', function () {
 // Route::get('kota', [c_kabkota::class, 'index']);
 
 // Route::get('/tiket/edit/{id}', [c_kabkota::class, 'edit'])->name('kabkota.edit');
-Route::get('tiket/create', [c_tiket::class, 'create'])->name('tiket.create');
-Route::get('tiket', [c_tiket::class, 'index'])->name('tiket.index');
-Route::get('tiket/rekap/', [c_tiket::class, 'rekap'])->name('tiket.rekap');
-Route::get('tiket/rekap/data/{optionkota}/{optionHari}', [c_tiket::class, 'rekapData'])->name('tiket.rekap.data');
-Route::post('tiket/post', [c_tiket::class, 'store'])->name('tiket.post');
-Route::get('/tiket/edit/{id}', [c_tiket::class, 'edit'])->name('tiket.edit');
-Route::put('tiket/update/{id}', [c_tiket::class, 'update'])->name('tiket.update');
-Route::get('tiket/detail/{id}', [c_tiket::class, 'show'])->name('tiket.detail');
+
 
 
 Route::get('login', [AuthController::class, 'index'])->name('login');
