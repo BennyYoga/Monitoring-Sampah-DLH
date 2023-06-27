@@ -119,6 +119,7 @@
                 {
                     data: 'action',
                     name: 'action',
+                    id:'printTiket',
                     orderable: false,
                     searchable: false
                 }
@@ -130,6 +131,11 @@
                 ]
             ]
         });
+        $("#printTiket").click(function() {
+            alert("anjay")
+                location.windows.reload()
+            });
     });
+
 </script>
 @endpush

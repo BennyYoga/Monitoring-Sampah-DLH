@@ -51,7 +51,7 @@ class c_tiket extends Controller
                         $btn .= '<form action="' . route('tiket.update', ['id' => $row->id]) . '" method="POST">';
                         $btn .= '<input type="hidden" name="_method" value="PUT">';
                         $btn .= csrf_field();
-                        $btn .= '<button type="submit" class="btn btn-success" onclick="notificationBeforeDelete(event, this)" style="font-size: 15px">Selesai</button>';
+                        $btn .= '<button type="submit" class="btn btn-success" id="printTiket" style="font-size: 15px">Selesai</button>';
                         $btn .= '</form>';
                     } else {
                         $btn .= '';
@@ -152,7 +152,7 @@ class c_tiket extends Controller
         $mpdf->WriteHTML($view);
         $filename = $tiket->pengemudi . '.pdf';
         $mpdf->Output($filename, 'D');
-        return redirect()->route('tiket.index')->with('refresh', true);
+        // return redirect()->route('tiket.index')->with('refresh', true);
         // return redirect()->route('tiket.index')->withToastSuccess('Data sudah Berhasil');
     }
 
