@@ -25,25 +25,21 @@
 
 <body>
     <div style="width:100%; text-align:center;">
-        <h4>Data Pegawai DLH Jawa Barat</h4>
+        <h4>Data Kabupaten / Kota DLH Jawa Barat</h4>
     </div>
     <br>
     <table>
         <thead>
             <tr>
                 <td>No</td>
-                <td>Nama Pegawai</td>
-                <td>NIP</td>
-                <td>Kantor</td>
+                <td>Nama Kabupaten / kota</td>
             </tr>
         </thead>
         <tbody>
-            @foreach($pegawai as $key => $pegawai)
+            @foreach($kabkota as $key => $kabkota)
             <tr>
                 <td>{{$key+1}}</td>
-                <td>{{$pegawai->nama_pegawai}}</td>
-                <td>{{$pegawai->NIP}}</td>
-                <td>{{$pegawai->fk_kantor->nama_kantor}}</td>
+                <td>{{$kabkota->nama_kab_kota}}</td>
             </tr>
             @endforeach
         </tbody>

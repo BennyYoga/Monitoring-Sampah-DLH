@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\m_kabkota;
 use App\Models\m_tiket;
+use App\Models\Pegawai;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 use \Yajra\Datatables\Datatables;
 use DateTime;
+use Illuminate\Support\Facades\Auth;
+use Mpdf\Mpdf;
 use Mpdf\Mpdf as PDF;
 
 
@@ -48,7 +51,7 @@ class c_tiket extends Controller
                         $btn .= '<form action="' . route('tiket.update', ['id' => $row->id]) . '" method="POST">';
                         $btn .= '<input type="hidden" name="_method" value="PUT">';
                         $btn .= csrf_field();
-                        $btn .= '<button type="submit" class="btn btn-success" data-confirm-swal="true" data-confirm-title="Delete User!" data-confirm-text="Are you sure you want to delete?" style="font-size: 15px">Selesai</button>';
+                        $btn .= '<button type="submit" class="btn btn-success" id="printTiket" style="font-size: 15px">Selesai</button>';
                         $btn .= '</form>';
                     } else {
                         $btn .= '';
@@ -94,7 +97,8 @@ class c_tiket extends Controller
         );
         $data = $request->all();
         $data['id_kab_kota'] = (int)$data['id_kab_kota'];
-
+        $user = Auth::user();
+        $data['id_pegawai'] = $user->id_pegawai;    
         $waktu = new DateTime();
         $data['jam_masuk'] = $waktu;
         m_tiket::create($data);
@@ -109,9 +113,16 @@ class c_tiket extends Controller
      */
     public function show($id)
     {
-        $tiket = m_tiket::findOrfail($id);
-        return view('tiket.detail', compact('tiket'));
-    }
+        $tiket = m_tiket::findOrFail($id);
+        $user = Auth::user();
+        // return view('tiket.detail', compact('tiket','user'))->render();
+        $mpdf = new Mpdf(['mode' => 'utf-8', 'format' => 'A5', 'margin_left'=>'20', 'margin_right'=>'20', 'margin-bottom'=>'10']);
+        $view = view('tiket.detail', compact('tiket', 'user'))->render();
+        $mpdf->WriteHTML($view);
+        $filename = $tiket->pengemudi . '.pdf';
+        $mpdf->Output($filename, 'D');
+
+        }
 
     /**
      * Show the form for editing the specified resource.
@@ -136,21 +147,20 @@ class c_tiket extends Controller
      */
     public function update($id)
     {
-        $tiket = m_tiket::where('id', $id)->first();
-        $data = [
-            'no_kendaraan' => $tiket['no_kendaraan'],
-            'jenis_kendaraan' => $tiket['jenis_kendaraan'],
-            'pengemudi' => $tiket['pengemudi'],
-            'lokasi_sampah' => $tiket['lokasi_sampah'],
-            'jam_masuk' => $tiket['jam_masuk'],
-            'volume' => $tiket['volume'],
-        ];
+        $tiket = m_tiket::findOrFail($id);
         $waktu = new DateTime();
-        $data['jam_keluar'] = $waktu;
-        // dd($data);
-        m_tiket::where('id', $id)->update($data);
-
-        return redirect()->route('tiket.index')->withToastSuccess('Berhasil Memperbarui tiket');
+        $tiket->jam_keluar = $waktu;
+        $tiket->save();
+        // dd($tiket);
+        $user = Auth::user();
+        // return view('tiket.detail', compact('tiket','user'))->render();
+        $mpdf = new Mpdf(['mode' => 'utf-8', 'format' => 'A4', 'margin_left'=>'20', 'margin_right'=>'20', 'margin-bottom'=>'10']);
+        $view = view('tiket.detail', compact('tiket', 'user'))->render();
+        $mpdf->WriteHTML($view);
+        $filename = $tiket->pengemudi . '.pdf';
+        $mpdf->Output($filename, 'D');
+        // return redirect()->route('tiket.index')->with('refresh', true);
+        // return redirect()->route('tiket.index')->withToastSuccess('Data sudah Berhasil');
     }
 
     /**
@@ -186,7 +196,8 @@ class c_tiket extends Controller
                 ->addColumn('bulan', function ($row) {
                     $tanggal = date('d', strtotime($row->jam_keluar));
                     $namaBulan = date('F', strtotime($row->jam_keluar));
-                    $bulan = $tanggal . ' ' . $namaBulan;
+                    $tahun = date('Y',strtotime($row->jam_keluar) );
+                    $bulan = $tanggal . ' ' . $namaBulan . ' ' . $tahun;
                     return $bulan;
                 })
                 ->addColumn('jam_masuk', function ($row) {
@@ -203,13 +214,13 @@ class c_tiket extends Controller
                     $kab_kota = m_kabkota::where('id_kab_kota', $row->id_kab_kota)->first();
                     return $kab_kota->nama_kab_kota;
                 })
-                ->addColumn('action', function ($row) {
-                    $tiket = m_tiket::all();
-                    $btn = '';
-                    $btn = '<a href=' . route('tiket.detail', $row->id) . ' style="font-size:20px" class="text-warning mr-10"><i class="lni lni-pencil-alt"></i></a>';
-                    return $btn;
-                })
-                ->rawColumns(['action'])
+                // ->addColumn('action', function ($row) {
+                //     $tiket = m_tiket::all();
+                //     $btn = '';
+                //     // $btn = '<a href=' . route('tiket.detail', $row->id) . ' style="font-size:20px" class="text-warning mr-10"><i class="lni lni-pencil-alt"></i></a>';
+                //     return $btn;
+                // })
+                // ->rawColumns(['action'])
                 ->make(true);
         }
 

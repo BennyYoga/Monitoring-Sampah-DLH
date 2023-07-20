@@ -41,6 +41,7 @@ Route::group(['middleware' => 'role:1|2'], function(){
         Route::get('/kantor/edit/{id}', [KantorController::class, 'edit'])->name('kantor.edit');
         Route::put('/kantor/update/{id}', [KantorController::class, 'update'])->name('kantor.update');
         Route::get('/kantor/destroy/{id}', [KantorController::class, 'destroy'])->name('kantor.destroy');
+        Route::get('/kantor/print', [KantorController::class, 'document'])->name('kantor.document');
 
         Route::get('kota', [c_kabkota::class, 'index'])->name('kabkota.index');
         Route::get('/kota/edit/{id}', [c_kabkota::class, 'edit'])->name('kabkota.edit');
@@ -48,12 +49,21 @@ Route::group(['middleware' => 'role:1|2'], function(){
         Route::get('/kota/create', [c_kabkota::class, 'create'])->name('kota.create');
         Route::post('/kota/post', [c_kabkota::class, 'store'])->name('kota.post');
         Route::get('/kota/destroy/{id}', [c_kabkota::class, 'destroy'])->name('kabkota.destroy');
+        Route::get('/kota/print', [c_kabkota::class, 'document'])->name('kabkota.document');
 
-        Route::get('/kantor/print', [KantorController::class, 'document'])->name('kantor.document');
     });
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');    
     Route::get('/dashboard/data/{option}', [DashboardController::class, 'getData'])->name('dashboard.data');
+    Route::get('tiket/create', [c_tiket::class, 'create'])->name('tiket.create');
+    Route::get('tiket', [c_tiket::class, 'index'])->name('tiket.index');
+    Route::get('tiket/rekap/', [c_tiket::class, 'rekap'])->name('tiket.rekap'); 
+    Route::get('tiket/rekap/data/{optionkota}/{optionHari}', [c_tiket::class, 'rekapData'])->name('tiket.rekap.data');
+    Route::get('tiket/rekap/print/{optionkota}/{optionHari}', [c_tiket::class, 'rekapPrint'])->name('tiket.rekap.print');
+    Route::post('tiket/post', [c_tiket::class, 'store'])->name('tiket.post');
+    Route::get('/tiket/edit/{id}', [c_tiket::class, 'edit'])->name('tiket.edit');
+    Route::put('tiket/update/{id}', [c_tiket::class, 'update'])->name('tiket.update');
+    // Route::get('tiket/detail/{id}', [c_tiket::class, 'show'])->name('tiket.detail');
 });
 
 Route::get('/login', function () {
@@ -62,16 +72,6 @@ Route::get('/login', function () {
 
 
 // Route::get('/tiket/edit/{id}', [c_kabkota::class, 'edit'])->name('kabkota.edit');
-Route::get('tiket/create', [c_tiket::class, 'create'])->name('tiket.create');
-Route::get('tiket', [c_tiket::class, 'index'])->name('tiket.index');
-Route::get('tiket/rekap/', [c_tiket::class, 'rekap'])->name('tiket.rekap');
-Route::get('tiket/rekap/data/{optionkota}/{optionHari}', [c_tiket::class, 'rekapData'])->name('tiket.rekap.data');
-Route::get('tiket/rekap/print/{optionkota}/{optionHari}', [c_tiket::class, 'rekapPrint'])->name('tiket.rekap.print');
-// Route::get('tiket/create', [c_tiket::class, 'create']);
-Route::post('tiket/post', [c_tiket::class, 'store'])->name('tiket.post');
-Route::get('/tiket/edit/{id}', [c_tiket::class, 'edit'])->name('tiket.edit');
-Route::put('tiket/update/{id}', [c_tiket::class, 'update'])->name('tiket.update');
-Route::get('tiket/detail/{id}', [c_tiket::class, 'show'])->name('tiket.detail');
 
 
 Route::get('login', [AuthController::class, 'index'])->name('login');
