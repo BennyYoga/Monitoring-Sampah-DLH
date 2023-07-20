@@ -317,21 +317,33 @@ class c_tiket extends Controller
         
         $total = [
             'Volume' => 0,
-            'Tara' => 0,
-            'Netto' => 0,
-            'Bruto' => 0
+            'Tonase' => 0,
 
         ];
 
         foreach ($data as $dataItem) {
 
             $volume = $dataItem->volume;
-            $tara = $volume * 476;
-            $netto = $volume - $tara;
-        
+            $tonase = 0;
+            if($volume <= 5){
+                $tonase = 0;
+            }
+            elseif ($volume <=8) {
+                $tonase = 2856;
+            }
+            elseif ($volume <= 11) {
+                $tonase = 4760; 
+            }
+            elseif ($volume <= 24) {
+                $tonase = 5712;
+            }
+            elseif ($volume <= 30) {
+                $tonase = 11900;
+            }
+            
+            $total['Tonase'] += $tonase;
             $total['Volume'] += $dataItem->volume;
-            $total['Tara'] += $tara;
-            $total['Netto'] += $netto;
+        
         }
         $mpdf = new PDF(['orientation' => 'P', 'format' => 'A4',]);
         $mpdf->AddPageByArray([

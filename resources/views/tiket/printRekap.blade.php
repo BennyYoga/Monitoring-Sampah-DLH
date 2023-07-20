@@ -80,7 +80,7 @@
                 <td>{{$total['Volume']}}</td>
                 <td>0</td>
                 <td>0</td>
-                <td>{{$total['Tara']}}</td>
+                <td>{{$total['Tonase']}}</td>
             </tr>
         </tbody>
     </table>
