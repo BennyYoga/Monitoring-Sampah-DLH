@@ -56,7 +56,7 @@
                     <span class="icon">
                         <i class="lni lni-apartment"></i>
                     </span>
-                    <span class="text">Kantor</span>
+                    <span class="text">TPA</span>
                 </a>
             </li>
             <li class="nav-item {{ Request::routeIs('kabkota.index') ? 'active' : '' }}">

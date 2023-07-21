@@ -98,31 +98,13 @@ class c_tiket extends Controller
         $data = $request->all();
         $data['id_kab_kota'] = (int)$data['id_kab_kota'];
         $user = Auth::user();
-        $data['id_pegawai'] = $user->id_pegawai;    
+        $data['id_pegawai'] = $user->id_pegawai;
         $waktu = new DateTime();
         $data['jam_masuk'] = $waktu;
         m_tiket::create($data);
         return redirect()->route('tiket.index')->withToastSuccess('Berhasil Menambahkan Tiket');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $tiket = m_tiket::findOrFail($id);
-        $user = Auth::user();
-        // return view('tiket.detail', compact('tiket','user'))->render();
-        $mpdf = new Mpdf(['mode' => 'utf-8', 'format' => 'A5', 'margin_left'=>'20', 'margin_right'=>'20', 'margin-bottom'=>'10']);
-        $view = view('tiket.detail', compact('tiket', 'user'))->render();
-        $mpdf->WriteHTML($view);
-        $filename = $tiket->pengemudi . '.pdf';
-        $mpdf->Output($filename, 'D');
-
-        }
 
     /**
      * Show the form for editing the specified resource.
@@ -149,18 +131,30 @@ class c_tiket extends Controller
     {
         $tiket = m_tiket::findOrFail($id);
         $waktu = new DateTime();
+        $user = Auth::user();
+
         $tiket->jam_keluar = $waktu;
         $tiket->save();
-        // dd($tiket);
-        $user = Auth::user();
-        // return view('tiket.detail', compact('tiket','user'))->render();
-        $mpdf = new Mpdf(['mode' => 'utf-8', 'format' => 'A4', 'margin_left'=>'20', 'margin_right'=>'20', 'margin-bottom'=>'10']);
-        $view = view('tiket.detail', compact('tiket', 'user'))->render();
+
+        $tiket->tonase = 0;
+        if ($tiket->volume <= 5) {
+            $tiket->tonase = 0;
+        } elseif ($tiket->volume <= 8) {
+            $tiket->tonase = 2856;
+        } elseif ($tiket->volume <= 11) {
+            $tiket->tonase = 4760;
+        } elseif ($tiket->volume <= 24) {
+            $tiket->tonase = 5712;
+        } elseif ($tiket->volume <= 30) {
+            $tiket->tonase = 11900;
+        }
+
+
+        $mpdf = new Mpdf(['mode' => 'utf-8', 'format' => 'A4', 'margin_left' => '20', 'margin_right' => '20', 'margin-bottom' => '10']);
+        $view = view('tiket.detail', compact('tiket', 'user',))->render();
         $mpdf->WriteHTML($view);
         $filename = $tiket->pengemudi . '.pdf';
-        $mpdf->Output($filename, 'D');
-        // return redirect()->route('tiket.index')->with('refresh', true);
-        // return redirect()->route('tiket.index')->withToastSuccess('Data sudah Berhasil');
+        $mpdf->Output($filename, 'I');
     }
 
     /**
@@ -177,7 +171,6 @@ class c_tiket extends Controller
     public function rekap(Request $request)
     {
         if ($request->ajax()) {
-            
             if (session('pegawai')->id_role == 1) {
                 $tiket = m_tiket::whereNotNull('jam_keluar');
             } else {
@@ -196,7 +189,7 @@ class c_tiket extends Controller
                 ->addColumn('bulan', function ($row) {
                     $tanggal = date('d', strtotime($row->jam_keluar));
                     $namaBulan = date('F', strtotime($row->jam_keluar));
-                    $tahun = date('Y',strtotime($row->jam_keluar) );
+                    $tahun = date('Y', strtotime($row->jam_keluar));
                     $bulan = $tanggal . ' ' . $namaBulan . ' ' . $tahun;
                     return $bulan;
                 })
@@ -214,13 +207,10 @@ class c_tiket extends Controller
                     $kab_kota = m_kabkota::where('id_kab_kota', $row->id_kab_kota)->first();
                     return $kab_kota->nama_kab_kota;
                 })
-                // ->addColumn('action', function ($row) {
-                //     $tiket = m_tiket::all();
-                //     $btn = '';
-                //     // $btn = '<a href=' . route('tiket.detail', $row->id) . ' style="font-size:20px" class="text-warning mr-10"><i class="lni lni-pencil-alt"></i></a>';
-                //     return $btn;
-                // })
-                // ->rawColumns(['action'])
+                ->addColumn('action', function ($row) {
+                    return '<a href=' . route('tiket.print', $row->id) . ' class="btn btn-primary" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">Print</a>';
+                })
+                ->rawColumns(['action'])
                 ->make(true);
         }
 
@@ -231,8 +221,7 @@ class c_tiket extends Controller
 
     public function rekapData(Request $request, $optionKota, $optionHari)
     {
-        $data = null; // Inisialisasi variabel $data dengan null
-
+        $data = null;
         if (session('pegawai')->id_role == 1) {
             $data = m_tiket::whereNotNull('jam_keluar');
         } else {
@@ -247,21 +236,20 @@ class c_tiket extends Controller
         }
 
         // Filter Berdasarkan Waktu
-        if (strlen($optionHari) === 10) {
-            $data = $data->whereDate('jam_keluar', $optionHari);
-        } else if (strlen($optionHari) === 7) {
-            list($tahun, $bulan) = explode("-", $optionHari);
-            $data = $data->whereYear('jam_keluar', '=', $tahun)
-                ->whereMonth('jam_keluar', '=', $bulan);
-        } else if (strlen($optionHari) === 4) {
-            $data = $data->whereYear('jam_keluar', $optionHari);
+        if($optionHari != 'undefined'){
+            $dateArray = explode(" - ", $optionHari);
+            $dateArray[0] = trim($dateArray[0]);
+            $dateArray[1] = trim($dateArray[1]);
+            $dateArray[0] .= ' 00:00:00';
+            $dateArray[1] .= ' 23:59:59'; 
+    
+            $data = $data->where('jam_keluar', '>=', $dateArray[0])
+                ->where('jam_keluar', '<=', $dateArray[1])
+                ->get();
         }
-
-
-        $data = $data->get(); // Eksekusi query dan ambil data
-
-        // Melanjutkan pemrosesan data selanjutnya...
-
+        else{
+            $data = $data->get();
+        }
 
         if ($request->ajax()) {
             return DataTables::of($data)
@@ -286,12 +274,41 @@ class c_tiket extends Controller
                     return $kab_kota->nama_kab_kota;
                 })
                 ->addColumn('action', function ($row) {
-                    $tiket = m_tiket::all();
+                    return '<a href=' . route('tiket.print', $row->id) . ' class="btn btn-primary" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">Print</a>';
                 })
+                ->rawColumns(['action'])
                 ->make(true);
         }
 
         return response()->json(['data' => $data]);
+    }
+
+    public function tiketPrint($id)
+    {
+        $tiket = m_tiket::findOrFail($id);
+        $user = Auth::user();
+
+        $tiket->jam_keluar = new DateTime($tiket->jam_keluar);
+
+        $tiket->tonase = 0;
+        if ($tiket->volume <= 5) {
+            $tiket->tonase = 0;
+        } elseif ($tiket->volume <= 8) {
+            $tiket->tonase = 2856;
+        } elseif ($tiket->volume <= 11) {
+            $tiket->tonase = 4760;
+        } elseif ($tiket->volume <= 24) {
+            $tiket->tonase = 5712;
+        } elseif ($tiket->volume <= 30) {
+            $tiket->tonase = 11900;
+        }
+
+
+        $mpdf = new Mpdf(['mode' => 'utf-8', 'format' => 'A4', 'margin_left' => '20', 'margin_right' => '20', 'margin-bottom' => '10']);
+        $view = view('tiket.detail', compact('tiket', 'user',))->render();
+        $mpdf->WriteHTML($view);
+        $filename = $tiket->pengemudi . '.pdf';
+        $mpdf->Output($filename, 'I');
     }
 
     public function rekapPrint($optionKota, $optionHari)
@@ -325,36 +342,28 @@ class c_tiket extends Controller
         }
 
         $data = $data->get();
-        
+
         $total = [
             'Volume' => 0,
             'Tonase' => 0,
-
         ];
 
         foreach ($data as $dataItem) {
-
             $volume = $dataItem->volume;
-            $tonase = 0;
-            if($volume <= 5){
-                $tonase = 0;
+            if ($volume <= 5) {
+                $dataItem->tonase = 0;
+            } elseif ($volume <= 8) {
+                $dataItem->tonase = 2856;
+            } elseif ($volume <= 11) {
+                $dataItem->tonase = 4760;
+            } elseif ($volume <= 24) {
+                $dataItem->tonase = 5712;
+            } elseif ($volume <= 30) {
+                $dataItem->tonase = 11900;
             }
-            elseif ($volume <=8) {
-                $tonase = 2856;
-            }
-            elseif ($volume <= 11) {
-                $tonase = 4760; 
-            }
-            elseif ($volume <= 24) {
-                $tonase = 5712;
-            }
-            elseif ($volume <= 30) {
-                $tonase = 11900;
-            }
-            
-            $total['Tonase'] += $tonase;
+
+            $total['Tonase'] += $dataItem->tonase;
             $total['Volume'] += $dataItem->volume;
-        
         }
         $mpdf = new PDF(['orientation' => 'P', 'format' => 'A4',]);
         $mpdf->AddPageByArray([

@@ -63,6 +63,7 @@ Route::group(['middleware' => 'role:1|2'], function(){
     Route::post('tiket/post', [c_tiket::class, 'store'])->name('tiket.post');
     Route::get('/tiket/edit/{id}', [c_tiket::class, 'edit'])->name('tiket.edit');
     Route::put('tiket/update/{id}', [c_tiket::class, 'update'])->name('tiket.update');
+    Route::get('tiket/print/{id}', [c_tiket::class, 'tiketPrint'])->name('tiket.print');
     // Route::get('tiket/detail/{id}', [c_tiket::class, 'show'])->name('tiket.detail');
 });
 

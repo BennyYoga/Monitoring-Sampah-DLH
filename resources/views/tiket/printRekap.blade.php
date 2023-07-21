@@ -45,6 +45,7 @@
                 <td rowspan="2">Lokasi Sumber Sampah</td>
                 <td>Volume</td>
                 <td colspan="3">Berat</td>
+                <td rowspan="2">Total Biaya</td>
             </tr>
             <tr>
                 <td>Nomor</td>
@@ -72,7 +73,8 @@
                 <td>{{$data->volume}}</td>
                 <td>0</td>
                 <td>0</td> 
-                <td>{{$data->volume * 476}}</td>
+                <td>{{$data->tonase}}</td>
+                <td>Rp. {{number_format($data->tonase*50)}}</td>
             </tr>
             @endforeach
             <tr>
@@ -81,6 +83,7 @@
                 <td>0</td>
                 <td>0</td>
                 <td>{{$total['Tonase']}}</td>
+                <td>Rp. {{number_format($total['Tonase']*50)}}</td>
             </tr>
         </tbody>
     </table>

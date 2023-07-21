@@ -56,18 +56,15 @@
 </head>
 <body>
 <?php for ($i = 0; $i < 2; $i++) { ?>
-    <div class="bungkus">
-        <div class="logo" style="text-align: center;">
-            <img src="images/logo/absensi.png" alt="Logo" class="logo">
-        </div>
-        <div class="header" style="text-align: center;">
-            <p class="h6">SISTEM MONITORING SAMPAH</p>
-            <p class="h6">PEMERINTAH DAERAH PROVINSI JAWA BARAT</p>
-            <p class="h6">DINAS LINGKUNGAN HIDUP</p>
-            <p class="h6">UPTD PENGELOLAAN SAMPAH TPA/TPST REGIONAL</p>
-            <p class="h6">{{ session('pegawai')->fk_kantor->nama_kantor }}</p>
+    <div class="bungkus mt-3">
+        <div style="text-align: center;">
+            <b class="h5">PEMERINTAH DAERAH PROVINSI JAWA BARAT</b>
+            <br>DINAS LINGKUNGAN HIDUP
+            <br>UPTD PENGELOLAAN SAMPAH TPA/TPST REGIONAL
+            <br><b class="h5">{{ session('pegawai')->fk_kantor->nama_kantor }}</b>
         </div>
     </div>
+    <hr>
     <div class="h6">
         <p class="text-center">TANDA TERIMA</p>
         <p class="text-center" style="padding-bottom:5px">HASIL KERJA</p>
@@ -99,8 +96,16 @@
                 <td style='text-align: left; font-size: 15px; color: black'>: {{$tiket->lokasi_sampah}}</td>
             </tr>
             <tr>
-                <td colspan='4' style='text-align: left; color: black'>Volume (Kg)</td>
+                <td colspan='4' style='text-align: left; color: black'>Wilayah</td>
+                <td style='text-align: left; font-size: 15px; color: black'>: {{$tiket->fk_kab_kot->nama_kab_kota}}</td>
+            </tr>
+            <tr>
+                <td colspan='4' style='text-align: left; color: black'>Volume (M3)</td>
                 <td style='text-align: left; font-size: 15px; color: black'>: {{$tiket->volume}}</td>
+            </tr>
+            <tr>
+                <td colspan='4' style='text-align: left; color: black'>Tonase (Kg)</td>
+                <td style='text-align: left; font-size: 15px; color: black'>: {{number_format($tiket->tonase)}}</td>
             </tr>
         </table>
     </div>
