@@ -191,7 +191,10 @@ class c_tiket extends Controller
                     $namaBulan = date('F', strtotime($row->jam_keluar));
                     $tahun = date('Y', strtotime($row->jam_keluar));
                     $bulan = $tanggal . ' ' . $namaBulan . ' ' . $tahun;
-                    return $bulan;
+                    return [
+                        'display' => $bulan,
+                        'timestamp' => strtotime($row->jam_keluar)
+                    ];
                 })
                 ->addColumn('jam_masuk', function ($row) {
                     $row->jam_masuk = date('H:i:s', strtotime($row->jam_masuk));
@@ -236,18 +239,17 @@ class c_tiket extends Controller
         }
 
         // Filter Berdasarkan Waktu
-        if($optionHari != 'undefined'){
+        if ($optionHari != 'undefined') {
             $dateArray = explode(" - ", $optionHari);
             $dateArray[0] = trim($dateArray[0]);
             $dateArray[1] = trim($dateArray[1]);
             $dateArray[0] .= ' 00:00:00';
-            $dateArray[1] .= ' 23:59:59'; 
-    
+            $dateArray[1] .= ' 23:59:59';
+
             $data = $data->where('jam_keluar', '>=', $dateArray[0])
                 ->where('jam_keluar', '<=', $dateArray[1])
                 ->get();
-        }
-        else{
+        } else {
             $data = $data->get();
         }
 
@@ -256,8 +258,12 @@ class c_tiket extends Controller
                 ->addColumn('bulan', function ($row) {
                     $tanggal = date('d', strtotime($row->jam_keluar));
                     $namaBulan = date('F', strtotime($row->jam_keluar));
-                    $bulan = $tanggal . ' ' . $namaBulan;
-                    return $bulan;
+                    $tahun = date('Y', strtotime($row->jam_keluar));
+                    $bulan = $tanggal . ' ' . $namaBulan . ' ' . $tahun;
+                    return [
+                        'display' => $bulan,
+                        'timestamp' => strtotime($row->jam_keluar)
+                    ];
                 })
                 ->addColumn('jam_masuk', function ($row) {
                     $row->jam_masuk = date('H:i:s', strtotime($row->jam_masuk));
@@ -313,8 +319,6 @@ class c_tiket extends Controller
 
     public function rekapPrint($optionKota, $optionHari)
     {
-        $data = null; // Inisialisasi variabel $data dengan null
-        $namakota = null;
 
         if (session('pegawai')->id_role == 1) {
             $data = m_tiket::whereNotNull('jam_keluar');
@@ -324,24 +328,25 @@ class c_tiket extends Controller
 
         // Filter Kota
         if ($optionKota != 'default') {
-            $data = m_tiket::whereNotNull('jam_keluar')->where('id_kab_kota', $optionKota);
-            $namakota = m_kabkota::where('id_kab_kota', $optionKota)->first();
+            $data = $data->where('id_kab_kota', $optionKota);
         } else {
-            $data = m_tiket::whereNotNull('jam_keluar');
+            $data = $data->whereNotNull('jam_keluar');
         }
 
         // Filter Berdasarkan Waktu
-        if (strlen($optionHari) === 10) {
-            $data = $data->whereDate('jam_keluar', $optionHari);
-        } else if (strlen($optionHari) === 7) {
-            list($tahun, $bulan) = explode("-", $optionHari);
-            $data = $data->whereYear('jam_keluar', '=', $tahun)
-                ->whereMonth('jam_keluar', '=', $bulan);
-        } else if (strlen($optionHari) === 4) {
-            $data = $data->whereYear('jam_keluar', $optionHari);
-        }
+        if ($optionHari != 'undefined') {
+            $dateArray = explode(" - ", $optionHari);
+            $dateArray[0] = trim($dateArray[0]);
+            $dateArray[1] = trim($dateArray[1]);
+            $dateArray[0] .= ' 00:00:00';
+            $dateArray[1] .= ' 23:59:59';
 
-        $data = $data->get();
+            $data = $data->where('jam_keluar', '>=', $dateArray[0])
+                ->where('jam_keluar', '<=', $dateArray[1])
+                ->get();
+        } else {
+            $data = $data->get();
+        }
 
         $total = [
             'Volume' => 0,
@@ -372,7 +377,7 @@ class c_tiket extends Controller
             'margin-top' => 10,
             'margin-bottom' => 10,
         ]);
-        $html = view('tiket.printRekap', compact('data', 'namakota', 'total'));
+        $html = view('tiket.printRekap', compact('data', 'total'));
         $mpdf->writeHTML($html);
         $mpdf->Output("Rekap.pdf", "D");
     }

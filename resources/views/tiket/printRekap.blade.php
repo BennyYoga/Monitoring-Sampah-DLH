@@ -28,11 +28,7 @@
         {{session('pegawai')->fk_kantor->alamat_kantor}}
     </div>
     <br>
-    @if($namakota == null)
-    <h4>Data Sampah Wilayah Jawa Barat</h4>
-    @else
-    <h4>Data Sampah {{$namakota->nama_kab_kota}}</h4>
-    @endif
+    <h4>Data Sampah TPA Sari Mukti</h4>
     <table>
         <thead>
             <tr>

@@ -90,7 +90,7 @@
                                     <th>Tanggal</th>
                                     <th>Jam<br>Masuk</th>
                                     <th>Jam<br>keluar</th>
-                                    <th>Nomor<br>Kendaraan</th>
+                                    <th>Nomor Kendaraan</th>
                                     <th>Jenis<br>Kendaraan</th>
                                     <th>Pengemudi</th>
                                     <th>Lokasi</th>
@@ -136,20 +136,24 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script type="text/javascript">
+    var table
     $(function() {
         // Initialize DataTable
-        var table = $('#tiket').DataTable({
+        table = $('#tiket').DataTable({
             processing: true,
             serverSide: true,
             ajax: "",
             columns: [{
-                    data: 'bulan',
-                    name: 'bulan',
-                    orderable: true,
+                    'name': 'bulan',
+                    'data': {
+                        '_': 'bulan.display',
+                        'sort': 'bulan.timestamp'
+                    },
+                    width: '13%'
                 },
                 {
                     data: 'jam_masuk',
-                    name: 'jam_masuk'
+                    name: 'jam_masuk',
                 },
                 {
                     data: 'jam_keluar',
@@ -157,7 +161,7 @@
                 },
                 {
                     data: 'no_kendaraan',
-                    name: 'no_kendaraan'
+                    name: 'no_kendaraan',
                 },
                 {
                     data: 'jenis_kendaraan',
@@ -180,7 +184,9 @@
                     data: 'action'
                 },
             ],
-            order: [[0, "DESC"]],
+            order: [
+                [0, "DESC"]
+            ],
         });
 
         $(function() {
@@ -221,16 +227,7 @@
             });
 
             $("#print").click(function() {
-                let dataTable = table.data().length
-                var Pilihan = $('#filter-hari').val();
-                var inputKota = $('#filter-kota').val();
-                var inputHari = $('#filter-calendar').val();
-                if (Pilihan == 'SemuaHari') {
-                    inputHari = 'all'
-                    window.location.href = '/tiket/rekap/print/' + inputKota + '/' + inputHari;
-                } else if (inputHari) {
-                    window.location.href = '/tiket/rekap/print/' + inputKota + '/' + inputHari;
-                }
+                window.location.href = '/tiket/rekap/print/' + inputKota + '/' + dateRange;
             });
         });
     });
