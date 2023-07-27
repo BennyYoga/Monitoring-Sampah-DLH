@@ -56,7 +56,7 @@
                                     <th>Jenis <br> Kendaraan</th>
                                     <th>Pengemudi</th>
                                     <th>Lokasi</th>
-                                    <th>Berat(Kg)</th>
+                                    <th>Volume</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>

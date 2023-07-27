@@ -7,6 +7,7 @@
             width: 100%;
             border-collapse: collapse;
             text-align: center;
+            margin-top: 10px;
         }
         
         table tr td,
@@ -24,34 +25,41 @@
 
 <body>
     <div style="width:100%; text-align:center;">
-        <h4><u>{{session('pegawai')->fk_kantor->nama_kantor}}</u></h4>
+        <b>{{session('pegawai')->fk_kantor->nama_kantor}}</b><br>
         {{session('pegawai')->fk_kantor->alamat_kantor}}
+
     </div>
     <br>
-    <h4>Data Sampah TPA Sari Mukti</h4>
+    <b>Data Sampah TPA Sari Mukti</b><br>
+    @if($option->optionKota != 'undefined')
+        Untuk Wilayah : {{$option->optionKota}} <br>
+    @endif
+    @if($option->optionHari != 'undefined')
+        {{$option->optionHari}} <br>
+    @endif
     <table>
         <thead>
             <tr>
-                <td rowspan="2">No.</td>
-                <td rowspan="2">No. Tiket</td>
-                <td colspan="2">Kendaraan</td>
-                <td rowspan="2">Kode Surat Jalan</td>
-                <td colspan="2">Jam</td>
-                <td rowspan="2">Nama Pengemudi</td>
-                <td rowspan="2">Lokasi Sumber Sampah</td>
-                <td>Volume</td>
-                <td colspan="3">Berat</td>
-                <td rowspan="2">Total Biaya</td>
+                <td rowspan="2"><b>No.</b></td>
+                <td rowspan="2"><b>No. Tiket</b></td>
+                <td colspan="2"><b>Kendaraan</b></td>
+                <td rowspan="2"><b>Kode Surat Jalan</b></td>
+                <td colspan="2"><b>Jam</b></td>
+                <td rowspan="2"><b>Nama Pengemudi</b></td>
+                <td rowspan="2"><b>Lokasi Sumber Sampah</b></td>
+                <td><b>Volume</b></td>
+                <td colspan="3"><b>Berat</b></td>
+                <td rowspan="2"><b>Total Biaya</b></td>
             </tr>
             <tr>
-                <td>Nomor</td>
-                <td>Jenis</td>
-                <td>Masuk</td>
-                <td>Keluar</td>
-                <td>M3</td>
-                <td>Bruto</td>
-                <td>Tarra</td>
-                <td>Netto</td>
+                <td><b>Nomor</b></td>
+                <td><b>Jenis</b></td>
+                <td><b>Masuk</b></td>
+                <td><b>Keluar</b></td>
+                <td><b>M3</b></td>
+                <td><b>Bruto</b></td>
+                <td><b>Tarra</b></td>
+                <td><b>Netto</b></td>
             </tr>
         </thead>
         <tbody>

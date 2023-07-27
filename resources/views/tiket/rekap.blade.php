@@ -61,6 +61,9 @@
                                     <button id="print" class="btn btn-danger">
                                         Download PDF
                                     </button>
+                                    <button id="printExcel" class="btn btn-success">
+                                        Download Excel
+                                    </button>
                                 </div>
                                 <div class="right mt-4">
                                     <div class="row">
@@ -68,7 +71,7 @@
                                             <div class="select-style-1">
                                                 <div class="select-position select-sm">
                                                     <select class="light-bg" id="filter-kota" name="option">
-                                                        <option value="default">Semua Kota</option>
+                                                        <option value="undefined">Semua Kota</option>
                                                         @foreach($kab_kota as $option)
                                                         <option value="{{$option->id_kab_kota}}">{{$option->nama_kab_kota}}</option>
                                                         @endforeach
@@ -228,6 +231,9 @@
 
             $("#print").click(function() {
                 window.location.href = '/tiket/rekap/print/' + inputKota + '/' + dateRange;
+            });
+            $("#printExcel").click(function() {
+                window.location.href = '/tiket/print-excel/' + inputKota + '/' + dateRange;
             });
         });
     });

@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('dashboard');
 });
 
 Route::group(['middleware' => 'role:1|2'], function(){
@@ -65,6 +65,7 @@ Route::group(['middleware' => 'role:1|2'], function(){
     Route::put('tiket/update/{id}', [c_tiket::class, 'update'])->name('tiket.update');
     Route::get('tiket/print/{id}', [c_tiket::class, 'tiketPrint'])->name('tiket.print');
     // Route::get('tiket/detail/{id}', [c_tiket::class, 'show'])->name('tiket.detail');
+    Route::get('/tiket/print-excel/{optionkota}/{optionHari}', [c_tiket::class, 'exportExcel'])->name('tiket.excel');
 });
 
 Route::get('/login', function () {

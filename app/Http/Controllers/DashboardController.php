@@ -13,20 +13,19 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
         $today = date('Y-m-d');
-        $today = date('m');
+        $todaymonth = date('m');
         if (session('pegawai')->id_role == 1) {
             $tiket['Day'] = m_tiket::whereDate('jam_keluar', $today)->get();
-            $tiket['Month'] = m_tiket::whereMonth('jam_keluar', $today)->get();
+            $tiket['Month'] = m_tiket::whereMonth('jam_keluar', $todaymonth)->get();
         } else {
             $tiket['Day'] = m_tiket::whereDate('jam_keluar', $today)->where('id_pegawai', session('pegawai')->id_pegawai)->get();
-            $tiket['Month'] = m_tiket::whereMonth('jam_keluar', $today)->where('id_pegawai', session('pegawai')->id_pegawai)->get();
+            $tiket['Month'] = m_tiket::whereMonth('jam_keluar', $todaymonth)->where('id_pegawai', session('pegawai')->id_pegawai)->get();
         }
 
         $berat = [
             'hari' => 0,
             'bulan' => 0
         ];
-
         $iteration = ['hari' => 0, 'bulan' => 0];
         foreach ($tiket['Day'] as $tiket['Day']) {
             $berat['hari'] += $tiket['Day']->volume;
@@ -50,7 +49,6 @@ class DashboardController extends Controller
                 ->select('id_kab_kota', 'jam_keluar', DB::raw('SUM(volume) as volume'))
                 ->get();
         }
-
         $data = [];
         foreach ($rekap as $dataTiket) {
             $id_kab_kota = $dataTiket->id_kab_kota;
@@ -70,7 +68,6 @@ class DashboardController extends Controller
                 'jumlah_data' => 1
             ];
         }
-
         $data = array_values($data);
 
         if ($request->ajax()) {
@@ -96,7 +93,6 @@ class DashboardController extends Controller
                 })
                 ->make(true);
         }
-
         return view('Dashboard.index', compact('iteration', 'berat'));
     }
 

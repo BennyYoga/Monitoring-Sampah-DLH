@@ -15,6 +15,7 @@
         "laravel/framework": "^8.0",
         "laravel/tinker": "^2.0",
         "mpdf/mpdf": "^8.1",
+        "phpoffice/phpspreadsheet": "^1.25",
         "realrashid/sweet-alert": "^7.0",
         "yajra/laravel-datatables-buttons": "^4.13",
         "yajra/laravel-datatables-oracle": "^9.21"
