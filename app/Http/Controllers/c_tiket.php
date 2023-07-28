@@ -378,7 +378,6 @@ class c_tiket extends Controller
             $option->optionKota = 'undefined';
             $option->optionHari = $optionHari;
         }
-
         $mpdf = new PDF(['orientation' => 'P', 'format' => 'A4',]);
         $mpdf->AddPageByArray([
             'margin-left' => 7,

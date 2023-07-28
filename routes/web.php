@@ -72,10 +72,6 @@ Route::get('/login', function () {
     return view('Login/login');
 });
 
-
-// Route::get('/tiket/edit/{id}', [c_kabkota::class, 'edit'])->name('kabkota.edit');
-
-
 Route::get('login', [AuthController::class, 'index'])->name('login');
 Route::get('changePassword', [AuthController::class, 'changePassword'])->name('changePassword.index');
 Route::put('updatePassword/{id}', [AuthController::class, 'updatePassword'])->name('updatePassword');
