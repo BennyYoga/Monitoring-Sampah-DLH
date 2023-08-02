@@ -12,6 +12,7 @@ use Mpdf\Mpdf;
 use Mpdf\Mpdf as PDF;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Symfony\Component\VarDumper\Cloner\Data;
 
 class c_tiket extends Controller
 {
@@ -319,9 +320,9 @@ class c_tiket extends Controller
     public function rekapPrint($optionKota, $optionHari)
     {
         if (session('pegawai')->id_role == 1) {
-            $data = m_tiket::whereNotNull('jam_keluar');
+            $data = m_tiket::whereNotNull('jam_keluar')->orderBy('jam_masuk', 'asc');
         } else {
-            $data = m_tiket::whereNotNull('jam_keluar')->where('id_pegawai', session('pegawai')->id_pegawai);
+            $data = m_tiket::whereNotNull('jam_keluar')->where('id_pegawai', session('pegawai')->id_pegawai)->orderBy('jam_masuk', 'asc');
         }
 
         // Filter Kota
@@ -399,34 +400,36 @@ class c_tiket extends Controller
         $sheet->mergeCells('A1:A2');
         $sheet->setCellValue('B1', 'No Tiket');
         $sheet->mergeCells('B1:B2');
-        $sheet->setCellValue('C1', 'No Kendaraan');
-        $sheet->mergeCells('C1:D1');
-        $sheet->setCellValue('C2', 'Nomor');
-        $sheet->setCellValue('D2', 'Jenis');
-        $sheet->setCellValue('E1', 'Kode Surat Jalan');
-        $sheet->mergeCells('E1:E2');
-        $sheet->setCellValue('F1', 'Jam');
-        $sheet->mergeCells('F1:G1');
-        $sheet->setCellValue('F2', 'Masuk');
-        $sheet->setCellValue('G2', 'Keluar');
-        $sheet->setCellValue('H1', 'Nama Pengemudi');
-        $sheet->mergeCells('H1:H2');
-        $sheet->setCellValue('I1', 'Lokasi Sumber Sampah');
+        $sheet->setCellValue('C1', 'Tanggal');
+        $sheet->mergeCells('C1:C2');
+        $sheet->setCellValue('D1', 'No Kendaraan');
+        $sheet->mergeCells('D1:E1');
+        $sheet->setCellValue('D2', 'Nomor');
+        $sheet->setCellValue('E2', 'Jenis');
+        $sheet->setCellValue('F1', 'Kode Surat Jalan');
+        $sheet->mergeCells('F1:F2');
+        $sheet->setCellValue('G1', 'Jam');
+        $sheet->mergeCells('G1:H1');
+        $sheet->setCellValue('G2', 'Masuk');
+        $sheet->setCellValue('H2', 'Keluar');
+        $sheet->setCellValue('I1', 'Nama Pengemudi');
         $sheet->mergeCells('I1:I2');
-        $sheet->setCellValue('J1', 'Volume');
-        $sheet->setCellValue('J2', 'M3');
-        $sheet->setCellValue('K1', 'Berat');
-        $sheet->mergeCells('K1:M1');
-        $sheet->setCellValue('K2', 'Bruto');
-        $sheet->setCellValue('L2', 'Tara');
-        $sheet->setCellValue('M2', 'Netto');
-        $sheet->setCellValue('N1', 'Total Biaya');
-        $sheet->mergeCells('N1:N2');
+        $sheet->setCellValue('J1', 'Lokasi Sumber Sampah');
+        $sheet->mergeCells('J1:J2');
+        $sheet->setCellValue('K1', 'Volume');
+        $sheet->setCellValue('K2', 'M3');
+        $sheet->setCellValue('L1', 'Berat');
+        $sheet->mergeCells('L1:N1');
+        $sheet->setCellValue('L2', 'Bruto');
+        $sheet->setCellValue('M2', 'Tara');
+        $sheet->setCellValue('N2', 'Netto');
+        $sheet->setCellValue('O1', 'Total Biaya');
+        $sheet->mergeCells('O1:O2');
 
         if (session('pegawai')->id_role == 1) {
-            $data = m_tiket::whereNotNull('jam_keluar');
+            $data = m_tiket::whereNotNull('jam_keluar')->orderBy('jam_masuk', 'asc');
         } else {
-            $data = m_tiket::whereNotNull('jam_keluar')->where('id_pegawai', session('pegawai')->id_pegawai);
+            $data = m_tiket::whereNotNull('jam_keluar')->where('id_pegawai', session('pegawai')->id_pegawai)->orderBy('jam_masuk', 'asc');
         }
 
         // Filter Kota
@@ -478,28 +481,29 @@ class c_tiket extends Controller
         foreach ($data as $item) {
             $sheet->setCellValue('A' . $i, $i);
             $sheet->setCellValue('B' . $i, $item->id);
-            $sheet->setCellValue('C' . $i, $item->no_kendaraan);
-            $sheet->setCellValue('D' . $i, $item->jenis_kendaraan);
-            $sheet->setCellValue('E' . $i, "-");
-            $sheet->setCellValue('F' . $i, date('H:i:s', strtotime($item->jam_masuk)));
-            $sheet->setCellValue('G' . $i, date('H:i:s', strtotime($item->jam_keluar)));
-            $sheet->setCellValue('H' . $i, $item->pengemudi);
-            $sheet->setCellValue('I' . $i, $item->lokasi_sampah);
-            $sheet->setCellValue('J' . $i, $item->volume);
-            $sheet->setCellValue('K' . $i, '0');
+            $sheet->setCellValue('C' . $i, date('d F Y', strtotime($item->jam_masuk)));
+            $sheet->setCellValue('D' . $i, $item->no_kendaraan);
+            $sheet->setCellValue('E' . $i, $item->jenis_kendaraan);
+            $sheet->setCellValue('F' . $i, "-");
+            $sheet->setCellValue('G' . $i, date('H:i:s', strtotime($item->jam_masuk)));
+            $sheet->setCellValue('H' . $i, date('H:i:s', strtotime($item->jam_keluar)));
+            $sheet->setCellValue('I' . $i, $item->pengemudi);
+            $sheet->setCellValue('J' . $i, $item->lokasi_sampah);
+            $sheet->setCellValue('K' . $i, $item->volume);
             $sheet->setCellValue('L' . $i, '0');
-            $sheet->setCellValue('M' . $i, $item->tonase);
-            $sheet->setCellValue('N' . $i, number_format($item->tonase * 50));
+            $sheet->setCellValue('M' . $i, '0');
+            $sheet->setCellValue('N' . $i, $item->tonase);
+            $sheet->setCellValue('O' . $i, number_format($item->tonase * 50));
             $i++;
         };
 
         $sheet->setCellValue('A' . $i, 'Jumlah');
-        $sheet->mergeCells('A'.$i. ':'.'I'.$i);
-        $sheet->setCellValue('J' . $i, $total['Volume']);
-        $sheet->setCellValue('K' . $i, '0');
+        $sheet->mergeCells('A'.$i. ':'.'J'.$i);
+        $sheet->setCellValue('K' . $i, $total['Volume']);
         $sheet->setCellValue('L' . $i, '0');
-        $sheet->setCellValue('M' . $i, $total['Tonase']);
-        $sheet->setCellValue('N' . $i, 'Rp '. number_format($total['Tonase'] * 50));
+        $sheet->setCellValue('M' . $i, '0');
+        $sheet->setCellValue('N' . $i, $total['Tonase']);
+        $sheet->setCellValue('O' . $i, 'Rp '. number_format($total['Tonase'] * 50));
 
         $writer = new Xlsx($spreadsheet);
         // $writer->save('hello world.xlsx');

@@ -152,7 +152,6 @@
                         '_': 'bulan.display',
                         'sort': 'bulan.timestamp'
                     },
-                    width: '13%'
                 },
                 {
                     data: 'jam_masuk',

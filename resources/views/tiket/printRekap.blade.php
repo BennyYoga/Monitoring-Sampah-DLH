@@ -12,7 +12,7 @@
         
         table tr td,
         table tr th {
-            font-size: 8pt;
+            font-size: 7pt;
             border: 1px solid;
             padding: 0 2px;
         }
@@ -42,6 +42,7 @@
             <tr>
                 <td rowspan="2"><b>No.</b></td>
                 <td rowspan="2"><b>No. Tiket</b></td>
+                <td rowspan="2"><b>Tanggal</b></td>
                 <td colspan="2"><b>Kendaraan</b></td>
                 <td rowspan="2"><b>Kode Surat Jalan</b></td>
                 <td colspan="2"><b>Jam</b></td>
@@ -67,6 +68,7 @@
             <tr>
                 <td>{{$key+1}}</td>
                 <td>{{$data->id}}</td>
+                <td>{{ date('d F Y', strtotime($data->jam_masuk)) }}</td>
                 <td>{{$data->no_kendaraan}}</td>
                 <td>{{$data->jenis_kendaraan}}</td>
                 <td>-</td>
@@ -82,7 +84,7 @@
             </tr>
             @endforeach
             <tr>
-                <td colspan='9'>Jumlah</td>
+                <td colspan='10'>Jumlah</td>
                 <td>{{$total['Volume']}}</td>
                 <td>0</td>
                 <td>0</td>
