@@ -15,9 +15,9 @@ class PegawaiController extends Controller
 {
     //
     public function index(Request $request)
-    {                    
+    {
         if ($request->ajax()) {
-            $pegawai = Pegawai::all();
+            $pegawai = Pegawai::where('id_role', 2)->get();
             if (!empty($filterKantor)) {
                 $pegawai->whereHas('id_kantor', function ($query) use ($filterKantor) {
                     $query->where('nama_kantor', $filterKantor);
@@ -31,7 +31,7 @@ class PegawaiController extends Controller
                     return $btn;
                 })
                 ->addColumn('nama_kantor', function ($row) {
-                    $kantor = Kantor::where('id_kantor', $row->id_kantor)->first();                    
+                    $kantor = Kantor::where('id_kantor', $row->id_kantor)->first();
                     return $kantor->nama_kantor;
                 })
                 ->addColumn('nama_role', function ($row) {
@@ -79,9 +79,9 @@ class PegawaiController extends Controller
     {
         $kantor = Kantor::all();
         $pegawai = Pegawai::find($id_pegawai);
-    if (!$pegawai) return redirect()->route('pegawai')
-        ->with('error_message', 'Anggota dengan ID'.$id_pegawai.' tidak ada');
-    return view('Pegawai.edit', compact('pegawai', 'kantor'));
+        if (!$pegawai) return redirect()->route('pegawai')
+            ->with('error_message', 'Anggota dengan ID' . $id_pegawai . ' tidak ada');
+        return view('Pegawai.edit', compact('pegawai', 'kantor'));
     }
 
     /**
@@ -97,12 +97,10 @@ class PegawaiController extends Controller
             'id_kantor' => 'required',
             'nama_pegawai' => 'required',
             'NIP' => 'required',
-            'password' => 'required'
         ]);
 
         $data = $request->all();
         $data['id_role'] = 2;
-        $data['password'] = Hash::make($request->password);
         Pegawai::find($id_pegawai)->update($data);
 
         return redirect()->route('pegawai')->with('success', 'Data berhasil diubah');
@@ -118,11 +116,12 @@ class PegawaiController extends Controller
         return redirect()->route('pegawai')->with('error', 'Pegawai tidak ditemukan');
     }
 
-    public function document (){
+    public function document()
+    {
         $pegawai = Pegawai::all();
         $mpdf = new PDF(['orientation' => 'P']);
-        $html = view('Pegawai.print',compact('pegawai'));
-        $mpdf ->writeHTML($html);
-        $mpdf -> Output("Daftar Pegawai.pdf","D");
+        $html = view('Pegawai.print', compact('pegawai'));
+        $mpdf->writeHTML($html);
+        $mpdf->Output("Daftar Pegawai.pdf", "D");
     }
 }

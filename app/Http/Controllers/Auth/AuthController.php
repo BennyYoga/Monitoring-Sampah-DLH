@@ -22,7 +22,7 @@ class AuthController extends Controller
         if(!session('pegawai')){
             return view('Login/login');
         }else{
-            return view('Dashboard/index');
+            return redirect()->route('dashboard');
         }
     }
 
@@ -60,6 +60,26 @@ class AuthController extends Controller
         } else {
             return redirect()->route('login')->withToastError('NIP dan Password Tidak Sesuai');
         }
+
+
+        // $request->validate([
+        //     'NIP' => 'required',
+        //     'password' => 'required',
+        // ]);
+        // $credentials = $request->only('NIP', 'password');
+        // Alert::success('Success Title', 'Success Message');
+        // if (!Auth::attempt($credentials)) {
+        //     $pegawai = Pegawai::where('NIP', $request->NIP)->first();
+        //     session(['pegawai' => $pegawai]);
+        //     if(session('pegawai')->id_role == 1){
+        //         return redirect()->route('dashboard')->withToastSuccess('Selamat Anda Berhasil Login');
+        //     }
+        //     elseif (session('pegawai')->id_role == 2) {
+        //         return redirect()->route('dashboard')->withToastSuccess('Selamat Anda Berhasil Login');
+        //     }
+        // } else {
+        //     return redirect()->route('login')->withToastError('NIP dan Password Tidak Sesuai');
+        // }
     }
 
     /**
@@ -102,11 +122,15 @@ class AuthController extends Controller
         if(Hash::check($request->PassLama, session('pegawai')->password)){
             $data = Hash::make($request->PassBaru);
             Pegawai::where("NIP", $id)->first()->update(['password' => $data]);
-            return redirect()->route('pegawai')->withToastSuccess('Berhasil Mengubah Password');
+            return redirect()->route('dashboard')->withToastSuccess('Berhasil Mengubah Password');
         }
         else{
             return redirect()->route('changePassword.index')->withError('Password Lama tidak Sesuai');
         }
 
+
+            // $data = Hash::make($request->PassBaru);
+            // Pegawai::where("NIP", $id)->first()->update(['password' => $data]);
+            // return redirect()->route('pegawai')->withToastSuccess('Berhasil Mengubah Password');
     }
 }

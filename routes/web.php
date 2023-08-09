@@ -25,6 +25,11 @@ Route::get('/', function () {
     return redirect()->route('dashboard');
 });
 
+
+Route::get('/login', function () {
+    return view('Login/login');
+});
+
 Route::group(['middleware' => 'role:1|2'], function(){
     Route::group(['middleware' => 'role:1'], function(){            
         Route::get('/pegawai', [PegawaiController::class, 'index'])->name('pegawai');    
@@ -68,9 +73,6 @@ Route::group(['middleware' => 'role:1|2'], function(){
     Route::get('/tiket/print-excel/{optionkota}/{optionHari}', [c_tiket::class, 'exportExcel'])->name('tiket.excel');
 });
 
-Route::get('/login', function () {
-    return view('Login/login');
-});
 
 Route::get('login', [AuthController::class, 'index'])->name('login');
 Route::get('changePassword', [AuthController::class, 'changePassword'])->name('changePassword.index');

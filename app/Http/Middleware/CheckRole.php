@@ -29,8 +29,12 @@ class CheckRole
             }
         }
         if($roles){
-            // return redirect()->route('dashboard')->withToastError('Page Tidak Tersedia');
-            return abort(404);
+            // return redirect()->route('login')->withToastError('Page Tidak Tersedia');
+            if(session('pegawai')){
+                return redirect()->route('login')->withToastError('Page Tidak Tersedia');
+            }
+            return redirect()->route('login')->withToastError('Anda harus login terlebih dahulu');
+            // return abort(404);
         }
         return redirect()->route('login')->withToastError('Anda harus login terlebih dahulu');
     }

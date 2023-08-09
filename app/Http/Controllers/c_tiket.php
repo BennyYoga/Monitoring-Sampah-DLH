@@ -391,8 +391,9 @@ class c_tiket extends Controller
         $mpdf->Output("Rekap.pdf", "D");
     }
 
-    public function exportExcel($optionHari, $optionKota)
+    public function exportExcel($optionKota, $optionHari)
     {
+        // dd($optionHari, $optionKota);
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
@@ -433,14 +434,14 @@ class c_tiket extends Controller
         }
 
         // Filter Kota
-        if ($optionKota != 'undefined') {
+        if ($optionKota !== 'undefined') {
             $data = $data->where('id_kab_kota', $optionKota);
         } else {
             $data = $data->whereNotNull('jam_keluar');
         }
 
         // Filter Berdasarkan Waktu
-        if ($optionHari != 'undefined') {
+        if ($optionHari !== 'undefined') {
             $dateArray = explode(" - ", $optionHari);
             $dateArray[0] = trim($dateArray[0]);
             $dateArray[1] = trim($dateArray[1]);
@@ -479,7 +480,7 @@ class c_tiket extends Controller
 
         $i = 3;
         foreach ($data as $item) {
-            $sheet->setCellValue('A' . $i, $i);
+            $sheet->setCellValue('A' . $i, $i-2);
             $sheet->setCellValue('B' . $i, $item->id);
             $sheet->setCellValue('C' . $i, date('d F Y', strtotime($item->jam_masuk)));
             $sheet->setCellValue('D' . $i, $item->no_kendaraan);

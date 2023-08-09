@@ -43,11 +43,9 @@
                                     <nav aria-label="breadcrumb">
                                         <ol class="breadcrumb">
                                             <li class="breadcrumb-item">
-                                                <a href="https://demo.plainadmin.com/index.html#0">Dashboard</a>
+                                                [ Dashboard ]
                                             </li>
-                                            <li class="breadcrumb-item active" aria-current="page">
-                                                eCommerce
-                                            </li>
+                                            
                                         </ol>
                                     </nav>
                                 </div>

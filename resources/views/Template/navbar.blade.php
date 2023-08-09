@@ -157,6 +157,11 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profile">
                     <li>
+                        <a class="dropdown-item" href="{{ route('changePassword.index') }}">
+                            <i class="lni lni-key"></i> Change Password
+                        </a>
+                    </li>
+                    <li>
                         <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                             document.getElementById('logout-form').submit();">
                             <i class="lni lni-exit"></i> Sign Out
@@ -164,11 +169,6 @@
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                             @csrf
                         </form>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="{{ route('changePassword.index') }}">
-                            <i class="lni lni-key"></i> Change Password
-                        </a>
                     </li>
                 </ul>
             </div>

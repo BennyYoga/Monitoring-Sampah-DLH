@@ -72,10 +72,6 @@
                         </div>
                         <!-- end row -->
                         <div class="row">
-                        <div class="input-style-1 col-lg-6">
-                            <label>Password</label>
-                            <input type="text" placeholder="Password" id="password" name="password" required autofocus value="{{$pegawai->password}}"/>
-                        </div>
                         <!-- end input -->
                         <div class="select-style-1 col-lg-6">
                             <label>Kantor</label>
