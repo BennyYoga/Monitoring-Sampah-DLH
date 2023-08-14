@@ -309,7 +309,6 @@ class c_tiket extends Controller
             $tiket->tonase = 11900;
         }
 
-
         $mpdf = new Mpdf(['mode' => 'utf-8', 'format' => 'A4', 'margin_left' => '20', 'margin_right' => '20', 'margin-bottom' => '10']);
         $view = view('tiket.detail', compact('tiket', 'user',))->render();
         $mpdf->WriteHTML($view);
@@ -397,35 +396,101 @@ class c_tiket extends Controller
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
-        $sheet->setCellValue('A1', 'No');
-        $sheet->mergeCells('A1:A2');
-        $sheet->setCellValue('B1', 'No Tiket');
-        $sheet->mergeCells('B1:B2');
-        $sheet->setCellValue('C1', 'Tanggal');
-        $sheet->mergeCells('C1:C2');
-        $sheet->setCellValue('D1', 'No Kendaraan');
-        $sheet->mergeCells('D1:E1');
-        $sheet->setCellValue('D2', 'Nomor');
-        $sheet->setCellValue('E2', 'Jenis');
-        $sheet->setCellValue('F1', 'Kode Surat Jalan');
-        $sheet->mergeCells('F1:F2');
-        $sheet->setCellValue('G1', 'Jam');
-        $sheet->mergeCells('G1:H1');
-        $sheet->setCellValue('G2', 'Masuk');
-        $sheet->setCellValue('H2', 'Keluar');
-        $sheet->setCellValue('I1', 'Nama Pengemudi');
-        $sheet->mergeCells('I1:I2');
-        $sheet->setCellValue('J1', 'Lokasi Sumber Sampah');
-        $sheet->mergeCells('J1:J2');
-        $sheet->setCellValue('K1', 'Volume');
-        $sheet->setCellValue('K2', 'M3');
-        $sheet->setCellValue('L1', 'Berat');
-        $sheet->mergeCells('L1:N1');
-        $sheet->setCellValue('L2', 'Bruto');
-        $sheet->setCellValue('M2', 'Tara');
-        $sheet->setCellValue('N2', 'Netto');
-        $sheet->setCellValue('O1', 'Total Biaya');
-        $sheet->mergeCells('O1:O2');
+        $namakota = m_kabkota::where('id_kab_kota', $optionKota)->first();
+        $sheet->setCellValue('A1', 'PEMERINTAH DAERAH PROVINSI JAWA BARAT');
+        $sheet->mergeCells('A1:P1');
+        $sheet->setCellValue('A2', 'DINAS LINGKUNGAN HIDUP');
+        $sheet->mergeCells('A2:P2');
+        $sheet->setCellValue('A3', 'UPTD PENGELOLAAN SAMPAH TPA/TPST REGIONAL ' . session('pegawai')->fk_kantor->nama_kantor . '' );
+        $sheet->mergeCells('A3:P3');
+        $sheet->setCellValue('A4', session('pegawai')->fk_kantor->alamat_kantor);
+        $sheet->mergeCells('A4:P4');
+        $sheet->setCellValue('A5', ' ');
+        $sheet->mergeCells('A5:P5');
+        if($optionKota != 'undefined'){
+            $sheet->setCellValue('A6', 'Untuk Wilayah : '.$namakota->nama_kab_kota.'');
+            $sheet->mergeCells('A6:P6');
+        }
+        else{
+            $sheet->setCellValue('A6', 'Untuk Wilayah : Semua Wilayah');
+            $sheet->mergeCells('A6:P6');
+        }
+        if($optionHari != 'undefined'){
+            $sheet->setCellValue('A7', 'Tanggal : '.$optionHari.'');
+            $sheet->mergeCells('A7:P7');
+        }
+        else{
+            $sheet->setCellValue('A7', 'Tanggal : Semua Tanggal');
+            $sheet->mergeCells('A7:P7');
+        }
+        $sheet->setCellValue('A8', ' ');
+        $sheet->mergeCells('A8:P8');
+
+        
+        if($optionKota != 'undefined'){
+            $sheet->setCellValue('A9', 'No');
+            $sheet->mergeCells('A9:A10');
+            $sheet->setCellValue('B9', 'No Tiket');
+            $sheet->mergeCells('B9:B10');
+            $sheet->setCellValue('C9', 'Tanggal');
+            $sheet->mergeCells('C9:C10');
+            $sheet->setCellValue('D9', 'No Kendaraan');
+            $sheet->mergeCells('D10:E10');
+            $sheet->setCellValue('D10', 'Nomor');
+            $sheet->setCellValue('E10', 'Jenis');
+            $sheet->setCellValue('F9', 'Kode Surat Jalan');
+            $sheet->mergeCells('F10:F10');
+            $sheet->setCellValue('G9', 'Jam');
+            $sheet->mergeCells('G9:H9');
+            $sheet->setCellValue('G10', 'Masuk');
+            $sheet->setCellValue('H10', 'Keluar');
+            $sheet->setCellValue('I9', 'Nama Pengemudi');
+            $sheet->mergeCells('I9:I10');
+            $sheet->setCellValue('J9', 'Lokasi Sumber Sampah');
+            $sheet->mergeCells('J9:J10');
+            $sheet->setCellValue('K9', 'Volume');
+            $sheet->setCellValue('K10', 'M3');
+            $sheet->setCellValue('L9', 'Berat');
+            $sheet->mergeCells('L9:N9');
+            $sheet->setCellValue('L10', 'Bruto');
+            $sheet->setCellValue('M10', 'Tara');
+            $sheet->setCellValue('N10', 'Netto');
+            $sheet->setCellValue('O9', 'Total Biaya');
+            $sheet->mergeCells('O9:O10');
+        }
+        else{
+            $sheet->setCellValue('A9', 'No');
+            $sheet->mergeCells('A9:A10');
+            $sheet->setCellValue('B9', 'Kab/Kota');
+            $sheet->mergeCells('B9:B10');
+            $sheet->setCellValue('C9', 'No Tiket');
+            $sheet->mergeCells('C9:C10');
+            $sheet->setCellValue('D9', 'Tanggal');
+            $sheet->mergeCells('D9:D10');
+            $sheet->setCellValue('E9', 'No Kendaraan');
+            $sheet->mergeCells('E10:F10');
+            $sheet->setCellValue('E10', 'Nomor');
+            $sheet->setCellValue('F10', 'Jenis');
+            $sheet->setCellValue('G9', 'Kode Surat Jalan');
+            $sheet->mergeCells('G10:G10');
+            $sheet->setCellValue('H9', 'Jam');
+            $sheet->mergeCells('H10:I9');
+            $sheet->setCellValue('H10', 'Masuk');
+            $sheet->setCellValue('I10', 'Keluar');
+            $sheet->setCellValue('J9', 'Nama Pengemudi');
+            $sheet->mergeCells('J9:J10');
+            $sheet->setCellValue('K9', 'Lokasi Sumber Sampah');
+            $sheet->mergeCells('K9:K10');
+            $sheet->setCellValue('L9', 'Volume');
+            $sheet->setCellValue('L10', 'M3');
+            $sheet->setCellValue('M9', 'Berat');
+            $sheet->mergeCells('M9:O9');
+            $sheet->setCellValue('M10', 'Bruto');
+            $sheet->setCellValue('N10', 'Tara');
+            $sheet->setCellValue('O10', 'Netto');
+            $sheet->setCellValue('P9', 'Total Biaya');
+            $sheet->mergeCells('P9:P10');
+        }
 
         if (session('pegawai')->id_role == 1) {
             $data = m_tiket::whereNotNull('jam_keluar')->orderBy('jam_masuk', 'asc');
@@ -478,33 +543,64 @@ class c_tiket extends Controller
             $total['Volume'] += $dataItem->volume;
         }
 
-        $i = 3;
-        foreach ($data as $item) {
-            $sheet->setCellValue('A' . $i, $i-2);
-            $sheet->setCellValue('B' . $i, $item->id);
-            $sheet->setCellValue('C' . $i, date('d F Y', strtotime($item->jam_masuk)));
-            $sheet->setCellValue('D' . $i, $item->no_kendaraan);
-            $sheet->setCellValue('E' . $i, $item->jenis_kendaraan);
-            $sheet->setCellValue('F' . $i, "-");
-            $sheet->setCellValue('G' . $i, date('H:i:s', strtotime($item->jam_masuk)));
-            $sheet->setCellValue('H' . $i, date('H:i:s', strtotime($item->jam_keluar)));
-            $sheet->setCellValue('I' . $i, $item->pengemudi);
-            $sheet->setCellValue('J' . $i, $item->lokasi_sampah);
-            $sheet->setCellValue('K' . $i, $item->volume);
+        $i = 11;
+        if($optionKota != 'undefined'){
+            foreach ($data as $item) {
+                $sheet->setCellValue('A' . $i, $i-10);
+                $sheet->setCellValue('B' . $i, $item->id);
+                $sheet->setCellValue('C' . $i, date('d F Y', strtotime($item->jam_masuk)));
+                $sheet->setCellValue('D' . $i, $item->no_kendaraan);
+                $sheet->setCellValue('E' . $i, $item->jenis_kendaraan);
+                $sheet->setCellValue('F' . $i, "-");
+                $sheet->setCellValue('G' . $i, date('H:i:s', strtotime($item->jam_masuk)));
+                $sheet->setCellValue('H' . $i, date('H:i:s', strtotime($item->jam_keluar)));
+                $sheet->setCellValue('I' . $i, $item->pengemudi);
+                $sheet->setCellValue('J' . $i, $item->lokasi_sampah);
+                $sheet->setCellValue('K' . $i, $item->volume);
+                $sheet->setCellValue('L' . $i, '0');
+                $sheet->setCellValue('M' . $i, '0');
+                $sheet->setCellValue('N' . $i, $item->tonase);
+                $sheet->setCellValue('O' . $i, number_format($item->tonase * 50));
+                $i++;
+            };
+    
+            $sheet->setCellValue('A' . $i, 'Jumlah');
+            $sheet->mergeCells('A'.$i. ':'.'J'.$i);
+            $sheet->setCellValue('K' . $i, $total['Volume']);
             $sheet->setCellValue('L' . $i, '0');
             $sheet->setCellValue('M' . $i, '0');
-            $sheet->setCellValue('N' . $i, $item->tonase);
-            $sheet->setCellValue('O' . $i, number_format($item->tonase * 50));
-            $i++;
-        };
-
-        $sheet->setCellValue('A' . $i, 'Jumlah');
-        $sheet->mergeCells('A'.$i. ':'.'J'.$i);
-        $sheet->setCellValue('K' . $i, $total['Volume']);
-        $sheet->setCellValue('L' . $i, '0');
-        $sheet->setCellValue('M' . $i, '0');
-        $sheet->setCellValue('N' . $i, $total['Tonase']);
-        $sheet->setCellValue('O' . $i, 'Rp '. number_format($total['Tonase'] * 50));
+            $sheet->setCellValue('N' . $i, $total['Tonase']);
+            $sheet->setCellValue('O' . $i, 'Rp '. number_format($total['Tonase'] * 50));
+        }
+        else{
+            foreach ($data as $item) {
+                $sheet->setCellValue('A' . $i, $i-10);
+                $sheet->setCellValue('B' . $i, $item->fk_kab_kot->nama_kab_kota);
+                $sheet->setCellValue('C' . $i, $item->id);
+                $sheet->setCellValue('D' . $i, date('d F Y', strtotime($item->jam_masuk)));
+                $sheet->setCellValue('E' . $i, $item->no_kendaraan);
+                $sheet->setCellValue('F' . $i, $item->jenis_kendaraan);
+                $sheet->setCellValue('G' . $i, "-");
+                $sheet->setCellValue('H' . $i, date('H:i:s', strtotime($item->jam_masuk)));
+                $sheet->setCellValue('I' . $i, date('H:i:s', strtotime($item->jam_keluar)));
+                $sheet->setCellValue('J' . $i, $item->pengemudi);
+                $sheet->setCellValue('K' . $i, $item->lokasi_sampah);
+                $sheet->setCellValue('L' . $i, $item->volume);
+                $sheet->setCellValue('M' . $i, '0');
+                $sheet->setCellValue('N' . $i, '0');
+                $sheet->setCellValue('O' . $i, $item->tonase);
+                $sheet->setCellValue('P' . $i, number_format($item->tonase * 50));
+                $i++;
+            };
+    
+            $sheet->setCellValue('A' . $i, 'Jumlah');
+            $sheet->mergeCells('A'.$i. ':'.'J'.$i);
+            $sheet->setCellValue('L' . $i, $total['Volume']);
+            $sheet->setCellValue('M' . $i, '0');
+            $sheet->setCellValue('N' . $i, '0');
+            $sheet->setCellValue('O' . $i, $total['Tonase']);
+            $sheet->setCellValue('P' . $i, 'Rp '. number_format($total['Tonase'] * 50));
+        }
 
         $writer = new Xlsx($spreadsheet);
         // $writer->save('hello world.xlsx');
