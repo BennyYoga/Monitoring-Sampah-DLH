@@ -155,4 +155,89 @@ class DashboardController extends Controller
         }
         return response()->json(['data' => $data]);
     }
+
+
+    public function grafik($option)
+    {
+
+        if ($option == 'undefined') {
+            $start = now()->startOfYear()->format('Y-m-t');
+            $end = now()->format('Y-m-t');
+        } else {
+            $dateArray = explode(" ", $option);
+
+            $start = $dateArray[0];
+            $end = $dateArray[1];
+        }
+
+        $kabkota = m_kabkota::all();
+        $data = new m_tiket();
+        $grafik = [];
+
+        $grafik = $data->grafik(now()->startOfMonth()->startOfYear()->format('Y-m-d'), $start, $end, null);
+        // $grafik = $data->grafik('2023-01-01', '2023-01-31', '2023-08-31', null);
+        $selectedDataArray = [];
+        $bulan = [];
+
+        foreach ($grafik as $key => $grafik) {
+
+            $year = substr($grafik->selected_date, 0, 4);
+            $month = substr($grafik->selected_date, 4);
+            $formattedDate = date("F Y", strtotime("$year-$month-01"));
+            array_push($bulan, $formattedDate);
+        }
+
+        foreach ($kabkota as $key => $kabkota) {
+            $grafik = $data->grafik(now()->startOfMonth()->startOfYear()->format('Y-m-d'), $start, $end, $kabkota->id_kab_kota);
+            // $grafik = $data->grafik('2023-01-01', '2023-01-31', '2023-08-31', $kabkota->id_kab_kota);
+            $namaKabKot = m_kabkota::where('id_kab_kota', $kabkota->id_kab_kota)->first();
+            $detailItem = [
+                "kab_kota" => $namaKabKot->nama_kab_kota,
+                "data" => [],
+            ];
+            foreach ($grafik as $item) {
+                $monthVolume = [
+                    'volume' =>  $item->total_volume,
+                    'bulan' => $item->selected_date
+                ];
+                array_push($detailItem['data'], $monthVolume);
+            }
+
+            array_push($selectedDataArray, $detailItem);
+        }
+
+        $dataItem = [
+            $bulan,
+            $selectedDataArray
+        ];
+
+        return response()->json(['data' => $dataItem]);
+    }
+
+    public function pie($option)
+    {
+        if ($option == 'undefined') {
+            $start = now()->startOfYear()->format('Y-m-t');
+            $end = now()->format('Y-m-t');
+        } else {
+            $dateArray = explode(" ", $option);
+
+            $start = $dateArray[0];
+            $end = $dateArray[1];
+
+            $originalDate = $start;
+            $dateParts = explode('-', $originalDate);
+
+            $newYear = substr($dateParts[0], 2);
+            $newMonth = $dateParts[1];
+            $newDay = "01";
+
+            $newDate = $newYear . '-' . $newMonth . '-' . $newDay;
+        }
+
+        $data = new m_tiket();
+        $grafik = $data->pie($start, $end);
+
+        return response()->json(['data' => $grafik]);
+    }
 }

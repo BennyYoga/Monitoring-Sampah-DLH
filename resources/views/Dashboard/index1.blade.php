@@ -292,10 +292,8 @@
         });
     });
 
-    $(document).ready(async function() {
 
-        let Pie;
-        let Line;
+    $(document).ready(async function() {
 
         //Filter Button
         let isFilterOpen = false;
@@ -310,115 +308,18 @@
             }
         });
 
-        $('#GoFilter').on('click', async () => {
-            let startDate = $('#startDate').val();
-            let endDate = $('#endDate').val();
-
-            startDate = `${startDate}-31`;
-            endDate = `${endDate}-31`;
-
-            const date = `${startDate} ${endDate}`;
-            try {
-                let graphchart = await $.ajax({
-                    type: 'get',
-                    url: '{{url("dashboard/graph")}}/' + date,
-                });
-
-                let piechart = await $.ajax({
-                    type: 'get',
-                    url: '{{url("dashboard/pie")}}/' + date,
-                });
-
-                let data = graphchart.data;
-                let dataPie = piechart.data;
-
-                Line.destroy();
-                Pie.destroy();
-
-                Line = new Chart(
-                    document.getElementById('acquisitions'), {
-                        type: 'line',
-                        data: {
-                            labels: data[0].map(row => row),
-                            datasets: data[1].map(row => {
-                                return {
-                                    label: row.kab_kota,
-                                    data: row.data.map(row => row.volume)
-                                }
-                            })
-                        }
-                    }
-                );
-
-
-                var labels = dataPie.map(row => row.nama_kab_kota);
-                var totals = dataPie.map(row => parseInt(row.Total));
-
-                var ctx = document.getElementById('pie');
-                Pie = new Chart(ctx, {
-                    type: 'pie',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            data: totals,
-                        }]
-                    }
-                });
-
-            } catch (error) {
-                console.log(error.message);
+        $('#filterButton').on('click', function() {
+            const filterSection = $('#filterSection');
+            if (!isFilterOpen) {
+                filterSection.addClass('d-none');
+                isFilterOpen = true;
+            } else {
+                filterSection.removeClass('d-none');
+                isFilterOpen = false;
             }
         });
 
-
-
-        //Get Data Chart
-        try {
-            let graphchart = await $.ajax({
-                type: 'get',
-                url: '{{url("dashboard/graph/undefined")}}',
-            });
-
-            let piechart = await $.ajax({
-                type: 'get',
-                url: '{{url("dashboard/pie/undefined")}}',
-            });
-
-            let data = graphchart.data;
-            let dataPie = piechart.data;
-
-            Line = new Chart(
-                document.getElementById('acquisitions'), {
-                    type: 'line',
-                    data: {
-                        labels: data[0].map(row => row),
-                        datasets: data[1].map(row => {
-                            return {
-                                label: row.kab_kota,
-                                data: row.data.map(row => row.volume)
-                            }
-                        })
-                    }
-                }
-            );
-
-            var labels = dataPie.map(row => row.nama_kab_kota);
-            var totals = dataPie.map(row => parseInt(row.Total));
-
-            var ctx = document.getElementById('pie');
-            Pie = new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        data: totals,
-                    }]
-                }
-            });
-
-        } catch (error) {
-            console.log(error.message);
-        }
+        loadCharts('undefined');
     });
 </script>
 @endpush

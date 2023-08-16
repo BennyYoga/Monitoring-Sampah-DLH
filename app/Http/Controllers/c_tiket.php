@@ -317,7 +317,7 @@ class c_tiket extends Controller
     }
 
     public function rekapPrint($optionKota, $optionHari)
-    {
+    {        
         if (session('pegawai')->id_role == 1) {
             $data = m_tiket::whereNotNull('jam_keluar')->orderBy('jam_masuk', 'asc');
         } else {
@@ -369,12 +369,12 @@ class c_tiket extends Controller
             $total['Volume'] += $dataItem->volume;
         }
         $option = new \stdClass();
-        if($optionKota != 'undefined'){
+        if ($optionKota != 'undefined') {
             $optionKota = m_kabkota::where('id_kab_kota', $optionKota)->first();
             $optionKota = $optionKota->nama_kab_kota;
             $option->optionKota = $optionKota;
             $option->optionHari = $optionHari;
-        }else{
+        } else {
             $option->optionKota = 'undefined';
             $option->optionHari = $optionHari;
         }
@@ -385,7 +385,7 @@ class c_tiket extends Controller
             'margin-top' => 10,
             'margin-bottom' => 10,
         ]);
-        $html = view('tiket.printRekap', compact('data', 'total','option'));
+        $html = view('tiket.printRekap', compact('data', 'total', 'option'));
         $mpdf->writeHTML($html);
         $mpdf->Output("Rekap.pdf", "D");
     }
@@ -401,33 +401,31 @@ class c_tiket extends Controller
         $sheet->mergeCells('A1:P1');
         $sheet->setCellValue('A2', 'DINAS LINGKUNGAN HIDUP');
         $sheet->mergeCells('A2:P2');
-        $sheet->setCellValue('A3', 'UPTD PENGELOLAAN SAMPAH TPA/TPST REGIONAL ' . session('pegawai')->fk_kantor->nama_kantor . '' );
+        $sheet->setCellValue('A3', 'UPTD PENGELOLAAN SAMPAH TPA/TPST REGIONAL ' . session('pegawai')->fk_kantor->nama_kantor . '');
         $sheet->mergeCells('A3:P3');
         $sheet->setCellValue('A4', session('pegawai')->fk_kantor->alamat_kantor);
         $sheet->mergeCells('A4:P4');
         $sheet->setCellValue('A5', ' ');
         $sheet->mergeCells('A5:P5');
-        if($optionKota != 'undefined'){
-            $sheet->setCellValue('A6', 'Untuk Wilayah : '.$namakota->nama_kab_kota.'');
+        if ($optionKota != 'undefined') {
+            $sheet->setCellValue('A6', 'Untuk Wilayah : ' . $namakota->nama_kab_kota . '');
             $sheet->mergeCells('A6:P6');
-        }
-        else{
+        } else {
             $sheet->setCellValue('A6', 'Untuk Wilayah : Semua Wilayah');
             $sheet->mergeCells('A6:P6');
         }
-        if($optionHari != 'undefined'){
-            $sheet->setCellValue('A7', 'Tanggal : '.$optionHari.'');
+        if ($optionHari != 'undefined') {
+            $sheet->setCellValue('A7', 'Tanggal : ' . $optionHari . '');
             $sheet->mergeCells('A7:P7');
-        }
-        else{
+        } else {
             $sheet->setCellValue('A7', 'Tanggal : Semua Tanggal');
             $sheet->mergeCells('A7:P7');
         }
         $sheet->setCellValue('A8', ' ');
         $sheet->mergeCells('A8:P8');
 
-        
-        if($optionKota != 'undefined'){
+
+        if ($optionKota != 'undefined') {
             $sheet->setCellValue('A9', 'No');
             $sheet->mergeCells('A9:A10');
             $sheet->setCellValue('B9', 'No Tiket');
@@ -457,8 +455,7 @@ class c_tiket extends Controller
             $sheet->setCellValue('N10', 'Netto');
             $sheet->setCellValue('O9', 'Total Biaya');
             $sheet->mergeCells('O9:O10');
-        }
-        else{
+        } else {
             $sheet->setCellValue('A9', 'No');
             $sheet->mergeCells('A9:A10');
             $sheet->setCellValue('B9', 'Kab/Kota');
@@ -544,9 +541,9 @@ class c_tiket extends Controller
         }
 
         $i = 11;
-        if($optionKota != 'undefined'){
+        if ($optionKota != 'undefined') {
             foreach ($data as $item) {
-                $sheet->setCellValue('A' . $i, $i-10);
+                $sheet->setCellValue('A' . $i, $i - 10);
                 $sheet->setCellValue('B' . $i, $item->id);
                 $sheet->setCellValue('C' . $i, date('d F Y', strtotime($item->jam_masuk)));
                 $sheet->setCellValue('D' . $i, $item->no_kendaraan);
@@ -563,18 +560,17 @@ class c_tiket extends Controller
                 $sheet->setCellValue('O' . $i, number_format($item->tonase * 50));
                 $i++;
             };
-    
+
             $sheet->setCellValue('A' . $i, 'Jumlah');
-            $sheet->mergeCells('A'.$i. ':'.'J'.$i);
+            $sheet->mergeCells('A' . $i . ':' . 'J' . $i);
             $sheet->setCellValue('K' . $i, $total['Volume']);
             $sheet->setCellValue('L' . $i, '0');
             $sheet->setCellValue('M' . $i, '0');
             $sheet->setCellValue('N' . $i, $total['Tonase']);
-            $sheet->setCellValue('O' . $i, 'Rp '. number_format($total['Tonase'] * 50));
-        }
-        else{
+            $sheet->setCellValue('O' . $i, 'Rp ' . number_format($total['Tonase'] * 50));
+        } else {
             foreach ($data as $item) {
-                $sheet->setCellValue('A' . $i, $i-10);
+                $sheet->setCellValue('A' . $i, $i - 10);
                 $sheet->setCellValue('B' . $i, $item->fk_kab_kot->nama_kab_kota);
                 $sheet->setCellValue('C' . $i, $item->id);
                 $sheet->setCellValue('D' . $i, date('d F Y', strtotime($item->jam_masuk)));
@@ -592,14 +588,14 @@ class c_tiket extends Controller
                 $sheet->setCellValue('P' . $i, number_format($item->tonase * 50));
                 $i++;
             };
-    
+
             $sheet->setCellValue('A' . $i, 'Jumlah');
-            $sheet->mergeCells('A'.$i. ':'.'J'.$i);
+            $sheet->mergeCells('A' . $i . ':' . 'J' . $i);
             $sheet->setCellValue('L' . $i, $total['Volume']);
             $sheet->setCellValue('M' . $i, '0');
             $sheet->setCellValue('N' . $i, '0');
             $sheet->setCellValue('O' . $i, $total['Tonase']);
-            $sheet->setCellValue('P' . $i, 'Rp '. number_format($total['Tonase'] * 50));
+            $sheet->setCellValue('P' . $i, 'Rp ' . number_format($total['Tonase'] * 50));
         }
 
         $writer = new Xlsx($spreadsheet);

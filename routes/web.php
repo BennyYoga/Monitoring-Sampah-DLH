@@ -59,7 +59,10 @@ Route::group(['middleware' => 'role:1|2'], function(){
     });
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');    
+    Route::get('/dashboard/graph/{undefined}', [DashboardController::class, 'grafik'])->name('dashboard.graph');    
+    Route::get('/dashboard/pie/{undefined}', [DashboardController::class, 'pie'])->name('dashboard.pie');    
     Route::get('/dashboard/data/{option}', [DashboardController::class, 'getData'])->name('dashboard.data');
+
     Route::get('tiket/create', [c_tiket::class, 'create'])->name('tiket.create');
     Route::get('tiket', [c_tiket::class, 'index'])->name('tiket.index');
     Route::get('tiket/rekap/', [c_tiket::class, 'rekap'])->name('tiket.rekap'); 
