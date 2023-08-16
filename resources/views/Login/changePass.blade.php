@@ -1,6 +1,6 @@
 @extends('Template.template')
 
-@section('title','Trash Monitoring System | Dashboard')
+@section('title','Trash Monitoring System | Change Password')
 
 {{-- kalau ada css tambahan selain dari template.blade --}}
 @push('css')

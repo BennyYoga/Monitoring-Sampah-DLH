@@ -1,6 +1,6 @@
 @extends('Template.template')
 
-@section('title', 'Trash Monitoring System | Dashboard')
+@section('title', 'Trash Monitoring System | Rekap Tiket')
 
 @push('css')
 <link href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css" rel="stylesheet">

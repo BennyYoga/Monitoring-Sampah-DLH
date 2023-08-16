@@ -298,7 +298,7 @@
         let Line;
 
         //Filter Button
-        let isFilterOpen = false;
+        let isFilterOpen = true;
         $('#filterButton').on('click', function() {
             const filterSection = $('#filterSection');
             if (!isFilterOpen) {
