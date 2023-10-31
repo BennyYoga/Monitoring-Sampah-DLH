@@ -41,7 +41,6 @@ class PegawaiController extends Controller
                 ->make(true);
         }
         $kantor = Kantor::all();
-
         return view('Pegawai.index', compact('kantor'));
     }
 

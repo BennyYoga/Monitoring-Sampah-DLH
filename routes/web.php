@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\AlatBeratJenisContoller;
+use App\Http\Controllers\AlatController;
+use App\Http\Controllers\AlatKondisiController;
 use App\Http\Controllers\c_kabkota;
 use App\Http\Controllers\c_tiket;
 use App\Http\Controllers\Auth\AuthController;
@@ -29,6 +32,26 @@ Route::get('/', function () {
 Route::get('/login', function () {
     return view('Login/login');
 });
+
+
+Route::get('/alat', [AlatController::class, 'index'])->name('alat.index');    
+Route::get('/alat/create', [AlatController::class, 'create'])->name('alat.create');    
+Route::get('/alat/{id}', [AlatController::class, 'show'])->name('alat.show');    
+Route::get('/alat/edit/{id}', [AlatController::class, 'edit'])->name('alat.edit');    
+Route::get('/alat/delete/{id}', [AlatController::class, 'destroy'])->name('alat.destroy');    
+Route::put('/alat/update/{id}', [AlatController::class, 'update'])->name('alat.update');    
+Route::post('/alat/store', [AlatController::class, 'store'])->name('alat.store');
+Route::post('/alat/create/uploadImage', [AlatController::class, 'uploadImage'])->name('alat.create.uploadImage');
+
+Route::get('/jenisalat', [AlatBeratJenisContoller::class, 'index'])->name('jenisalat.index');
+Route::post('/jenisalat/store', [AlatBeratJenisContoller::class, 'store'])->name('jenisalat.store');
+Route::put('/jenisalat/update', [AlatBeratJenisContoller::class, 'update'])->name('jenisalat.update');
+Route::get('/jenisalat/destroy/{id}', [AlatBeratJenisContoller::class, 'destroy'])->name('jenisalat.destroy');
+
+Route::get('/kondisialat', [AlatKondisiController::class, 'index'])->name('kondisialat.index');
+Route::post('/kondisialat/store', [AlatKondisiController::class, 'store'])->name('kondisialat.store');
+Route::put('/kondisialat/update', [AlatKondisiController::class, 'update'])->name('kondisialat.update');
+Route::get('/kondisialat/destroy/{id}', [AlatKondisiController::class, 'destroy'])->name('kondisialat.destroy');
 
 Route::group(['middleware' => 'role:1|2'], function(){
     Route::group(['middleware' => 'role:1'], function(){            

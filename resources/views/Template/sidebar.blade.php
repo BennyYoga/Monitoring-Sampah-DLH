@@ -7,7 +7,7 @@
     </div>
     <nav class="sidebar-nav">
         <ul>
-        @if(Session('pegawai')->id_role == 2 || Session('pegawai')->id_role == 1 )
+            @if(Session('pegawai')->id_role == 2 || Session('pegawai')->id_role == 1 )
             <li class="nav-item {{ Request::routeIs('dashboard') ? 'active' : '' }}">
                 <a href="{{route('dashboard')}}">
                     <span class="icon">
@@ -62,15 +62,39 @@
             <li class="nav-item {{ Request::routeIs('kabkota.index') ? 'active' : '' }}">
                 <a href="{{route('kabkota.index')}}">
                     <span class="icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-globe-central-south-asia" viewBox="0 0 16 16">
-                        <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0ZM4.882 1.731a.482.482 0 0 0 .14.291.487.487 0 0 1-.126.78l-.291.146a.721.721 0 0 0-.188.135l-.48.48a1 1 0 0 1-1.023.242l-.02-.007a.996.996 0 0 0-.462-.04 7.03 7.03 0 0 1 2.45-2.027Zm-3 9.674.86-.216a1 1 0 0 0 .758-.97v-.184a1 1 0 0 1 .445-.832l.04-.026a1 1 0 0 0 .152-1.54L3.121 6.621a.414.414 0 0 1 .542-.624l1.09.818a.5.5 0 0 0 .523.047.5.5 0 0 1 .724.447v.455a.78.78 0 0 0 .131.433l.795 1.192a1 1 0 0 1 .116.238l.73 2.19a1 1 0 0 0 .949.683h.058a1 1 0 0 0 .949-.684l.73-2.189a1 1 0 0 1 .116-.238l.791-1.187A.454.454 0 0 1 11.743 8c.16 0 .306.084.392.218.557.875 1.63 2.282 2.365 2.282a.61.61 0 0 0 .04-.001 7.003 7.003 0 0 1-12.658.905Z"/>
-                    </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-globe-central-south-asia" viewBox="0 0 16 16">
+                            <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0ZM4.882 1.731a.482.482 0 0 0 .14.291.487.487 0 0 1-.126.78l-.291.146a.721.721 0 0 0-.188.135l-.48.48a1 1 0 0 1-1.023.242l-.02-.007a.996.996 0 0 0-.462-.04 7.03 7.03 0 0 1 2.45-2.027Zm-3 9.674.86-.216a1 1 0 0 0 .758-.97v-.184a1 1 0 0 1 .445-.832l.04-.026a1 1 0 0 0 .152-1.54L3.121 6.621a.414.414 0 0 1 .542-.624l1.09.818a.5.5 0 0 0 .523.047.5.5 0 0 1 .724.447v.455a.78.78 0 0 0 .131.433l.795 1.192a1 1 0 0 1 .116.238l.73 2.19a1 1 0 0 0 .949.683h.058a1 1 0 0 0 .949-.684l.73-2.189a1 1 0 0 1 .116-.238l.791-1.187A.454.454 0 0 1 11.743 8c.16 0 .306.084.392.218.557.875 1.63 2.282 2.365 2.282a.61.61 0 0 0 .04-.001 7.003 7.003 0 0 1-12.658.905Z" />
+                        </svg>
                     </span>
                     <span class="text">Kabupaten Kota</span>
                 </a>
             </li>
             @endif
             @endif
+            <li class="nav-item nav-item-has-children {{ (Request::routeIs('alat.index' or 'jenisalat.index' or 'kondisialat.index' )) ? 'active' : '' }}">
+                <a href="#0" class="collapsed" data-bs-toggle="collapse" data-bs-target="#ddmenu_1" aria-controls="ddmenu_1" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="icon">
+                        <svg fill="#1C2033" width="16" height="16" version="1.1" id="lni_lni-construction" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 64 64" style="enable-background:new 0 0 64 64;" xml:space="preserve">
+                            <path d="M57.5,24.1c2.6,0,4.8-2.2,4.8-4.8v-3.2c0-2.1-1.4-4-3.4-4.6L27.9,2c-0.5-0.1-0.9-0.2-1.4-0.2H14.2c-2.6,0-4.8,2.2-4.8,4.8
+                            v12.7c0,2.6,2.2,4.8,4.8,4.8H17v18.4H8c-3.4,0-6.2,2.8-6.2,6.2V56c0,3.4,2.8,6.2,6.2,6.2h22.5c3.4,0,6.3-2.8,6.3-6.2v-7.3
+                            c0-3.4-2.8-6.2-6.3-6.2h-9V24.1h28.6V35c0,2.1,1.5,4,3.6,4.5c2.7,0.7,4.4,3.4,3.9,6.2c-0.4,2.1-2.2,3.9-4.3,4.3
+                            c-1.6,0.3-3.2-0.1-4.5-1.2c-1.2-1-1.9-2.5-1.9-4.1c0-0.6,0.1-1.2,0.3-1.8c0.4-1.2-0.2-2.5-1.4-2.9c-1.2-0.4-2.5,0.2-2.9,1.4
+                            c-0.4,1.1-0.6,2.2-0.6,3.3c0,2.9,1.3,5.7,3.5,7.6c1.8,1.5,4,2.3,6.4,2.3c0.6,0,1.2-0.1,1.8-0.2c4-0.7,7.3-4,8-8
+                            c0.9-5.2-2.2-10-7.2-11.3c-0.2,0-0.2-0.1-0.2-0.2V24.1H57.5z M32.3,48.7V56c0,1-0.8,1.8-1.8,1.8H8c-1,0-1.8-0.8-1.8-1.8v-7.3
+                            C6.2,47.8,7,47,8,47h22.5C31.5,47,32.3,47.8,32.3,48.7z M57.8,16.1v3.2c0,0.2-0.1,0.3-0.3,0.3H29.2V7l28.4,8.7
+                            C57.7,15.8,57.8,15.9,57.8,16.1z M13.9,19.3V6.5c0-0.2,0.1-0.3,0.3-0.3l10.5,0v13.3H14.2C14,19.6,13.9,19.4,13.9,19.3z" />
+                        </svg>
+                    </span>
+                    <span class="text">Alat</span>
+                </a>
+                <ul id="ddmenu_1" class="collapse dropdown-nav {{ (Request::routeIs('alat.index' or 'jenisalat.index' or 'kondisialat.index')) ? 'show' : '' }}">
+                    <li>
+                        <a href="{{route('alat.index')}}" class="{{ Request::routeIs('alat.*') ? 'active' : '' }}"> Data Alat </a>
+                        <a href="{{route('jenisalat.index')}}" class="{{ Request::routeIs('jenisalat.*') ? 'active' : '' }}"> Jenis Alat Berat </a>
+                        <a href="{{route('kondisialat.index')}}" class="{{ Request::routeIs('kondisialat.*') ? 'active' : '' }}"> Kondisi Alat Berat </a>
+                    </li>
+                </ul>
+            </li>
         </ul>
     </nav>
 </aside>
