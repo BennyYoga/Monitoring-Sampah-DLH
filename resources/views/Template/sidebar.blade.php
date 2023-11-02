@@ -71,7 +71,7 @@
             </li>
             @endif
             @endif
-            <li class="nav-item nav-item-has-children {{ (Request::routeIs('alat.index' or 'jenisalat.index' or 'kondisialat.index' )) ? 'active' : '' }}">
+            <li class="nav-item nav-item-has-children {{ (Request::routeIs('alat.*') or Request::routeIs('jenisalat.*') or Request::routeIs('kondisialat.*')) ? 'active' : '' }}">
                 <a href="#0" class="collapsed" data-bs-toggle="collapse" data-bs-target="#ddmenu_1" aria-controls="ddmenu_1" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="icon">
                         <svg fill="#1C2033" width="16" height="16" version="1.1" id="lni_lni-construction" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 64 64" style="enable-background:new 0 0 64 64;" xml:space="preserve">
@@ -87,7 +87,7 @@
                     </span>
                     <span class="text">Alat</span>
                 </a>
-                <ul id="ddmenu_1" class="collapse dropdown-nav {{ (Request::routeIs('alat.index' or 'jenisalat.index' or 'kondisialat.index')) ? 'show' : '' }}">
+                <ul id="ddmenu_1" class="collapse dropdown-nav {{ (Request::routeIs('alat.*') or Request::routeIs('jenisalat.*') or Request::routeIs('kondisialat.*')) ? 'show' : '' }}">
                     <li>
                         <a href="{{route('alat.index')}}" class="{{ Request::routeIs('alat.*') ? 'active' : '' }}"> Data Alat </a>
                         <a href="{{route('jenisalat.index')}}" class="{{ Request::routeIs('jenisalat.*') ? 'active' : '' }}"> Jenis Alat Berat </a>

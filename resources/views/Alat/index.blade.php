@@ -8,6 +8,23 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.bootstrap5.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+<style>
+    .canvas {
+        width: 100%;
+        height: 300px;
+        border: 2px solid #e5e5e5;
+        padding: 15px 5px;
+        border-radius: 5px;
+        background: rgba(239, 239, 239, 0.5);
+    }
+
+    #imagePreview {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+</style>
 @endpush
 
 @section('content')
@@ -98,17 +115,63 @@
     </div>
 </div>
 
-<!-- Modals Detail -->
-
 <!-- Modals Edit -->
 <div id="detail-alat" class="modal fade bd-example-modal" tabindex="-1" role="dialog" aria-labelledby="edit-kondisi-alat" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content card-style ">
             <div class="modal-header px-0">
                 <h5 class="text-bold" id="exampleModalLabel">Detail Alat Berat</h5>
             </div>
             <div class="modal-body px-0">
-                
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="canvas text-center">
+                            <img src="" onerror="this.src='{{asset('images/defaultImage.png')}}'" id="imagePreview" alt="">
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <table style="width: 100%;">
+                            <tbody>
+                                <tr>
+                                    <td style="width: 40%;"><b>Kode Alat Berat</b></td>
+                                    <td style="width: 60%;" id="kodeAlat"></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 40%;"><b>Jenis Alat Berat</b></td>
+                                    <td style="width: 60%;" id="jenisAlat"></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 40%;"><b>Merk</b></td>
+                                    <td style="width: 60%;" id="merkAlat"></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 40%;"><b>Model</b></td>
+                                    <td style="width: 60%;" id="modelAlat"></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 40%;"><b>Nomor Seri</b></td>
+                                    <td style="width: 60%;" id="nomorSeri"></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 40%;"><b>Tahun Perolehan</b></td>
+                                    <td style="width: 60%;" id="tahunPerolehan"></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 40%;"><b>Keterangan</b></td>
+                                    <td style="width: 60%;" id="keterangan"></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 40%;"><b>Kondisi</b></td>
+                                    <td style="width: 60%;" id="kondisi"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+            <div class="action d-flex flex-wrap justify-content-end mt-3">
+                <button class="btn btn-primary" data-bs-dismiss="modal">Kembali</button>
             </div>
         </div>
     </div>
@@ -133,12 +196,35 @@
         event.preventDefault();
         {
             let data = JSON.parse(el.getAttribute('data-id'));
-            for (var key in data) {
-                if (data.hasOwnProperty(key)) {
-                    data[key] = data[key].replace(/_/g, ' ');
-                }
-            }
             console.log(data);
+
+            $('#imagePreview').attr('src', data.Foto);
+            $('#kodeAlat').text(`: ${data.Kode || '-'}`);
+            $('#jenisAlat').text(`: ${data.JenisAlatBerat || '-'}`);
+            $('#merkAlat').text(`: ${data.Merk || '-'}`);
+            $('#modelAlat').text(`: ${data.NamaModel || '-'}`);
+            $('#nomorSeri').text(`: ${data.NoSeri || '-'}`);
+            $('#tahunPerolehan').text(`: ${data.TahunPerolehan || '-'}`);
+            $('#keterangan').text(`: ${data.Keterangan || '-'}`);
+
+            let kondisiHtml = "";
+
+            if (data.Kondisi && data.Kondisi.length > 0) {
+                data.Kondisi.forEach(kondisi => {
+                    kondisiHtml += `
+                    <button type="button" class="btn btn-secondary disabled mt-1 mb-1"
+                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                        ${kondisi}
+                    </button>
+                `;
+                });
+            } else {
+                kondisiHtml = '<em>Tidak ada kondisi yang tersedia</em>';
+            }
+
+            $('#kondisi').html(`${kondisiHtml}`);
+
+
             $('#detail-alat').modal('show');
         }
     }

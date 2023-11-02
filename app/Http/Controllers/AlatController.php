@@ -59,13 +59,34 @@ class AlatController extends Controller
                     return $monthName . ' ' . $year;
                 })
                 ->addColumn('action', function ($row) {
-                    $newdata = json_decode($row);
-                    foreach ($newdata as $key => $value) {
-                        $newdata->$key = str_replace(" ", "_", $value);
-                    }
-                    $newdata = json_encode($newdata);
+
+                    $kondisiListDetail = DB::table('alat_kondisi_detail')->where('AlatUuid', $row->AlatUuid)->pluck('KondisiId')->toArray();
+                    $kondisi = AlatKondisi::whereIn('KondisiId', $kondisiListDetail)->orderBy('Label', 'asc')->get();
                     
-                    $btn = '<a href='. route('alat.show', $row->AlatUuid) .'  data-id='. $newdata .' style="font-size:20px" class="text-primary mr-10" onClick="notificationDetailAlat(event,this)"><i class="lni lni-eye"></i></a>';
+                    $row->Kondisi = $kondisi->pluck('Label')->toArray();
+                    $row->JenisAlatBerat = $row->Jenis->Nama;
+                    
+                    $date = new DateTime($row->TahunPerolehan);
+                    $monthName = $date->format('F');
+                    $year = $date->format('Y');
+                    $row->TahunPerolehan = $monthName . ' ' . $year;
+                    
+                    switch ($row->Keterangan) {
+                        case 0:
+                            $row->Keterangan = "Beroperasi";
+                            break;
+                        case 1:
+                            $row->Keterangan = "Beroperasi segera dilakukan perbaikan";
+                            break;
+                        case 2:
+                            $row->Keterangan = "Breakdown/dapat dilakukan perbaikan";
+                            break;
+                        case 3:
+                            $row->Keterangan = "Breakdown/dapat dilakukan perbaikan";
+                            break;
+                    }
+
+                    $btn = '<a href=' . route('alat.show', $row->AlatUuid) . '  data-id=\'' . $row . '\' style="font-size:20px" class="text-primary mr-10" onClick="notificationDetailAlat(event,this)"><i class="lni lni-eye"></i></a>';
                     $btn .= '<a href=' . route('alat.edit', $row->AlatUuid) . '  style="font-size:20px" class="text-warning mr-10"><i class="lni lni-pencil-alt"></i></a>';
                     $btn .= '<a href=' . route('alat.destroy', $row->AlatUuid) . ' style="font-size:20px" class="text-danger mr-10" onClick="notificationBeforeDelete(event,this)"><i class="lni lni-trash-can"></i></a>';
 
@@ -195,15 +216,14 @@ class AlatController extends Controller
         $kondisi = AlatKondisi::orderBy('Label', 'asc')->get();
         $dataKondisi = [];
         foreach ($kondisi as $value) {
-            if(in_array($value->KondisiId, $konsiDetailList)){
+            if (in_array($value->KondisiId, $konsiDetailList)) {
                 $isiData = [
                     'KondisiId' => $value->KondisiId,
                     'Label' => $value->Label,
                     'selected' => true,
                 ];
                 array_push($dataKondisi, $isiData);
-            }
-            else{
+            } else {
                 $isiData = [
                     'KondisiId' => $value->KondisiId,
                     'Label' => $value->Label,
@@ -236,7 +256,7 @@ class AlatController extends Controller
     public function update(Request $request, $id)
     {
         //
-        
+
         $alatBefore = Alat::where('AlatUuid', $id)->first();
         $keteranganUpdate = null;
         $kondisiUpdate = null;
@@ -244,19 +264,17 @@ class AlatController extends Controller
         $locationFile = null;
 
         //Pengecekan Prubahan Keterangan
-        if($alatBefore->Keterangan != (int)$request->Keterangan){
+        if ($alatBefore->Keterangan != (int)$request->Keterangan) {
             $keteranganUpdate = date('Y-m-d H:i:s');
-        }
-        else{
+        } else {
             $keteranganUpdate = $alatBefore->LastUpdateKeterangan;
         }
-        
+
         //Pengecekan Perubahan Kondisi
         $kondisiBefore = DB::table('alat_kondisi_detail')->where('AlatUuid', $id)->pluck('KondisiId')->toArray();
-        if($kondisiBefore != $request->Kondisi){
+        if ($kondisiBefore != $request->Kondisi) {
             $kondisiUpdate = date('Y-m-d H:i:s');
-        }
-        else{
+        } else {
             $kondisiUpdate = $alatBefore->LastUpdateKondisi;
         }
 
@@ -274,13 +292,12 @@ class AlatController extends Controller
             $locationFile = $alatBefore->Foto;
             $FotoUpdate = $alatBefore->LastUpdateFoto;
         }
-        
+
         //Pengecekan Perubahan Tahun Perolehan]
         $tahunPerolehan = null;
-        if($alatBefore->TahunPerolehan != $request->TahunPerolehan){
+        if ($alatBefore->TahunPerolehan != $request->TahunPerolehan) {
             $tahunPerolehan = $request->TahunPerolehan . '-01';
-        }
-        else{
+        } else {
             $tahunPerolehan = $alatBefore->TahunPerolehan;
         }
 
@@ -342,5 +359,11 @@ class AlatController extends Controller
         $image->move(public_path('images/temp/'), $imageName);
 
         return response()->json(['success' => $imageName]);
+    }
+
+    public function getDetail($id)
+    {
+        $data = Alat::where('AlatUuid', $id)->first();
+        return response()->json(['data' => $data]);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AlatKondisi;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\DataTables;
@@ -21,18 +22,23 @@ class AlatKondisiController extends Controller
             return DataTables::of($kondisi_alat)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $newdata = json_decode($row);
-                    foreach ($newdata as $key => $value) {
-                        $newdata->$key = str_replace(" ", "-", $value);
-                    }
-                    $newdata = json_encode($newdata);
 
-                    $btn = '<a href=' . route('kondisialat.update', $row->KondisiId) . ' data-id='.$newdata.' style="font-size:20px" class="text-warning mr-10" onClick="notificationEdit(event,this)"><i class="lni lni-pencil-alt"></i></a>';
+                    $btn = '<a href=' . route('kondisialat.update', $row->KondisiId) . ' data-id=\'' . $row . '\' style="font-size:20px" class="text-warning mr-10" onClick="notificationEdit(event,this)"><i class="lni lni-pencil-alt"></i></a>';
                     // $btn = '<a href=' . route('kondisialat.update', $row->KondisiId) . ' style="font-size:20px" class="text-warning mr-10" onClick="notificationEdit(event,this)"><i class="lni lni-pencil-alt"></i></a>';
                     $btn .= '<a href=' . route('kondisialat.destroy', $row->KondisiId) . ' style="font-size:20px" class="text-danger mr-10" onClick="notificationBeforeDelete(event,this)"><i class="lni lni-trash-can"></i></a>';
                     return $btn;
                 })
-                ->rawColumns(['action'])
+                ->addColumn('Keterangan', function ($row) {
+                    if ($row->Keterangan == null) {
+                        $keterangan = '
+                        <b><i>Belum ada keterangan</i></b>';
+                    }
+                    else{
+                        $keterangan = $row->Keterangan;
+                    }
+                    return $keterangan;
+                })
+                ->rawColumns(['action', 'Keterangan'])
                 ->make(true);
         }
         return view('alatberatkondisi.index');
@@ -123,8 +129,19 @@ class AlatKondisiController extends Controller
     public function destroy($id)
     {
         //
-        AlatKondisi::where('KondisiId', $id)->delete();
-        Alert::success('Success', 'Berhasil menghapus data Kondisi');
-        return redirect()->route('kondisialat.index');
+        try {
+            AlatKondisi::where('KondisiId', $id)->delete();
+            Alert::success('Success', 'Berhasil menghapus data Kondisi');
+            return redirect()->route('kondisialat.index');
+        } catch (QueryException $e) {
+            if($e->errorInfo[1] == 1451){
+                Alert::error('Error', 'Gagal menghapus data Kondisi, karena data masih digunakan');
+                return redirect()->route('kondisialat.index');
+            }
+            else{
+                Alert::error('Error', 'Terjadi Keasalahan ' . $e->getMessage() );
+                return redirect()->route('kondisialat.index');
+            }
+        }
     }
 }

@@ -193,15 +193,9 @@
         {
             let data = JSON.parse(el.getAttribute('data-id'));
 
-            for (var key in data) {
-                if (data.hasOwnProperty(key)) {
-                    data[key] = data[key].replace(/-/g, ' ');
-                }
-            }
-
             $('input[name=KondisiId]').val(`${data.KondisiId}`);
             $('input[name=Label]').val(`${data.Label}`);
-            $('textarea[name=Keterangan]').val(`${data.Keterangan}`);
+            $('textarea[name=Keterangan]').val(`${data.Keterangan || ''}`);
 
             $('#edit-kondisi-alat').modal('show');
             $("#form").attr('action', $(el).attr('href'));
@@ -227,6 +221,7 @@
                 },
                 {
                     data: 'Keterangan',
+                    name: 'Keterangan',
                     width: '60%'
                 },
                 {

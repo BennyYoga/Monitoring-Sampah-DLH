@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AlatBeratJenis;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 use Symfony\Component\VarDumper\Cloner\Data;
@@ -29,7 +30,7 @@ class AlatBeratJenisContoller extends Controller
                     }
                     $newdata = json_encode($newdata);
 
-                    $btn = '<a href=' . route('jenisalat.update', $row->JenisAlatBeratId) . ' data-id='.$newdata.' style="font-size:20px" class="text-warning mr-10" onClick="notificationEdit(event,this)"><i class="lni lni-pencil-alt"></i></a>';
+                    $btn = '<a href=' . route('jenisalat.update', $row->JenisAlatBeratId) . ' data-id=' . $newdata . ' style="font-size:20px" class="text-warning mr-10" onClick="notificationEdit(event,this)"><i class="lni lni-pencil-alt"></i></a>';
                     $btn .= '<a href=' . route('jenisalat.destroy', $row->JenisAlatBeratId) . ' style="font-size:20px" class="text-danger mr-10" onClick="notificationBeforeDelete(event,this)"><i class="lni lni-trash-can"></i></a>';
                     return $btn;
                 })
@@ -62,7 +63,7 @@ class AlatBeratJenisContoller extends Controller
             'Kode' => $request->Kode,
             'Nama' => $request->Nama
         ];
-        
+
         AlatBeratJenis::create($data);
         Alert::success('Success', 'Berhasil menambahkan data jenis alat berat');
         return redirect()->route('jenisalat.index');
@@ -119,8 +120,18 @@ class AlatBeratJenisContoller extends Controller
     public function destroy($id)
     {
         //
-        AlatBeratJenis::where('JenisAlatBeratId', $id)->delete();
-        Alert::success('Success', 'Berhasil menghapus data jenis alat berat');
-        return redirect()->route('jenisalat.index');
+        try {
+            AlatBeratJenis::where('JenisAlatBeratId', $id)->delete();
+            Alert::success('Success', 'Berhasil menghapus data jenis alat berat');
+            return redirect()->route('jenisalat.index');
+        } catch (QueryException $e) {
+            if ($e->errorInfo[1] == 1451) {
+                Alert::error('Error', 'Gagal menghapus data Jenis, karena data masih digunakan');
+                return redirect()->route('jenisalat.index');
+            } else {
+                Alert::error('Error', 'Terjadi Keasalahan ' . $e->getMessage());
+                return redirect()->route('jenisalat.index');
+            }
+        }
     }
 }
