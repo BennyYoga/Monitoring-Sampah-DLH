@@ -41,7 +41,7 @@ class AlatKondisiController extends Controller
                 ->rawColumns(['action', 'Keterangan'])
                 ->make(true);
         }
-        return view('alatberatkondisi.index');
+        return view('AlatBeratKondisi.index');
     }
 
     /**
