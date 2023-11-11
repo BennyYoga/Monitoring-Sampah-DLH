@@ -37,7 +37,7 @@ class AlatBeratJenisContoller extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        return view('alatberatjenis.index');
+        return view('AlatBeratJenis.index');
     }
 
     /**
