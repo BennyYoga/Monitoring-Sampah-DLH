@@ -95,7 +95,7 @@ class AlatController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        return view('alat.index');
+        return view('Alat.index');
     }
 
     /**
