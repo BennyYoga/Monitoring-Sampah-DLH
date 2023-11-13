@@ -7,6 +7,7 @@ use App\Models\AlatBeratJenis;
 use App\Models\AlatKondisi;
 use DateTime;
 use Faker\Provider\Uuid;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -58,19 +59,23 @@ class AlatController extends Controller
 
                     return $monthName . ' ' . $year;
                 })
+                ->addColumn('UpdateTerakhir', function ($row) {
+                    // $latestUpdate = collect([$row->LastUpdateKondisi, $row->LastUpdateFoto, $row->LastUpdateKeterangan])->max();
+                    return date('d F Y H:i:s', strtotime($row->LastUpdateKeterangan));
+                })
                 ->addColumn('action', function ($row) {
 
                     $kondisiListDetail = DB::table('alat_kondisi_detail')->where('AlatUuid', $row->AlatUuid)->pluck('KondisiId')->toArray();
                     $kondisi = AlatKondisi::whereIn('KondisiId', $kondisiListDetail)->orderBy('Label', 'asc')->get();
-                    
+
                     $row->Kondisi = $kondisi->pluck('Label')->toArray();
                     $row->JenisAlatBerat = $row->Jenis->Nama;
-                    
+
                     $date = new DateTime($row->TahunPerolehan);
                     $monthName = $date->format('F');
                     $year = $date->format('Y');
                     $row->TahunPerolehan = $monthName . ' ' . $year;
-                    
+
                     switch ($row->Keterangan) {
                         case 0:
                             $row->Keterangan = "Beroperasi";
@@ -232,7 +237,7 @@ class AlatController extends Controller
                 array_push($dataKondisi, $isiData);
             }
         };
-        $jenis_alat_berat = AlatBeratJenis::all();
+        $jenis_alat_berat = AlatBeratJenis::where('JenisAlatBeratId', $alat->JenisAlatBerat)->first();
         $kondisi = AlatKondisi::orderBy('Label', 'asc')->get();
 
         //Manipulasi File Temporary dan sesion preview Image
@@ -242,7 +247,6 @@ class AlatController extends Controller
         list($tahun, $bulan) = sscanf($alat->TahunPerolehan, "%d-%d");
         $bulan = str_pad($bulan, 2, '0', STR_PAD_LEFT);
         $alat->TahunPerolehan = $tahun . '-' . $bulan;
-
         return view('Alat.edit', compact('jenis_alat_berat', 'kondisi', 'alat', 'kondisi', 'dataKondisi'));
     }
 
@@ -303,7 +307,7 @@ class AlatController extends Controller
 
         $data = [
             'Kode' => $alatBefore->Kode,
-            'JenisAlatBerat' => (int) $request->JenisAlatBeratId,
+            'JenisAlatBerat' => $alatBefore->JenisAlatBerat,
             'Merk' => $request->Merk,
             'NoSeri' => $request->NoSeri,
             'NamaModel' => $request->NamaModel,
@@ -342,14 +346,25 @@ class AlatController extends Controller
     public function destroy($id)
     {
         //
-        $path = Alat::where('AlatUuid', $id)->first()->Foto;
-        if (file_exists(public_path($path))) {
-            unlink(public_path($path));
+        try {
+
+            $path = Alat::where('AlatUuid', $id)->first()->Foto;
+            if (file_exists(public_path($path))) {
+                unlink(public_path($path));
+            }
+            DB::table('alat_kondisi_detail')->where('AlatUuid', $id)->delete();
+            Alat::where('AlatUuid', $id)->delete();
+            Alert::success('Success', 'Berhasil menghapus data alat');
+            return redirect()->route('alat.index');
+        } catch (QueryException $e) {
+            if ($e->errorInfo[1] == 1451) {
+                Alert::error('Error', 'Gagal menghapus data Alat, karena data masih digunakan dalam suku cadang');
+                return redirect()->route('alat.index');
+            } else {
+                Alert::error('Error', 'Terjadi Keasalahan ' . $e->getMessage());
+                return redirect()->route('alat.index');
+            }
         }
-        DB::table('alat_kondisi_detail')->where('AlatUuid', $id)->delete();
-        Alat::where('AlatUuid', $id)->delete();
-        Alert::success('Success', 'Berhasil menghapus data alat');
-        return redirect()->route('alat.index');
     }
 
     public function uploadImage(Request $request)

@@ -97,17 +97,8 @@
                                     <div class="select-style-1">
                                         <label>Jenis Alat Berat</label>
                                         <div class="select-position">
-                                            <select class="select2" name="JenisAlatBeratId" id="JenisAlatBeratId" style="width: 100%" disabled>
-                                                @foreach($jenis_alat_berat as $value)
-                                                @if($value->JenisAlatBeratId == $alat->JenisAlatBeratId)
-                                                <option value="<?= $value->JenisAlatBeratId ?>" selected>
-                                                    <?= $value->Nama ?>
-                                                </option>
-                                                @endif
-                                                <option value="<?= $value->JenisAlatBeratId ?>">
-                                                    <?= $value->Nama ?>
-                                                </option>
-                                                @endforeach
+                                            <select class="select" name="JenisAlatBeratId" id="JenisAlatBeratId" style="width: 100%" disabled>
+                                                <option value="">{{$jenis_alat_berat->Nama}}</option>
                                             </select>
                                         </div>
                                     </div>

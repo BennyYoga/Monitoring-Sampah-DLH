@@ -23,4 +23,9 @@ class Alat extends Model
     {
         return $this->belongsTo(AlatBeratJenis::class, 'JenisAlatBerat', 'JenisAlatBeratId');
     }
+
+    public function AsetBarang()
+    {
+        return $this->hasMany(AsetBarang::class);
+    }
 }

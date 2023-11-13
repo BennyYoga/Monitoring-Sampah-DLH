@@ -32,8 +32,7 @@ class AlatKondisiController extends Controller
                     if ($row->Keterangan == null) {
                         $keterangan = '
                         <b><i>Belum ada keterangan</i></b>';
-                    }
-                    else{
+                    } else {
                         $keterangan = $row->Keterangan;
                     }
                     return $keterangan;
@@ -134,12 +133,11 @@ class AlatKondisiController extends Controller
             Alert::success('Success', 'Berhasil menghapus data Kondisi');
             return redirect()->route('kondisialat.index');
         } catch (QueryException $e) {
-            if($e->errorInfo[1] == 1451){
+            if ($e->errorInfo[1] == 1451) {
                 Alert::error('Error', 'Gagal menghapus data Kondisi, karena data masih digunakan');
                 return redirect()->route('kondisialat.index');
-            }
-            else{
-                Alert::error('Error', 'Terjadi Keasalahan ' . $e->getMessage() );
+            } else {
+                Alert::error('Error', 'Terjadi Keasalahan ' . $e->getMessage());
                 return redirect()->route('kondisialat.index');
             }
         }

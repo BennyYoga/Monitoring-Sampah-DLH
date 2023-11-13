@@ -3,6 +3,9 @@
 use App\Http\Controllers\AlatBeratJenisContoller;
 use App\Http\Controllers\AlatController;
 use App\Http\Controllers\AlatKondisiController;
+use App\Http\Controllers\AsetBarangController;
+use App\Http\Controllers\AsetJenisController;
+use App\Http\Controllers\AsetPembelianController;
 use App\Http\Controllers\c_kabkota;
 use App\Http\Controllers\c_tiket;
 use App\Http\Controllers\Auth\AuthController;
@@ -53,6 +56,18 @@ Route::get('/kondisialat', [AlatKondisiController::class, 'index'])->name('kondi
 Route::post('/kondisialat/store', [AlatKondisiController::class, 'store'])->name('kondisialat.store');
 Route::put('/kondisialat/update', [AlatKondisiController::class, 'update'])->name('kondisialat.update');
 Route::get('/kondisialat/destroy/{id}', [AlatKondisiController::class, 'destroy'])->name('kondisialat.destroy');
+
+Route::get('/aset/jenis', [AsetJenisController::class, 'index'])->name('aset.jenis.index');
+Route::post('/aset/jenis/store', [AsetJenisController::class, 'store'])->name('aset.jenis.store');
+Route::get('/aset/jenis/destroy/{id}', [AsetJenisController::class, 'destroy'])->name('aset.jenis.destroy');
+Route::put('/aset/jenis/update/', [AsetJenisController::class, 'update'])->name('aset.jenis.update');
+
+Route::get('/aset/barang', [AsetBarangController::class, 'index'])->name('aset.barang.index');
+Route::post('/aset/barang/store', [AsetBarangController::class, 'store'])->name('aset.barang.store');
+Route::get('/aset/barang/destroy/{id}', [AsetBarangController::class, 'destroy'])->name('aset.barang.destroy');
+Route::put('/aset/barang/update/', [AsetBarangController::class, 'update'])->name('aset.barang.update');
+
+Route::get('/aset/pembelian', [AsetPembelianController::class, 'index'])->name('aset.pembelian.index');
 
 Route::group(['middleware' => 'role:1|2'], function(){
     Route::group(['middleware' => 'role:1'], function(){            

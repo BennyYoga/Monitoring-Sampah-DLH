@@ -24,6 +24,13 @@
         object-fit: cover;
         border-radius: 5px;
     }
+
+    table.dataTable td{
+        font-size: 0.8em;
+    }
+    table.dataTable th{
+        font-size: 0.9em;
+    }
 </style>
 @endpush
 
@@ -79,6 +86,7 @@
                                         <th>Jenis Alat Berat</th>
                                         <th>Nama Model</th>
                                         <th>Tahun Perolehan</th>
+                                        <th>Last Update Keterangan</th>
                                         <th>Keterangan</th>
                                         <th>Action</th>
                                     </tr>
@@ -164,6 +172,22 @@
                                     <td style="width: 40%;"><b>Kondisi</b></td>
                                     <td style="width: 60%;" id="kondisi"></td>
                                 </tr>
+                                <tr>
+                                    <td style="width: 40%;"><b>Kondisi</b></td>
+                                    <td style="width: 60%;" id="kondisi"></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 40%;"><b>Update Foto</b></td>
+                                    <td style="width: 60%;" id="UpdateFoto"></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 40%;"><b>Update Kondisi</b></td>
+                                    <td style="width: 60%;" id="UpdateKondisi"></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 40%;"><b>Update Keterangan</b></td>
+                                    <td style="width: 60%;" id="UpdateKeterangan"></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -206,6 +230,9 @@
             $('#nomorSeri').text(`: ${data.NoSeri || '-'}`);
             $('#tahunPerolehan').text(`: ${data.TahunPerolehan || '-'}`);
             $('#keterangan').text(`: ${data.Keterangan || '-'}`);
+            $('#UpdateFoto').text(`: ${data.LastUpdateFoto || '-'}`);
+            $('#UpdateKondisi').text(`: ${data.LastUpdateKondisi || '-'}`);
+            $('#UpdateKeterangan').text(`: ${data.LastUpdateKeterangan || '-'}`);
 
             let kondisiHtml = "";
 
@@ -252,6 +279,10 @@
                 {
                     data: 'TahunPerolehan',
                     name: 'TahunPerolehan',
+                },
+                {
+                    data: 'UpdateTerakhir',
+                    name: 'UpdateTerakhir',
                 },
                 {
                     data: 'Keterangan',
