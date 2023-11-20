@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Alat;
 use App\Models\AsetBarang;
-use App\Models\AsetPembelian;
-use App\Models\AsetPembelianDetail;
+use App\Models\AsetPemakaian;
+use App\Models\AsetPemakaianDetail;
 use Faker\Provider\Uuid;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\Facades\DataTables;
 
-class AsetPembelianController extends Controller
+class AsetPemakaianController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -22,9 +21,9 @@ class AsetPembelianController extends Controller
     public function index(Request  $request)
     {
         //
-        $aset_jenis = AsetPembelian::all();
-        // $nama_barang = $aset_jenis->Barang->Nama;
-        // dd($aset_jenis->detailBarang->Barang->Nama);
+        $aset_jenis = AsetPemakaian::all();
+        // $nama_barang = $aset_jenis[1]->DetailBarang[0]->Barang->Alat;
+        // dd($nama_barang);
         if ($request->ajax()) {
             return DataTables::of($aset_jenis)
                 ->addIndexColumn()
@@ -34,11 +33,7 @@ class AsetPembelianController extends Controller
                 ->addColumn('JumlahUnit', function ($row) {
                     return $row->DetailBarang->sum('Unit');
                 })
-                ->addColumn('TotalHarga', function ($row) {
-                    $totalHarga =  $row->DetailBarang->sum('Harga');
-                    return 'Rp. ' . number_format($totalHarga, 0, ',', '.');
-                })
-                ->addColumn('TotalPembelian', function($row){
+                ->addColumn('TotalBarang', function($row){
                     return $row->DetailBarang->count();
                 })
                 ->addColumn('action', function($row){
@@ -46,19 +41,20 @@ class AsetPembelianController extends Controller
                     foreach($row->detailBarang as $item){
                         $row->detailBarang[$i] = [
                             'NamaBarang' => $item->Barang->Nama,
+                            'Merk' => $item->Barang->Alat->Merk ?? null,
+                            'Model' => $item->Barang->Alat->NamaModel ?? null,
                             'Unit' => $item->Unit,
-                            'Harga' => $item->Harga,
-                            'TotalHarga' => $item->Unit * $item->Harga,
                         ];
                         $i++;
                     }
-                    $btn = '<a href=""  data-id=\'' . $row . '\' style="font-size:20px" class="text-primary mr-10" onClick="notificationDetailPembelian(event,this)"><i class="lni lni-eye"></i></a>';
+                    $btn = '<a href=""  data-id=\'' . $row . '\' style="font-size:20px" class="text-primary mr-10" onClick="notificationDetailPemakaian(event,this)"><i class="lni lni-eye"></i></a>';
+
                     return $btn;
                 })
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        return view('AsetPembelian.index');
+        return view('AsetPemakaian.index');
     }
 
     /**
@@ -70,7 +66,7 @@ class AsetPembelianController extends Controller
     {
         //
         $barang = AsetBarang::get();
-        return view('AsetPembelian.form', compact('barang'));
+        return view('AsetPemakaian.form', compact('barang'));
     }
 
     /**
@@ -82,43 +78,50 @@ class AsetPembelianController extends Controller
     public function store(Request $request)
     {
         //
-        $BeliUuid = Uuid::uuid();
+        $PakaiUuid = Uuid::uuid();
         if(!$request->Barang){
             Alert::error('Gagal', 'Tidak ada barang yang dipilih');
-            return redirect()->route('aset.pembelian.create');
+            return redirect()->route('aset.pemakaian.create');
         }
-        if(count($request->Barang) != count($request->Unit) || count($request->Barang) != count($request->Harga)){
+        if(count($request->Barang) != count($request->Unit)){
             Alert::error('Gagal', 'Terdapat Row Yang tidak diisi');
-            return redirect()->route('aset.pembelian.create');
+            return redirect()->route('aset.pemakaian.create');
         }
         foreach ($request->Barang as $key => $value) {
             if($value == '-'){
                 Alert::error('Gagal', 'Terdapat Row Yang tidak diisi');
-                return redirect()->route('aset.pembelian.create');
+                return redirect()->route('aset.pemakaian.create');
             }
         }
         
+        //Pengecekan Stok
+        foreach ($request->Barang as $key => $value) {
+            $stok = AsetBarang::where('BarangUuid', $value)->first();
+            if($stok->TotalUnit < $request->Unit[$key]){
+                Alert::error('Gagal', 'Stok Barang ' . $stok->Nama . ' Tidak Mencukupi');
+                return redirect()->route('aset.pemakaian.create');
+            }
+        }
         
-        $dataBeli = [
-            'BeliUuid' => $BeliUuid,
+        $dataPakai = [
+            'PakaiUuid' => $PakaiUuid,
             'Tanggal' => Date::parse($request->Tanggal)->format('Y-m-d H:i:s'),
         ];
-        AsetPembelian::create($dataBeli);
+        // AsetPemakaian::create($dataPakai);
 
         $listBarang = $request->all();
         for($i=0; $i<count($listBarang['Barang']); $i++){
             $data = [
-                'BeliUuid' => $BeliUuid,
+                'PakaiUuid' => $PakaiUuid,
                 'BarangUuid' => $listBarang['Barang'][$i],
                 'Unit' => $listBarang['Unit'][$i],
-                'Harga' => $listBarang['Harga'][$i],
             ];
-            AsetBarang::where('BarangUuid', $listBarang['Barang'][$i])->increment('TotalUnit', $listBarang['Unit'][$i]);
-            AsetPembelianDetail::create($data);
+            // AsetBarang::where('BarangUuid', $listBarang['Barang'][$i])->decrement('TotalUnit', $listBarang['Unit'][$i]);
+            // AsetPemakaianDetail::create($data);
         }
 
         Alert::success('Berhasil', 'Data Berhasil Ditambahkan');
-        return redirect()->route('aset.pembelian.index');
+        return redirect()->route('aset.pemakaian.index');
     }
 
     /**

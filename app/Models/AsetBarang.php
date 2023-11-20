@@ -22,14 +22,10 @@ class AsetBarang extends Model
     }
     public function Alat()
     {
-        return $this->belongsTo(Alat::class, 'AlatId', 'AlatUuid');
+        return $this->belongsTo(Alat::class, 'AlatBeratId', 'AlatUuid');
     }
-    public function Pembelian()
+    public function AsetPembelianDetail()
     {
-        return $this->belongsToMany(AsetPembelian::class, 'aset_pembelian_detail', 'BarangUuid', 'BeliUuid');
-    }
-    public function Pemakaian()
-    {
-        return $this->belongsToMany(AsetPemakaian::class, 'aset_pemakaian_detail', 'BarangUuid', 'PakaiUuid');
+        return $this->hasMany(AsetPembelianDetail::class, 'BarangUuid', 'BarangUuid');
     }
 }

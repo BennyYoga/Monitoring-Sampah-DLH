@@ -1,6 +1,6 @@
 @extends('Template.template')
 
-@section('Pembelian Aset','Trash Monitoring System | Pembelian Aset')
+@section('Pemakaian Aset','Trash Monitoring System | Pembelian Aset')
 
 {{-- kalau ada css tambahan selain dari template.blade --}}
 @push('css')
@@ -33,7 +33,7 @@
                 </div>
                 @endif --}}
                 <div class="title mb-30">
-                    <h2>Pembelian Aset Barang</h2>
+                    <h2>Pemakaian Aset Barang</h2>
                 </div>
             </div>
             <!-- end col -->
@@ -42,7 +42,7 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">
-                                <a href="#0">Pembelian Aset Barang</a>
+                                <a href="#0">Pemakaian Aset Barang</a>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">
                                 Page
@@ -61,17 +61,16 @@
                 <div class="col-lg-12">
                     <div class="card-style mb-30">
                         <div class="table-wrapper table-responsive">
-                            <table class="table" id="AsetPembelian">
-                                <a href="{{route('aset.pembelian.create')}}" class="btn btn-primary mb-3">
-                                    Tambah Pembelian Baru
+                            <table class="table" id="AsetPemakaian">
+                                <a href="{{route('aset.pemakaian.create')}}" class="btn btn-primary mb-3">
+                                    Tambah Pemakaian Baru
                                 </a>
                                 <thead>
                                     <tr class="text-center">
                                         <th>No</th>
-                                        <th>Tanggal Pembelian</th>
+                                        <th>Tanggal Pemakaian</th>
                                         <th>Jumlah Barang</th>
                                         <th>Total Unit</th>
-                                        <th>Total Harga</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -85,19 +84,20 @@
 </section>
 
 
-<div id="detail-pembelian" class="modal fade bd-example-modal" tabindex="-1" role="dialog" aria-labelledby="edit-kondisi-alat" aria-hidden="true">
+
+<div id="detail-pemakaian" class="modal fade bd-example-modal" tabindex="-1" role="dialog" aria-labelledby="edit-kondisi-alat" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content card-style ">
             <div class="modal-header px-0">
-                <h5 class="text-bold" id="exampleModalLabel">Detail Pembelian Barang</h5>
+                <h5 class="text-bold" id="exampleModalLabel">Detail Pemakaian Barang</h5>
             </div>
             <div class="modal-body px-0">
                 <div class="row">
                     <div class="col-sm-3">
-                        Tanggal Pembelian :
+                        Tanggal Pemakaian :
                     </div>
                     <div class="col-sm-3">
-                        <span id="tanggal-pembelian"></span>
+                        <span id="tanggal-pemakaian"></span>
                     </div>
                 </div>
                 <div class="row mt-4">
@@ -105,11 +105,9 @@
                         <table width="100%">
                             <thead>
                                 <tr>
-                                    <th>No</th>
-                                    <th>Nama Barang</th>
-                                    <th>Harga</th>
-                                    <th>Jumlah Unit</th>
-                                    <th>Total Harga</th>
+                                    <th width="10%">No</th>
+                                    <th width="60%">Nama Barang</th>
+                                    <th width="30%">Jumlah Unit</th>
                                 </tr>
                             </thead>
                             <tbody id="list-barang">
@@ -132,34 +130,34 @@
 <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
 <script type="text/javascript">
-    function notificationDetailPembelian(event, el) {
+    function notificationDetailPemakaian(event, el) {
         event.preventDefault();
         {
             var data = $(el).data('id');
             console.log(data);
-            $('#tanggal-pembelian').text(data.Tanggal);
+            $('#tanggal-pemakaian').text(data.Tanggal);
             $('#list-barang').empty();
-            var totalKeseluruhan = {
-                totalUnit: 0,
-                totalHarga: 0
-            };
+            var totalUnit = 0
             data.detail_barang.forEach(function(item, index) {
-                $('#list-barang').append('<tr><td>' + (index + 1) + '</td><td>' + item.NamaBarang + '</td><td>Rp. ' + item.Harga.toLocaleString() + '</td><td>' + item.Unit + '</td><td>Rp. ' + item.TotalHarga.toLocaleString() + '</td></tr>');
-                totalKeseluruhan.totalUnit += item.Unit;
-                totalKeseluruhan.totalHarga += item.TotalHarga;
+                if (item.Merk != null) {
+                    $('#list-barang').append('<tr><td>' + (index + 1) + '</td><td>' + item.NamaBarang + ' - ' + item.Merk + ' ' + item.Model + '</td><td>' + item.Unit + '</td></tr>');
+                } else {
+                    $('#list-barang').append('<tr><td>' + (index + 1) + '</td><td>' + item.NamaBarang + '</td><td>' + item.Unit + '</td></tr>');
+                }
+                totalUnit += item.Unit;
             });
 
             $('#list-barang').append(`
-            <td colspan="3" class="text-center"><b>Total</b></td>
-            <td>` + totalKeseluruhan.totalUnit + `</td>
-            <td>Rp. `+ totalKeseluruhan.totalHarga.toLocaleString() + `</td>
+            <td colspan="2" class="text-center"><b>Total</b></td>
+            <td>` + totalUnit + `</td>
             `);
 
-            $('#detail-pembelian').modal('show');
+            $('#detail-pemakaian').modal('show');
         }
     }
+
     $(document).ready(function() {
-        var table = $('#AsetPembelian').DataTable({
+        var table = $('#AsetPemakaian').DataTable({
             processing: true,
             serverSide: true,
             ajax: "",
@@ -175,16 +173,12 @@
                     name: 'Tanggal',
                 },
                 {
-                    data: 'TotalPembelian',
-                    name: 'TotalPembelian',
+                    data: 'TotalBarang',
+                    name: 'TotalBarang',
                 },
                 {
                     data: 'JumlahUnit',
                     name: 'JumlahUnit',
-                },
-                {
-                    data: 'TotalHarga',
-                    name: 'TotalHarga',
                 },
                 {
                     data: 'action',

@@ -17,10 +17,6 @@ class AsetPembelian extends Model
         'BeliUuid', 'Tanggal'
     ];
 
-    public function Barang()
-    {
-        return $this->belongsToMany(AsetBarang::class, 'aset_pembelian_detail', 'BeliUuid', 'BarangUuid');
-    }
     public function DetailBarang()
     {
         return $this->hasMany(AsetPembelianDetail::class, 'BeliUuid', 'BeliUuid');

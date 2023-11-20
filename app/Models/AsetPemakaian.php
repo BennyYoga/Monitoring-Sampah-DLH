@@ -13,8 +13,8 @@ class AsetPemakaian extends Model
         'PakaiUuid', 'Tanggal'
     ];
 
-    public function Barang()
+    public function DetailBarang()
     {
-        return $this->belongsToMany(AsetBarang::class, 'aset_pemakaian_detail', 'PakaiUuid', 'BarangUuid');
+        return $this->hasMany(AsetPemakaianDetail::class, 'PakaiUuid', 'PakaiUuid');
     }
 }

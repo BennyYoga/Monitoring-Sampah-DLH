@@ -5,6 +5,7 @@ use App\Http\Controllers\AlatController;
 use App\Http\Controllers\AlatKondisiController;
 use App\Http\Controllers\AsetBarangController;
 use App\Http\Controllers\AsetJenisController;
+use App\Http\Controllers\AsetPemakaianController;
 use App\Http\Controllers\AsetPembelianController;
 use App\Http\Controllers\c_kabkota;
 use App\Http\Controllers\c_tiket;
@@ -12,6 +13,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\KantorController;
+use App\Models\AsetPemakaian;
 use Illuminate\Support\Facades\Route;
 
 
@@ -68,6 +70,13 @@ Route::get('/aset/barang/destroy/{id}', [AsetBarangController::class, 'destroy']
 Route::put('/aset/barang/update/', [AsetBarangController::class, 'update'])->name('aset.barang.update');
 
 Route::get('/aset/pembelian', [AsetPembelianController::class, 'index'])->name('aset.pembelian.index');
+Route::get('/aset/pembelian/show/{id}', [AsetPembelianController::class, 'show'])->name('aset.pembelian.show');
+Route::get('/aset/pembelian/create', [AsetPembelianController::class, 'create'])->name('aset.pembelian.create');
+Route::post('/aset/pembelian/store', [AsetPembelianController::class, 'store'])->name('aset.pembelian.store');
+
+Route::get('/aset/pemakaian', [AsetPemakaianController::class, 'index'])->name('aset.pemakaian.index');
+Route::get('/aset/pemakaian/create', [AsetPemakaianController::class, 'create'])->name('aset.pemakaian.create');
+Route::post('/aset/pemakaian/store', [AsetPemakaianController::class, 'store'])->name('aset.pemakaian.store');
 
 Route::group(['middleware' => 'role:1|2'], function(){
     Route::group(['middleware' => 'role:1'], function(){            

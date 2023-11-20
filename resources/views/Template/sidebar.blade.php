@@ -101,16 +101,17 @@
             <li class="nav-item nav-item-has-children {{ (Request::routeIs('aset.*')) ? 'active' : '' }}">
                 <a href="#0" class="collapsed" data-bs-toggle="collapse" data-bs-target="#ddmenu_1" aria-controls="ddmenu_1" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="icon">
-                        <svg fill="#1C2033" width="16" height="16" version="1.1" id="lni_lni-construction" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 64 64" style="enable-background:new 0 0 64 64;" xml:space="preserve">
-                            <path d="M57.5,24.1c2.6,0,4.8-2.2,4.8-4.8v-3.2c0-2.1-1.4-4-3.4-4.6L27.9,2c-0.5-0.1-0.9-0.2-1.4-0.2H14.2c-2.6,0-4.8,2.2-4.8,4.8
-                            v12.7c0,2.6,2.2,4.8,4.8,4.8H17v18.4H8c-3.4,0-6.2,2.8-6.2,6.2V56c0,3.4,2.8,6.2,6.2,6.2h22.5c3.4,0,6.3-2.8,6.3-6.2v-7.3
-                            c0-3.4-2.8-6.2-6.3-6.2h-9V24.1h28.6V35c0,2.1,1.5,4,3.6,4.5c2.7,0.7,4.4,3.4,3.9,6.2c-0.4,2.1-2.2,3.9-4.3,4.3
-                            c-1.6,0.3-3.2-0.1-4.5-1.2c-1.2-1-1.9-2.5-1.9-4.1c0-0.6,0.1-1.2,0.3-1.8c0.4-1.2-0.2-2.5-1.4-2.9c-1.2-0.4-2.5,0.2-2.9,1.4
-                            c-0.4,1.1-0.6,2.2-0.6,3.3c0,2.9,1.3,5.7,3.5,7.6c1.8,1.5,4,2.3,6.4,2.3c0.6,0,1.2-0.1,1.8-0.2c4-0.7,7.3-4,8-8
-                            c0.9-5.2-2.2-10-7.2-11.3c-0.2,0-0.2-0.1-0.2-0.2V24.1H57.5z M32.3,48.7V56c0,1-0.8,1.8-1.8,1.8H8c-1,0-1.8-0.8-1.8-1.8v-7.3
-                            C6.2,47.8,7,47,8,47h22.5C31.5,47,32.3,47.8,32.3,48.7z M57.8,16.1v3.2c0,0.2-0.1,0.3-0.3,0.3H29.2V7l28.4,8.7
-                            C57.7,15.8,57.8,15.9,57.8,16.1z M13.9,19.3V6.5c0-0.2,0.1-0.3,0.3-0.3l10.5,0v13.3H14.2C14,19.6,13.9,19.4,13.9,19.3z" />
+                        <svg fill="#1C2033" width="16" height="16" version="1.1" id="lni_lni-shopping-basket" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 64 64" style="enable-background:new 0 0 64 64;" xml:space="preserve">
+                            <g>
+                                <path d="M56.4,19.6H54L47.5,3.2C47,2,45.7,1.5,44.6,1.9c-1.2,0.5-1.7,1.8-1.3,2.9l5.8,14.8H14.9l5.8-14.7c0.5-1.2-0.1-2.5-1.3-2.9
+		C18.3,1.5,17,2,16.5,3.2L10,19.6H7.6c-1.8,0-3.3,1.5-3.3,3.3V31c0,1.7,1.2,3,2.9,3.2L9.7,56c0.4,3.6,3.4,6.3,7,6.3h30.6
+		c3.6,0,6.6-2.7,7-6.3l2.5-21.8c1.6-0.2,2.9-1.6,2.9-3.2v-8.2C59.7,21,58.2,19.6,56.4,19.6z M8.8,24.1h46.4v5.7H8.8V24.1z
+		 M47.3,57.8H16.7c-1.3,0-2.4-1-2.6-2.3l-2.4-21.2h40.6l-2.4,21.2C49.7,56.8,48.6,57.8,47.3,57.8z" />
+                                <path d="M21.8,38.8c-1.2,0-2.3,1-2.3,2.3v7.5c0,1.2,1,2.3,2.3,2.3s2.3-1,2.3-2.3V41C24.1,39.8,23.1,38.8,21.8,38.8z" />
+                                <path d="M42.2,38.8c-1.2,0-2.3,1-2.3,2.3v7.5c0,1.2,1,2.3,2.3,2.3s2.3-1,2.3-2.3V41C44.4,39.8,43.4,38.8,42.2,38.8z" />
+                            </g>
                         </svg>
+
                     </span>
                     <span class="text">Barang</span>
                 </a>
@@ -118,6 +119,8 @@
                     <li>
                         <a href="{{route('aset.barang.index')}}" class="{{ Request::routeIs('aset.barang.*') ? 'active' : '' }}"> Data Barang </a>
                         <a href="{{route('aset.jenis.index')}}" class="{{ Request::routeIs('aset.jenis.*') ? 'active' : '' }}"> Jenis Barang </a>
+                        <a href="{{route('aset.pembelian.index')}}" class="{{ Request::routeIs('aset.pembelian.*') ? 'active' : '' }}"> Pembelian Barang </a>
+                        <a href="{{route('aset.pemakaian.index')}}" class="{{ Request::routeIs('aset.pemakaian.*') ? 'active' : '' }}"> Pemakaian Barang </a>
                     </li>
                 </ul>
             </li>
