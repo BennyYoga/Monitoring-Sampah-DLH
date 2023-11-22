@@ -62,9 +62,13 @@
                     <div class="card-style mb-30">
                         <div class="table-wrapper table-responsive">
                             <table class="table" id="AsetPembelian">
-                                <a href="{{route('aset.pembelian.create')}}" class="btn btn-primary mb-3">
-                                    Tambah Pembelian Baru
-                                </a>
+                                <div class="row">
+                                    <div class="col-sm-12 d-flex justify-content-end">
+                                        <a href="{{route('aset.pembelian.create')}}" class="btn btn-primary mb-3">
+                                            Tambah Pembelian Baru
+                                        </a>
+                                    </div>
+                                </div>
                                 <thead>
                                     <tr class="text-center">
                                         <th>No</th>
@@ -152,7 +156,7 @@
             $('#list-barang').append(`
             <td colspan="3" class="text-center"><b>Total</b></td>
             <td>` + totalKeseluruhan.totalUnit + `</td>
-            <td>Rp. `+ totalKeseluruhan.totalHarga.toLocaleString() + `</td>
+            <td>Rp. ` + totalKeseluruhan.totalHarga.toLocaleString() + `</td>
             `);
 
             $('#detail-pembelian').modal('show');

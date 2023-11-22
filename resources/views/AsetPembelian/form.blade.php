@@ -11,10 +11,15 @@
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 <style>
     .action {
-        justify-content: center;
-        flex-direction: column-reverse;
-        top: -12px;
-        position: relative;
+        height: 55px;
+        padding-left: 5px;
+        padding-top: 15px;
+    }
+
+    .hapusItem {
+        background: transparent;
+        border: none;
+        outline: none;
     }
 
     .input-tags {
@@ -89,87 +94,90 @@
         </div>
         <!-- end row -->
 
-        <div class="tables-wrapper">
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="card-style">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                Tanggal Pembelian : {{date('d F Y')}}
-                            </div>
-                            <div class="col-sm-6 text-end">
-                                <button class="btn btn-primary" id="tambahItem">
-                                    Tambah item
-                                </button>
-                            </div>
-                        </div>
 
-                        <form action="{{route('aset.pembelian.store')}}" method="post">
-                            @csrf
-                            <table class="table Tabel-Item mt-5">
-                                <thead>
-                                    <tr>
-                                        <th width="55%">
-                                            <h6>Nama Barang</h6>
-                                        </th>
-                                        <th width="17.5%">
-                                            <h6>Unit</h6>
-                                        </th>
-                                        <th width="17.5%">
-                                            <h6>Harga Satuan</h6>
-                                        </th>
-                                        <th width="10%">
-                                            <h6>Action</h6>
-                                        </th>
-                                    </tr>
-                                    <!-- end table row-->
-                                </thead>
-                                <tbody>
-                                    <tr class="dataItem">
-                                        <td height="10" class="min-width">
+        <div class="tables-wrapper">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card-style">
+                            <form action="{{route('aset.pembelian.store')}}" method="post">
+                                @csrf
+
+                                <div class="row d-flex display-justify-content">
+                                    <div class="col-sm-2 mt-3">
+                                        <label>Tanggal Pembelian :</label>
+                                    </div>
+                                    <div class="col-sm-10">
+                                        <div class="input-style-1">
+                                            <input type="datetime-local" class="form-control @error('') is-invalid @enderror" id="" name="tanggalPembelian" value="" required />
+                                            @error('') <span class="text-danger">{{$message}}</span> @enderror
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-7">Nama Barang</div>
+                                    <div class="col-sm-2">Unit</div>
+                                    <div class="col-sm-2">Harga Satuan</div>
+                                    <div class="col-sm-1">Action</div>
+                                </div>
+                                <hr>
+
+                                <div class="dataItem" id="dataItemContainer">
+                                    <div class="row">
+                                        <div class="col-sm-7">
                                             <div class="select-sm select-style-1">
                                                 <div class="select-position input-tags">
-                                                    <select class="js-example-basic-single form-" id="tags" name="Barang[]">
+                                                    <select class="js-example-basic-single form-" name="Barang[]">
                                                         <option value="-" selected disabled>Pilih Barang yang Dibeli</option>
                                                         @foreach ($barang as $item)
                                                         @if ($item->AlatBeratId)
-                                                        <option value="{{$item->BarangUuid}}">{{$item->Nama}} - {{$item->Alat->Merk}} {{$item->Alat->NamaModel}}</option>
+                                                        <option value="{{$item->BarangUuid}}">{{$item->Nama}} - {{$item->Alat->Merk}} {{$item->Alat->NamaModel}} ({{$item->TotalUnit}})</option>
                                                         @else
-                                                        <option value="{{$item->BarangUuid}}">{{$item->Nama}}</option>
+                                                        <option value="{{$item->BarangUuid}}">{{$item->Nama}} ({{$item->TotalUnit}})</option>
                                                         @endif
                                                         @endforeach
                                                     </select>
                                                 </div>
                                             </div>
-                                        </td>
-                                        <td height="10" class="min-width">
+                                        </div>
+
+                                        <div class="col-sm-2">
                                             <div class="input-style-1">
-                                                <input type="number" class="form-control @error('') is-invalid @enderror" id="" name="Unit[]" value="" required min="1"/>
+                                                <input type="number" class="form-control @error('') is-invalid @enderror" name="Unit[]" value="" required min="1" />
                                                 @error('') <span class="text-danger">{{$message}}</span> @enderror
                                             </div>
-                                        </td>
-                                        <td height="10" class="min-width">
+                                        </div>
+                                        
+                                        <div class="col-sm-2">
                                             <div class="input-style-1">
-                                                <input type="number" class="form-control @error('') is-invalid @enderror" id="" name="Harga[]" value="" required min="1"/>
+                                                <input type="number" class="form-control @error('') is-invalid @enderror" id="" name="Harga[]" value="" required min="1" />
                                                 @error('') <span class="text-danger">{{$message}}</span> @enderror
                                             </div>
-                                        </td>
-                                        <td>
+                                        </div>
+                                        
+                                        <div class="col-sm-1">
                                             <div class="action">
-                                                <button class="text-danger hapusItem">
-                                                    <i class="lni lni-trash-can"></i>
+                                                <button class="hapusItem">
+                                                    <i class="lni lni-trash-can text-danger fs-4"></i>
                                                 </button>
                                             </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                        </div>
+                                    </div>
+                                </div>
 
-                            <div class="d-flex justify-content-end mt-5">
-                                <a href="{{route('aset.pembelian.index')}}" class='btn danger-btn-outline m-1'>Batal</a>
-                                <button type='submit' class='btn btn-primary m-1'>Submit</button>
-                            </div>
-                        </form>
+                                <div class="col-sm-12 text-center mt-2">
+                                    <button type="button" class="btn btn-primary" id="tambahItem">
+                                        Tambah item
+                                    </button>
+                                </div>
+
+                                <div class="d-flex justify-content-end mt-5">
+                                    <a href="{{route('aset.pembelian.index')}}" class='btn danger-btn-outline m-1'>Batal</a>
+                                    <button type='submit' class='btn btn-primary m-1'>Submit</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -193,53 +201,62 @@
 
         $('#tambahItem').click(function() {
             const newRowHtml = `
-                <tr class="dataItem">
-                    <td height="10" class="min-width">
-                        <div class="select-sm select-style-1">
-                            <div class="select-position input-tags">
-                                <select class="js-example-basic-single form-" name="Barang[]">
-                                    <option value="-" selected disabled>Pilih Barang yang Dibeli</option>
-                                    @foreach ($barang as $item)
-                                    <option value="{{$item->BarangUuid}}">{{$item->Nama}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </td>
-                    <td height="10" class="min-width">
-                        <div class="input-style-1">
-                            <input type="number" class="form-control @error('') is-invalid @enderror" name="Unit[]" value="" required/>
-                            @error('') <span class="text-danger">{{$message}}</span> @enderror
-                        </div>
-                    </td>
-                    <td height="10" class="min-width">
-                        <div class="input-style-1">
-                            <input type="number" class="form-control @error('') is-invalid @enderror" name="Harga[]" value="" required/>
-                            @error('') <span class="text-danger">{{$message}}</span> @enderror
-                        </div>
-                    </td>
-                    <td>
-                        <div class="action">
-                            <button class="text-danger hapusItem">
-                                <i class="lni lni-trash-can"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
+            <div class="row">
+                                        <div class="col-sm-7">
+                                            <div class="select-sm select-style-1">
+                                                <div class="select-position input-tags">
+                                                    <select class="js-example-basic-single form-" name="Barang[]">
+                                                        <option value="-" selected disabled>Pilih Barang yang Dibeli</option>
+                                                        @foreach ($barang as $item)
+                                                        @if ($item->AlatBeratId)
+                                                        <option value="{{$item->BarangUuid}}">{{$item->Nama}} - {{$item->Alat->Merk}} {{$item->Alat->NamaModel}} ({{$item->TotalUnit}})</option>
+                                                        @else
+                                                        <option value="{{$item->BarangUuid}}">{{$item->Nama}} ({{$item->TotalUnit}})</option>
+                                                        @endif
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-sm-2">
+                                        <div class="input-style-1">
+                                        <input type="number" class="form-control @error('') is-invalid @enderror" name="Unit[]" value="" required min="1" />
+                                        @error('') <span class="text-danger">{{$message}}</span> @enderror
+                                        </div>
+                                        </div>
+                                        
+                                                                                <div class="col-sm-2">
+                                                                                    <div class="input-style-1">
+                                                                                        <input type="number" class="form-control @error('') is-invalid @enderror" id="" name="Harga[]" value="" required min="1" />
+                                                                                        @error('') <span class="text-danger">{{$message}}</span> @enderror
+                                                                                    </div>
+                                                                                </div>
+
+                                        <div class="col-sm-1">
+                                            <div class="action">
+                                                <button class="hapusItem">
+                                                    <i class="lni lni-trash-can text-danger fs-4"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
             `;
 
-            // Append the new row HTML to the table
-            $('.Tabel-Item tbody').append(newRowHtml);
+            $('#dataItemContainer').append(newRowHtml);
+
+            // Generate a unique ID for the new select element
+            const newSelectId = 'tags' + Date.now();
+            $('#dataItemContainer .row:last-child .js-example-basic-single').attr('id', newSelectId);
 
             // Initialize Select2 for the newly added row
-            $('.Tabel-Item tbody tr:last-child .js-example-basic-single').select2({
+            $('#' + newSelectId).select2({
                 theme: "classic",
             });
         });
 
-        $('.Tabel-Item').on('click', '.hapusItem', function() {
-            $(this).closest('tr').remove();
-            updateRowNumbers();
+        $('#dataItemContainer').on('click', '.hapusItem', function() {
+            $(this).closest('.row').remove();
         });
     });
 </script>

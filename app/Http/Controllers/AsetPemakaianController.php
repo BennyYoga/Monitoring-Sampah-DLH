@@ -105,9 +105,9 @@ class AsetPemakaianController extends Controller
         
         $dataPakai = [
             'PakaiUuid' => $PakaiUuid,
-            'Tanggal' => Date::parse($request->Tanggal)->format('Y-m-d H:i:s'),
+            'Tanggal' => $request->tanggalPemakaian,
         ];
-        // AsetPemakaian::create($dataPakai);
+        AsetPemakaian::create($dataPakai);
 
         $listBarang = $request->all();
         for($i=0; $i<count($listBarang['Barang']); $i++){
@@ -116,8 +116,8 @@ class AsetPemakaianController extends Controller
                 'BarangUuid' => $listBarang['Barang'][$i],
                 'Unit' => $listBarang['Unit'][$i],
             ];
-            // AsetBarang::where('BarangUuid', $listBarang['Barang'][$i])->decrement('TotalUnit', $listBarang['Unit'][$i]);
-            // AsetPemakaianDetail::create($data);
+            AsetBarang::where('BarangUuid', $listBarang['Barang'][$i])->decrement('TotalUnit', $listBarang['Unit'][$i]);
+            AsetPemakaianDetail::create($data);
         }
 
         Alert::success('Berhasil', 'Data Berhasil Ditambahkan');

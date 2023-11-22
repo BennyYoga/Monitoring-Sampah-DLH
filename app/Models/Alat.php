@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Alat extends Model
 {
     use HasFactory;
+    public $incrementing = false;
     protected $table = 'alat';
+    protected $primaryKey = 'AlatUuid';
     protected $fillable = [
         'AlatUuid', 'Kode', 'JenisAlatBerat', 'Merk', 'NamaModel', 'NoSeri', 'TahunPerolehan', 'Keterangan', 
         'Foto', 'LastUpdateKondisi', 'LastUpdateFoto', 'LastUpdateKeterangan', 'created_at', 'updated_at'

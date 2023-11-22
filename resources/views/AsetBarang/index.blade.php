@@ -57,20 +57,23 @@
                     <div class="card-style mb-30">
                         <div class="table-wrapper table-responsive">
                             <table class="table" id="AsetBarang">
-                                <a href="" onClick="notificationAddBarang(event,this)" class="btn btn-primary mb-3">
-                                    Tambah Barang
-                                </a>
-                                <thead>
-                                    <tr class="text-center">
-                                        <th>No</th>
-                                        <th>Nama Barang</th>
-                                        <th>Satuan</th>
-                                        <th>Total Unit</th>
-                                        <th>Jenis Barang</th>
-                                        <th>Kategori Bahan</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
+                                <div class="row">
+                                    <div class="col-sm-12 d-flex justify-content-end">
+                                        <a href="" onClick="notificationAddBarang(event,this)" class="btn btn-primary mb-3">
+                                            Tambah Barang
+                                        </a>
+                                    </div>
+                                    <thead>
+                                        <tr class="text-center">
+                                            <th>No</th>
+                                            <th>Nama Barang</th>
+                                            <th>Satuan</th>
+                                            <th>Total Unit</th>
+                                            <th>Jenis Barang</th>
+                                            <th>Kategori Bahan</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
                             </table>
                         </div>
                     </div>
@@ -267,9 +270,9 @@
     function notificationAddBarang(event, el) {
         event.preventDefault();
         {
-            
+
             let ControlAlatBerat = $('.AlatBeratControl');
-            ControlAlatBerat.addClass('d-none');    
+            ControlAlatBerat.addClass('d-none');
             $('input[name="BarangUuid"]').val(null);
             $('input[name="NamaBarang"]').val(null);
             $('input[name="SatuanBarang"]').val(null);
@@ -287,17 +290,16 @@
             $('input[name="BarangUuid"]').val(data.BarangUuid);
             $('input[name="NamaBarang"]').val(data.Nama);
             $('input[name="SatuanBarang"]').val(data.Satuan);
-            
+
             let jenis_aset = JSON.stringify(data.aset_jenis);
             $('select[name="JenisBahan"]').val(jenis_aset);
 
             let ControlAlatBerat = $('.AlatBeratControl');
-            if(data.aset_jenis.Bahan == 3){
+            if (data.aset_jenis.Bahan == 3) {
                 $('select[name="AlatBerat"').val(data.AlatBeratId);
                 ControlAlatBerat.removeClass('d-none');
-            }
-            else{
-                ControlAlatBerat.addClass('d-none');    
+            } else {
+                ControlAlatBerat.addClass('d-none');
             }
 
             $('#edit-barang').modal('show');
@@ -350,13 +352,12 @@
             ]
         });
 
-        $('.JenisBahan').on('change', function(){
+        $('.JenisBahan').on('change', function() {
             var pilihan = JSON.parse($(this).val());
             let ControlAlatBerat = $('.AlatBeratControl');
-            if(pilihan.Bahan == 3){
+            if (pilihan.Bahan == 3) {
                 ControlAlatBerat.removeClass('d-none');
-            }
-            else{
+            } else {
                 ControlAlatBerat.addClass('d-none');
             }
         });

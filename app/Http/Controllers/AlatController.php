@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\DataTables;
 
@@ -380,5 +383,59 @@ class AlatController extends Controller
     {
         $data = Alat::where('AlatUuid', $id)->first();
         return response()->json(['data' => $data]);
+    }
+
+    public function export()
+    {
+        $spreadsheet = new Spreadsheet();
+
+        $sheet1 = $spreadsheet->getActiveSheet();
+        $sheet1->setTitle('Data Alat Berat1');
+        $sheet1->setCellValue('A1', 'Data 1');
+
+        $data = [
+            ['Nama' => 'kehed', 'Deskripsi' => 'Anjay'],
+            // Tambahkan data lain sesuai kebutuhan
+        ];
+
+        $html = view('Alat/Export/alatExport', ['data' => $data])->render();
+
+        $reader = new \PhpOffice\PhpSpreadsheet\Reader\Html();
+        $spreadsheet = $reader->loadFromString($html);
+
+        // Menambahkan gambar ke Spreadsheet
+        $drawing = new Drawing();
+        $drawing->setName('Logo');
+        $drawing->setPath(public_path('images/logo/absensi.png')); // Ganti dengan path gambar yang sesuai
+        $drawing->setCoordinates('A5'); // Koordinat di mana gambar akan ditambahkan
+        $drawing->setWorksheet($spreadsheet->getActiveSheet());
+
+        $sheet2 = $spreadsheet->createSheet();
+        $sheet2->setTitle('Data Alat Berat2');
+        $sheet2->setCellValue('A1', 'Data 2');
+
+        $sheet3 = $spreadsheet->createSheet();
+        $sheet3->setTitle('Data Alat Berat3');
+        $sheet3->setCellValue('A1', 'Data 3');
+
+        $writer = new Xlsx($spreadsheet);
+        $fileName = 'Data Alat Berat.xlsx';
+        $writer->save($fileName);
+
+        return response()->download($fileName);
+    }
+
+    public function exportExcel(){
+        $alat = AlatBeratJenis::with('Alat')->get();
+        $spreadsheet = new Spreadsheet();
+        
+        $sheet1 = $spreadsheet->getActiveSheet();
+        $sheet1->setTitle('DAFTAR ALAT BERAT');
+        
+        $html = view('Alat/Export/alatExport', ['data' => $alat])->render();
+
+        $reader = new \PhpOffice\PhpSpreadsheet\Reader\Html();
+        $spreadsheet = $reader->loadFromString($html);
+
     }
 }

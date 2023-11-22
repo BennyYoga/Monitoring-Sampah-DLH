@@ -9,6 +9,7 @@ class AlatBeratJenis extends Model
 {
     use HasFactory;
     protected $table = 'alat_berat_jenis';
+    protected $primaryKey = 'JenisAlatBeratId';
     protected $fillable = [
         'Nama', 'Kode'
     ];
@@ -16,6 +17,6 @@ class AlatBeratJenis extends Model
 
     public function Alat()
     {
-        return $this->hasMany(Alat::class);
+        return $this->hasMany(Alat::class, 'JenisAlatBerat', 'JenisAlatBeratId');
     }
 }

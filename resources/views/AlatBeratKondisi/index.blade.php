@@ -57,9 +57,13 @@
                     <div class="card-style mb-30">
                         <div class="table-wrapper table-responsive">
                             <table class="table" id="kondisiAlat">
-                                <a href="" onClick="notificationAddAlat(event,this)" class="btn btn-primary mb-3">
-                                    Tambah Kondisi
-                                </a>
+                                <div class="row">
+                                    <div class="col-sm-12 d-flex justify-content-end">
+                                        <a href="" onClick="notificationAddAlat(event,this)" class="btn btn-primary mb-3">
+                                            Tambah Kondisi
+                                        </a>
+                                    </div>  
+                                </div>
                                 <thead>
                                     <tr class="text-center">
                                         <th>No</th>
@@ -149,7 +153,7 @@
                         </div>
                         <div class="input-style-1">
                             <label>Deskripsi</label>
-                            <textarea rows="3" type="text" placeholder="Keterangan dari kondisi alat berat" class="form-control @error('Keterangan') is-invalid @enderror" name="Keterangan" value="" ></textarea>
+                            <textarea rows="3" type="text" placeholder="Keterangan dari kondisi alat berat" class="form-control @error('Keterangan') is-invalid @enderror" name="Keterangan" value=""></textarea>
                             @error('Keterangan') <span class="text-danger">{{$message}}</span> @enderror
                         </div>
                     </div>
@@ -179,7 +183,7 @@
         }
     }
 
-    
+
     function notificationBeforeDelete(event, el) {
         event.preventDefault();
         {

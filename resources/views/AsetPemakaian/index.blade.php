@@ -62,9 +62,13 @@
                     <div class="card-style mb-30">
                         <div class="table-wrapper table-responsive">
                             <table class="table" id="AsetPemakaian">
-                                <a href="{{route('aset.pemakaian.create')}}" class="btn btn-primary mb-3">
-                                    Tambah Pemakaian Baru
-                                </a>
+                                <div class="row">
+                                    <div class="col-sm-12 d-flex justify-content-end">
+                                        <a href="{{route('aset.pemakaian.create')}}" class="btn btn-primary mb-3">
+                                            Tambah Pemakaian Baru
+                                        </a>
+                                    </div>
+                                </div>
                                 <thead>
                                     <tr class="text-center">
                                         <th>No</th>

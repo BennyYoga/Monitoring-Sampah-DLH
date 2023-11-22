@@ -52,9 +52,13 @@
                     <div class="card-style mb-30">
                         <div class="table-wrapper table-responsive">
                             <table class="table" id="jenisAlat">
-                                <a href="" onClick="notificationAddAlat(event,this)" class="btn btn-primary mb-3">
-                                    Tambah Jenis Alat
-                                </a>
+                                <div class="row">
+                                    <div class="col-sm-12 d-flex justify-content-end">
+                                        <a href="" onClick="notificationAddAlat(event,this)" class="btn btn-primary mb-3">
+                                            Tambah Jenis Alat
+                                        </a>
+                                    </div>
+                                </div>
                                 <thead>
                                     <tr class="text-center">
                                         <th>No</th>
@@ -205,8 +209,7 @@
             processing: true,
             serverSide: true,
             ajax: "",
-            columns: [
-                {
+            columns: [{
                     data: 'id',
                     name: 'id',
                     render: function(data, type, row, meta) {

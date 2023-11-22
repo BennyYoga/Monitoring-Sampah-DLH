@@ -41,6 +41,7 @@ Route::get('/login', function () {
 
 Route::get('/alat', [AlatController::class, 'index'])->name('alat.index');    
 Route::get('/alat/create', [AlatController::class, 'create'])->name('alat.create');    
+Route::get('/alat/export-excel', [AlatController::class, 'exportExcel'])->name('alat.export-excel');    
 Route::get('/alat/{id}', [AlatController::class, 'show'])->name('alat.show');    
 Route::get('/alat/edit/{id}', [AlatController::class, 'edit'])->name('alat.edit');    
 Route::get('/alat/delete/{id}', [AlatController::class, 'destroy'])->name('alat.destroy');    

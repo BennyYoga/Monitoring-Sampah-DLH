@@ -25,10 +25,11 @@
         border-radius: 5px;
     }
 
-    table.dataTable td{
+    table.dataTable td {
         font-size: 0.8em;
     }
-    table.dataTable th{
+
+    table.dataTable th {
         font-size: 0.9em;
     }
 </style>
@@ -76,9 +77,16 @@
                     <div class="card-style mb-30">
                         <div class="table-wrapper table-responsive">
                             <table class="table" id="alat">
-                                <a href="{{route('alat.create')}}" class="btn btn-primary mb-3">
-                                    Tambah Alat Berat
-                                </a>
+                                <div class="row">
+                                    <div class="col-sm-12 d-flex justify-content-between">
+                                        <a href="{{route('alat.export-excel')}}" class="btn btn-success mb-3 mr-3">
+                                            Download Excel
+                                        </a>
+                                        <a href="{{route('alat.create')}}" class="btn btn-primary mb-3 ml-3">
+                                            Tambah Alat Berat
+                                        </a>
+                                    </div>
+                                </div>
                                 <thead>
                                     <tr class="text-center">
                                         <th>No</th>
@@ -169,14 +177,6 @@
                                     <td style="width: 60%;" id="keterangan"></td>
                                 </tr>
                                 <tr>
-                                    <td style="width: 40%;"><b>Kondisi</b></td>
-                                    <td style="width: 60%;" id="kondisi"></td>
-                                </tr>
-                                <tr>
-                                    <td style="width: 40%;"><b>Kondisi</b></td>
-                                    <td style="width: 60%;" id="kondisi"></td>
-                                </tr>
-                                <tr>
                                     <td style="width: 40%;"><b>Update Foto</b></td>
                                     <td style="width: 60%;" id="UpdateFoto"></td>
                                 </tr>
@@ -190,6 +190,17 @@
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-2"><b>Kondisi : </b></div>
+                            <div class="col-sm-10">
+                                <div id="kondisi"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -222,6 +233,9 @@
             let data = JSON.parse(el.getAttribute('data-id'));
             console.log(data);
 
+            if (data.Foto == null) {
+                data.Foto = '{{asset('images/defaultImage.png')}}';
+            }
             $('#imagePreview').attr('src', data.Foto);
             $('#kodeAlat').text(`: ${data.Kode || '-'}`);
             $('#jenisAlat').text(`: ${data.JenisAlatBerat || '-'}`);

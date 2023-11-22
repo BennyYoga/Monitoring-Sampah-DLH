@@ -32,9 +32,6 @@
                             </ol>
                         </nav>
                     </div>
-                    <div class="d-flex justify-content-end mb-3">
-                        <a href="{{ route('kota.create') }}" class="btn btn-primary">Add</a>
-                    </div>
                 </div>
             </div>
         </div>
@@ -45,27 +42,11 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        <div class="title d-flex flex-wrap align-items-center justify-content-between">
-                            <div class="left">
-                                <a href="{{ route('kabkota.document') }}" class="btn btn-danger mb-5">Download PDF</a>
+                        <div class="row mb-3">
+                            <div class="col-sm-12 d-flex justify-content-between">
+                                <a href="{{ route('kabkota.document') }}" class="btn btn-danger">Download PDF</a>
+                                <a href="{{ route('kota.create') }}" class="btn btn-primary">Tambah Kab/Kota Baru</a>
                             </div>
-                            {{-- <div class="right">
-                                <div class="row">
-                                    <div class="col-sm-6 contain">
-                                        <div class="select-style-1">
-                                            <div class="select-position select-sm">
-                                                <select class="light-bg" id="filter-kota" name="option">
-                                                    <option value="default">Semua Kota</option>
-                                                    @foreach($kab_kota as $option)
-                                                    <option value="{{$option->id_kab_kota}}">{{$option->nama_kab_kota}}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- end select -->
-                            </div> --}}
                         </div>
                         <table class="table" id="kabkota">
                             <thead>
@@ -86,19 +67,19 @@
     <!-- Modal -->
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-            <h5 class="modal-title" id="staticBackdropLabel">Hapus Kabupaten/Kota</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Hapus Kabupaten/Kota</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Anda yakin ingin menghapus Kabupaten/Kota ini?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
+                    <button type="submit" class="btn btn-danger" id="hapusBtnModal">Ya, hapus</button>
+                </div>
             </div>
-            <div class="modal-body">
-            Anda yakin ingin menghapus Kabupaten/Kota ini?
-            </div>
-            <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
-            <button type="submit" class="btn btn-danger" id="hapusBtnModal">Ya, hapus</button>
-            </div>
-        </div>
         </div>
     </div>
 </section>
@@ -123,9 +104,9 @@
     @csrf
 </form>
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         // Menggunakan event click untuk button dengan id hapusBtn
-        $('#kabkota').on('click', '#hapusBtn', function (e) {
+        $('#kabkota').on('click', '#hapusBtn', function(e) {
             e.preventDefault();
 
             // Simpan URL hapus pada atribut data-hapus pada tombol hapus
@@ -137,7 +118,7 @@
         });
 
         // Menggunakan event click untuk button hapus pada modal
-        $('#hapusBtnModal').on('click', function () {
+        $('#hapusBtnModal').on('click', function() {
             // Mengambil URL hapus dari atribut data-hapus pada tombol hapus
             var deleteUrl = $('#hapusBtn').attr('data-hapus');
 
@@ -151,20 +132,35 @@
 </script>
 
 <script type="text/javascript">
-$(document).ready(function () {
-    var table = $('#kabkota').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: "",
-        columns: [
-            {"data": 'DT_RowIndex', orderable: false, searchable: false},
-            { data : 'id_kab_kota', name: 'id_kab_kota', class:"text-center"},
-            { data: 'nama_kab_kota', name: 'nama_kab_kota'},
-            { data: 'action', name: 'action', orderable: false,  searchable: false }
-        ]
-    });
-    $('.buttons-pdf').removeClass('btn-secondary').addClass('btn-danger');
+    $(document).ready(function() {
+        var table = $('#kabkota').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "",
+            columns: [{
+                    "data": 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'id_kab_kota',
+                    name: 'id_kab_kota',
+                    class: "text-center"
+                },
+                {
+                    data: 'nama_kab_kota',
+                    name: 'nama_kab_kota'
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false
+                }
+            ]
+        });
+        $('.buttons-pdf').removeClass('btn-secondary').addClass('btn-danger');
 
-});
+    });
 </script>
 @endpush

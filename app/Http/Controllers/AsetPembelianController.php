@@ -91,17 +91,13 @@ class AsetPembelianController extends Controller
             Alert::error('Gagal', 'Terdapat Row Yang tidak diisi');
             return redirect()->route('aset.pembelian.create');
         }
-        foreach ($request->Barang as $key => $value) {
-            if($value == '-'){
-                Alert::error('Gagal', 'Terdapat Row Yang tidak diisi');
-                return redirect()->route('aset.pembelian.create');
-            }
+        for ($i=0; $i < count($request->Barang); $i++) { 
+            # code...
         }
-        
         
         $dataBeli = [
             'BeliUuid' => $BeliUuid,
-            'Tanggal' => Date::parse($request->Tanggal)->format('Y-m-d H:i:s'),
+            'Tanggal' => $request->tanggalPembelian,
         ];
         AsetPembelian::create($dataBeli);
 

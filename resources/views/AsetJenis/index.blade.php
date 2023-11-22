@@ -57,9 +57,13 @@
                     <div class="card-style mb-30">
                         <div class="table-wrapper table-responsive">
                             <table class="table" id="AsetJenis">
-                                <a href="" onClick="notificationAddJenis(event,this)" class="btn btn-primary mb-3">
-                                    Tambah Jenis
-                                </a>
+                                <div class="row">
+                                    <div class="col-sm-12 d-flex justify-content-end">
+                                        <a href="" onClick="notificationAddJenis(event,this)" class="btn btn-primary mb-3">
+                                            Tambah Jenis
+                                        </a>
+                                    </div>
+                                </div>
                                 <thead>
                                     <tr class="text-center">
                                         <th>No</th>
@@ -184,7 +188,6 @@
 <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
 <script type="text/javascript">
-
     function notificationAddJenis(event, el) {
         event.preventDefault();
         {
@@ -202,7 +205,7 @@
         }
     }
 
-        function notificationEdit(event, el) {
+    function notificationEdit(event, el) {
         event.preventDefault();
         {
             let data = JSON.parse(el.getAttribute('data-id'));
