@@ -120,7 +120,7 @@ class AsetJenisController extends Controller
             'Nama' => $request->Nama_Jenis,
             'Bahan' => $request->Bahan
         ];
-        AsetJenis::where('Id', $request->Id)->update($data);
+        AsetJenis::where('Id', $request->KondisiId)->update($data);
         Alert::success('Success', 'Berhasil mengubah data Jenis Aset');
         return redirect()->route('aset.jenis.index');
     }

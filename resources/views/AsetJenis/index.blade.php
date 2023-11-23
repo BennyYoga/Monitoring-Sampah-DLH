@@ -165,6 +165,7 @@
                                 </select>
                             </div>
                         </div>
+                        <input type="hidden" value="" id="KondisiId" name="KondisiId">
                         <div class="input-style-1">
                             <label>Nama Jenis Aset</label>
                             <input type="text" placeholder="Nama Jenis Aset" class="form-control @error('Nama_Jenis') is-invalid @enderror" name="Nama_Jenis" value="" required />
@@ -209,8 +210,8 @@
         event.preventDefault();
         {
             let data = JSON.parse(el.getAttribute('data-id'));
-
-            $('input[name=KondisiId]').val(`${data.KondisiId}`);
+            
+            $('input[name=KondisiId]').val(`${data.Id}`);
             $('select[name=Bahan]').val(`${data.Bahan}`);
             $('input[name=Nama_Jenis]').val(`${data.Nama}`);
 
