@@ -109,7 +109,7 @@
                                     </div>
                                     <div class="col-sm-10">
                                         <div class="input-style-1">
-                                            <input type="datetime-local" class="form-control @error('') is-invalid @enderror" id="" name="tanggalPembelian" value="" required />
+                                            <input type="date" class="form-control @error('') is-invalid @enderror" id="" name="tanggalPembelian" value="" required />
                                             @error('') <span class="text-danger">{{$message}}</span> @enderror
                                         </div>
                                     </div>
