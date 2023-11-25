@@ -1,8 +1,8 @@
 <!-- ======== sidebar-nav start =========== -->
 <aside class="sidebar-nav-wrapper">
-    <div class="navbar-logo" style="text-align: left">
+    <div class="navbar-logo" style="text-align: center">
         <a href="index.html">
-            <img src="{{asset('images/logo/absensi.png')}}" class="w-100" alt="logo" />
+            <img src="{{asset('images/Icon/apple-icon-60x60.png')}}" class="w-100" alt="logo" />
         </a>
     </div>
     <nav class="sidebar-nav">

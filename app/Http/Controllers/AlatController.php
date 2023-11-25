@@ -425,17 +425,189 @@ class AlatController extends Controller
         return response()->download($fileName);
     }
 
-    public function exportExcel(){
-        $alat = AlatBeratJenis::with('Alat')->get();
+    public function exportExcel()
+    {
+        $alat = AlatBeratJenis::with('Alat')->orderBy('Nama', 'asc')->get();
         $spreadsheet = new Spreadsheet();
-        
+
+        //Sheet 1 Alat Berat
         $sheet1 = $spreadsheet->getActiveSheet();
         $sheet1->setTitle('DAFTAR ALAT BERAT');
-        
-        $html = view('Alat/Export/alatExport', ['data' => $alat])->render();
 
+        $html = view('Alat/Export/alatExport', ['data' => $alat])->render();
         $reader = new \PhpOffice\PhpSpreadsheet\Reader\Html();
         $spreadsheet = $reader->loadFromString($html);
 
+        foreach ($alat as $alat) {
+            $this->detailExportAlatBerat($alat, $spreadsheet);
+        }
+        // $this->detailExportAlatBerat($alat[2], $spreadsheet);
+
+        $writer = new Xlsx($spreadsheet);
+        $fileName = 'Data Alat Berat.xlsx';
+        $writer->save($fileName);
+        return response()->download($fileName);
+    }
+
+    private function detailExportAlatBerat($detailAlat, $spreadsheet)
+    {
+
+
+        $sheet2 = $spreadsheet->createSheet();
+        $sheet2->setTitle($detailAlat->Nama);
+
+        $sheet2->getStyle($sheet2->calculateWorksheetDimension())->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)->setWrapText(true);
+        $sheet2->getStyle('A1:H1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)->setWrapText(true);
+        $sheet2->getStyle('A2:H2')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)->setWrapText(true);
+        $sheet2->getStyle('A4:H5')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)->setWrapText(true);
+        $sheet2->getStyle('F4:H5')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)->setWrapText(true);
+
+        $sheet2->setCellValue('A1', 'DAFTAR ALAT BERAT ' . $detailAlat->Nama);
+        $sheet2->mergeCells('A1:H1');
+        $sheet2->setCellValue('A2', 'TPK SARIMUKTI');
+        $sheet2->mergeCells('A2:H2');
+
+        $sheet2->getStyle('A4:H5')->getFont()->setBold(true);
+
+        $sheet2->getStyle('A4:H5')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+        $sheet2->setCellValue('A4', 'Jenis Peralatan');
+        $sheet2->mergeCells('A4:B4');
+        $sheet2->setCellValue('A5', 'FOTO');
+        $sheet2->getColumnDimension('A')->setWidth(30);
+        $sheet2->getStyle('A5')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+        $sheet2->setCellValue('B5', 'NAMA');
+        $sheet2->getColumnDimension('B')->setWidth(15);
+        $sheet2->getStyle('B5')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+        $sheet2->setCellValue('C4', 'TAHUN PEROLEHAN');
+        $sheet2->getColumnDimension('C')->setWidth(15);
+        $sheet2->mergeCells('C4:C5');
+        $sheet2->getStyle('C4')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+        $sheet2->setCellValue('D4', 'KONDISI');
+        $sheet2->getColumnDimension('D')->setWidth(20);
+        $sheet2->mergeCells('D4:D5');
+        $sheet2->getStyle('D4')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+        $sheet2->setCellValue('E4', 'KETERANGAN');
+        $sheet2->getColumnDimension('E')->setWidth(15);
+        $sheet2->mergeCells('E4:E5');
+        $sheet2->getStyle('E4')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+        $sheet2->getColumnDimension('F')->setWidth(15);
+        $sheet2->getColumnDimension('G')->setWidth(15);
+        $sheet2->getColumnDimension('H')->setWidth(15);
+        $sheet2->setCellValue('F4', 'TERAKHIR UPDATE');
+        $sheet2->mergeCells('F4:H4');
+        $sheet2->getStyle('F4')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+        $sheet2->setCellValue('F5', 'KONDISI');
+        $sheet2->getStyle('F5')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+        $sheet2->setCellValue('G5', 'FOTO');
+        $sheet2->getStyle('G5')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+        $sheet2->setCellValue('H5', 'KETERANGAN');
+        $sheet2->getStyle('H5')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+
+        $i = 6;
+        foreach ($detailAlat->Alat as $alat) {
+            $drawing = new Drawing();
+            $drawing->setName('Logo');
+
+
+            if (file_exists(public_path($alat->Foto)) && $alat->Foto != null) {
+                $drawing->setPath(public_path($alat->Foto));
+            } else {
+                $drawing->setPath(public_path('images/defaultImage.png'));
+            }
+
+            $drawing->setCoordinates('A' . $i);
+            $drawing->setOffsetX(5);
+            $drawing->setOffsetY(5);
+            $drawing->setWidth(200);
+
+            $drawing->setWorksheet($sheet2);
+
+            $imageWidth = $drawing->getWidth();
+            $imageHeight = $drawing->getHeight();
+
+            $sheet2->getStyle('A' . $i . ':H' . $i)->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+            $sheet2->getColumnDimensionByColumn($i)->setWidth($imageWidth / 12);
+            $sheet2->getRowDimension($i)->setRowHeight($imageHeight / 1.2);
+
+            $sheet2->setCellValue('B' . $i, $alat->NamaModel . ' Seri-' . $alat->NoSeri);
+            $sheet2->getStyle('B' . $i)
+                ->getAlignment()
+                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
+                ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER)
+                ->setWrapText(true);
+
+            $sheet2->setCellValue('C' . $i, date('F Y', strtotime($alat->TahunPerolehan)));
+            $sheet2->getStyle('C' . $i)
+                ->getAlignment()
+                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
+                ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER)
+                ->setWrapText(true);
+
+            $kondisi = DB::table('alat_kondisi_detail')->where('AlatUuid', $alat->AlatUuid)->pluck('KondisiId')->toArray();
+            $kondisi = AlatKondisi::whereIn('KondisiId', $kondisi)->orderBy('Label', 'asc')->get();
+            $kondisiAlat = "Tidak Ada Kondisi";
+            if ($kondisi != null || $kondisi != []) {
+                $kondisiAlat = "";
+                foreach ($kondisi as $value) {
+                    $kondisiAlat .= $value->Label . ', ';
+                }
+            }
+            $sheet2->setCellValue('D' . $i, $kondisiAlat);
+            $sheet2->getStyle('D' . $i)
+                ->getAlignment()
+                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
+                ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER)
+                ->setWrapText(true);
+
+            $keteranganAlat = "";
+            if ($alat->Keterangan == 0) {
+                $keteranganAlat = "Beroperasi";
+            } elseif ($alat->Keterangan == 1) {
+                $keteranganAlat = "Beroperasi segera dilakukan perbaikan";
+            } elseif ($alat->Keterangan == 2) {
+                $keteranganAlat = "Breakdown/dapat dilakukan perbaikan";
+            } elseif ($alat->Keterangan == 3) {
+                $keteranganAlat = "Breakdown/rusak berat";
+            }
+
+            $sheet2->setCellValue('E' . $i, $keteranganAlat);
+            $sheet2->getStyle('E' . $i)
+                ->getAlignment()
+                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
+                ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER)
+                ->setWrapText(true);
+
+            $sheet2->setCellValue('F' . $i, date('d F Y H:i:s', strtotime($alat->LastUpdateKondisi)));
+            $sheet2->getStyle('F' . $i)
+                ->getAlignment()
+                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
+                ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER)
+                ->setWrapText(true);
+
+            $sheet2->setCellValue('G' . $i, date('d F Y H:i:s', strtotime($alat->LastUpdateFoto)));
+            $sheet2->getStyle('G' . $i)
+                ->getAlignment()
+                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
+                ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER)
+                ->setWrapText(true);
+
+            $sheet2->setCellValue('H' . $i, date('d F Y H:i:s', strtotime($alat->LastUpdateKeterangan)));
+            $sheet2->getStyle('H' . $i)
+                ->getAlignment()
+                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
+                ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER)
+                ->setWrapText(true);
+
+            $i++;
+        }
     }
 }
